@@ -1,20 +1,17 @@
 from fastapi import FastAPI
 from sqlalchemy import text
-from app.database import engine
+from app.database import engine, Base
+from app.models.user import User
+from app.routers.user import router as user_router
 
 app = FastAPI()
 
+Base.metadata.create_all(bind=engine)
+
+app.include_router(user_router)
+
 @app.get("/")
 def root():
-    try:
-        with engine.connect() as connection:
-            connection.execute(text("SELECT 1"))
-
-        return {
-            "message": "GlowUp API + MySQL Connected"
-        }
-
-    except Exception as e:
-        return {
-            "error": str(e)
-        }
+    return {
+        "message": "GlowUp API Connected"
+    }
