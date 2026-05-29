@@ -18,6 +18,7 @@ from app.utils.hash import (
 )
 
 from app.utils.jwt import create_access_token
+from app.utils.permissions import require_admin, require_owner
 
 router = APIRouter()
 
@@ -103,4 +104,22 @@ def get_me(
         "name": current_user.name,
         "email": current_user.email,
         "role": current_user.role
+    }
+
+@router.get("/admin/dashboard")
+def admin_dashboard_data(
+    current_user: User = Depends(require_admin)
+):
+    return {
+        "message": "Selamat datang di Dashboard Admin",
+        "admin_data": current_user.name
+    }
+
+@router.get("/owner/dashboard")
+def owner_dashboard_data(
+    current_user: User = Depends(require_owner)
+):
+    return {
+        "message": "Selamat datang di Dashboard Owner Salon",
+        "owner_data": current_user.name
     }
