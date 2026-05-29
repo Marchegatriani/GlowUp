@@ -21,6 +21,10 @@ class Booking(Base):
     salon = relationship("Salon", backref="bookings")
     # Relasi ke layanan yang di-booking
     services = relationship("BookingService", back_populates="booking")
+    # Relasi One-to-One ke tabel payments
+    payment = relationship("Payment", back_populates="booking", uselist=False)
+    # Relasi One-to-One ke tabel reviews
+    review = relationship("Review", back_populates="booking", uselist=False)
 
 # 2. Tabel Detail Layanan yang di-booking
 class BookingService(Base):

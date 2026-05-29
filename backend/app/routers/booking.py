@@ -7,6 +7,7 @@ from app.models.booking import Booking, BookingService
 from app.models.salon import Salon
 from app.models.service import SalonService
 from app.models.user import User
+from app.models.payment import Payment
 
 from app.schemas.booking import BookingCreate, BookingResponse, BookingStatusUpdate
 from app.utils.auth import get_current_user
@@ -80,6 +81,16 @@ def create_booking(
     
     db.commit() # Simpan semuanya ke database permanen
     db.refresh(new_booking)
+
+    # 5. Otomatis buat Payment (Status = Pending)
+    new_payment = Payment(
+        booking_id=new_booking.id,
+        amount=new_booking.total_price,
+        status="pending"
+    )
+    db.add(new_payment)
+    db.commit()
+
     return new_booking
 
 # 2. User Melihat History Booking Miliknya Sendiri
