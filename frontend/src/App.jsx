@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -9,8 +11,8 @@ function App() {
         <Routes>
           {/* 1. Halaman Publik */}
           <Route path="/" element={<h2>Halaman Utama (Daftar Salon)</h2>} />
-          <Route path="/login" element={<h2>Halaman Login</h2>} />
-          <Route path="/register" element={<h2>Halaman Register</h2>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           {/* 2. Halaman Protected (Sementara pakai rute biasa dulu) */}
           <Route path="/user/dashboard" element={<h2>Dashboard Customer</h2>} />
