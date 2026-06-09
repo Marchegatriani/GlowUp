@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, time
 
 # Base schema untuk field yang sama-sama digunakan
 class SalonBase(BaseModel):
@@ -8,6 +8,8 @@ class SalonBase(BaseModel):
     address: str
     phone_number: str
     description: Optional[str] = None
+    open_time: time = time(9, 0)
+    close_time: time = time(21, 0)
 
 # Dipakai ketika POST (Create)
 class SalonCreate(SalonBase):
@@ -19,6 +21,8 @@ class SalonUpdate(BaseModel):
     address: Optional[str] = None
     phone_number: Optional[str] = None
     description: Optional[str] = None
+    open_time: Optional[time] = None
+    close_time: Optional[time] = None
     is_active: Optional[bool] = None
 
 # Dipakai ketika mengembalikan data ke Frontend (Response)

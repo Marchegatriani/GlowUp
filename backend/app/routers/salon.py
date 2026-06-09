@@ -32,7 +32,9 @@ def create_salon(
         name=salon.name,
         address=salon.address,
         phone_number=salon.phone_number,
-        description=salon.description
+        description=salon.description,
+        open_time=salon.open_time,
+        close_time=salon.close_time
     )
     db.add(new_salon)
     db.commit()

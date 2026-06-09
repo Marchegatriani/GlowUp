@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+from datetime import datetime, timedelta
 
 from app.database import SessionLocal
 from app.models.booking import Booking, BookingService
@@ -36,6 +37,25 @@ def create_booking(
     salon = db.query(Salon).filter(Salon.id == booking_in.salon_id).first()
     if not salon:
         raise HTTPException(status_code=404, detail="Salon tidak ditemukan")
+
+    # 1a. Validasi apakah waktu booking sesuai dengan jam operasional salon
+    booking_time_only = booking_in.booking_time.time()
+    if booking_time_only < salon.open_time or booking_time_only > salon.close_time:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Waktu booking di luar jam operasional salon ({salon.open_time.strftime('%H:%M')} - {salon.close_time.strftime('%H:%M')})"
+        )
+
+    # 1b. Mencegah Bentrok Jadwal (Double Booking)
+    # Cek apakah ada booking di salon yang sama, pada jam tersebut, yang belum dibatalkan/selesai
+    existing_booking = db.query(Booking).filter(
+        Booking.salon_id == booking_in.salon_id,
+        Booking.booking_time == booking_in.booking_time,
+        Booking.status.in_(["pending", "confirmed"])
+    ).first()
+
+    if existing_booking:
+        raise HTTPException(status_code=400, detail="Jadwal pada jam tersebut sudah di-booking oleh orang lain. Silakan pilih waktu lain.")
 
     total_price = 0
     valid_services = []
@@ -124,3 +144,19 @@ def update_booking_status(
     db.commit()
     db.refresh(booking)
     return booking
+
+# 4. Owner/Admin Melihat Semua Booking di Salonnya
+@router.get("/salons/{salon_id}", response_model=List[BookingResponse])
+def get_owner_bookings(
+    salon_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_owner) # HANYA OWNER/ADMIN
+):
+    salon = db.query(Salon).filter(Salon.id == salon_id).first()
+    if not salon:
+        raise HTTPException(status_code=404, detail="Salon tidak ditemukan")
+        
+    if salon.owner_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak. Anda bukan pemilik salon ini.")
+
+    return db.query(Booking).filter(Booking.salon_id == salon_id).all()

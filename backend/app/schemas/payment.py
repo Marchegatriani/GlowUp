@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Literal
 from datetime import datetime
 
 class PaymentBase(BaseModel):
@@ -11,11 +11,11 @@ class PaymentBase(BaseModel):
 # Untuk user mengeset metode pembayaran (cash, transfer, ewallet)
 class PaymentMethodInput(BaseModel):
     booking_id: int
-    method: str 
+    method: Literal["cash", "transfer", "ewallet"]
 
 # Untuk simulasi update status menjadi "paid"
 class PaymentStatusUpdate(BaseModel):
-    status: str 
+    status: Literal["pending", "paid", "cancelled"]
 
 class PaymentResponse(PaymentBase):
     id: int
