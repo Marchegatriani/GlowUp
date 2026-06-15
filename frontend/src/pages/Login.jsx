@@ -1,8 +1,50 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosClient from "../api/axiosClient";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const response = await axiosClient.post("/login", {
+        email,
+        password
+      });
+
+      // Simpan token ke localStorage
+      localStorage.setItem("access_token", response.data.access_token);
+      
+      console.log("Login berhasil:", response.data);
+      
+      // Redirect sesuai role
+      const role = response.data.role;
+      if (role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (role === "owner") {
+        navigate("/owner/dashboard");
+      } else {
+        // Default ke customer dashboard
+        navigate("/user/beranda");
+      }
+    } catch (err) {
+      console.error("Gagal login:", err);
+      setError(
+        err.response?.data?.detail || "Terjadi kesalahan saat mencoba masuk."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-glowup-bg p-4 sm:p-8 lg:p-[72px_64px] font-inter">
@@ -54,8 +96,15 @@ export default function Login() {
               </p>
             </div>
 
+            {/* Error Message Display */}
+            {error && (
+              <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+
             {/* Form */}
-            <div className="flex flex-col gap-6">
+            <form className="flex flex-col gap-6" onSubmit={handleLogin}>
 
               {/* Email Field */}
               <div className="flex flex-col gap-2">
@@ -66,6 +115,9 @@ export default function Login() {
                   <input
                     type="email"
                     placeholder="nama@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                     className="w-full pl-10 pr-4 py-4 rounded-[20px] border border-[rgba(210,195,199,0.30)] bg-glowup-input text-base text-glowup-text placeholder:text-[rgba(210,195,199,0.60)] outline-none focus:border-glowup-brand transition-colors"
                   />
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
@@ -90,6 +142,9 @@ export default function Login() {
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                     className="w-full pl-10 pr-14 py-4 rounded-[20px] border border-[rgba(210,195,199,0.30)] bg-glowup-input text-base text-glowup-text placeholder:text-[rgba(210,195,199,0.60)] outline-none focus:border-glowup-brand transition-colors"
                   />
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
@@ -112,16 +167,19 @@ export default function Login() {
 
               {/* Submit Button */}
               <button
-                type="button"
-                className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-[20px] font-semibold text-base text-glowup-dark hover:opacity-90 active:opacity-80 transition-opacity"
+                type="submit"
+                disabled={isLoading}
+                className={`w-full flex items-center justify-center gap-3 py-4 px-6 rounded-[20px] font-semibold text-base text-glowup-dark hover:opacity-90 active:opacity-80 transition-opacity ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                 style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)" }}
               >
-                <span>Masuk Ke Akun</span>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9.09519 6.18746H0V5.06249H9.09519L4.82307 0.790366L5.62497 0L11.2499 5.62497L5.62497 11.2499L4.82307 10.4596L9.09519 6.18746Z" fill="#2E1221"/>
-                </svg>
+                <span>{isLoading ? "Memproses..." : "Masuk Ke Akun"}</span>
+                {!isLoading && (
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.09519 6.18746H0V5.06249H9.09519L4.82307 0.790366L5.62497 0L11.2499 5.62497L5.62497 11.2499L4.82307 10.4596L9.09519 6.18746Z" fill="#2E1221"/>
+                  </svg>
+                )}
               </button>
-            </div>
+            </form>
 
             {/* Divider */}
             <div className="flex items-center">

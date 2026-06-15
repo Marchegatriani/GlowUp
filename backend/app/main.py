@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from app.database import engine, Base
 
@@ -14,6 +15,20 @@ from app.models.review import Review
 from app.routers import user, salon, service, booking, payment, review
 
 app = FastAPI()
+
+# Konfigurasi CORS
+origins = [
+    "http://localhost:5173",  # Origin standar Vite React
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 Base.metadata.create_all(bind=engine)
 

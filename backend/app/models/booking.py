@@ -11,6 +11,7 @@ class Booking(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     salon_id = Column(Integer, ForeignKey("salons.id"), nullable=False)
     booking_time = Column(DateTime, nullable=False)
+    end_time = Column(DateTime, nullable=True) # Tambahan: untuk menghitung durasi/overlap
     
     # Status bisa berupa: pending, confirmed, completed, cancelled
     status = Column(String(50), default="pending") 

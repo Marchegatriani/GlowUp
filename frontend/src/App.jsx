@@ -1,23 +1,57 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import LandingPage from './pages/LandingPage';
+import Beranda from './pages/user/Beranda';
+import Jelajah from './pages/user/Jelajah';
+import Detail from './pages/user/Detail';
+
+// Komponen PrivateRoute untuk mengecek apakah user sudah login
+const PrivateRoute = ({ children }) => {
+  const isAuthenticated = !!localStorage.getItem("access_token");
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
 
 function App() {
   return (
     <Router>
       <div className="app-container">
-        {/* Nanti Anda bisa letakkan Navbar di sini agar muncul di semua halaman */}
-        
         <Routes>
           {/* 1. Halaman Publik */}
-          <Route path="/" element={<h2>Halaman Utama (Daftar Salon)</h2>} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* 2. Halaman Protected (Sementara pakai rute biasa dulu) */}
-          <Route path="/user/dashboard" element={<h2>Dashboard Customer</h2>} />
-          <Route path="/owner/dashboard" element={<h2>Dashboard Owner Salon</h2>} />
-          <Route path="/admin/dashboard" element={<h2>Dashboard Admin</h2>} />
+          {/* 2. Halaman Protected untuk Customer */}
+          <Route 
+            path="/user/beranda" 
+            element={
+              <PrivateRoute>
+                <Beranda />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/user/jelajah" 
+            element={
+              <PrivateRoute>
+                <Jelajah />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/user/salon/:id" 
+            element={
+              <PrivateRoute>
+                <Detail />
+              </PrivateRoute>
+            } 
+          />
+
+          {/* Placeholder untuk rute lain nanti */}
+          <Route path="/user/dashboard" element={<h2>Dashboard Customer (Placeholder)</h2>} />
+          <Route path="/owner/dashboard" element={<h2>Dashboard Owner Salon (Placeholder)</h2>} />
+          <Route path="/admin/dashboard" element={<h2>Dashboard Admin (Placeholder)</h2>} />
         </Routes>
       </div>
     </Router>

@@ -92,7 +92,8 @@ def login(
 
     return {
         "access_token": token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "role": db_user.role
     }
 
 @router.get("/me")
@@ -122,4 +123,39 @@ def owner_dashboard_data(
     return {
         "message": "Selamat datang di Dashboard Owner Salon",
         "owner_data": current_user.name
+    }
+
+from app.models.booking import Booking
+from app.models.review import Review
+
+@router.get("/customer/dashboard")
+def customer_dashboard_data(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Menampilkan data ringkasan untuk Dashboard Customer.
+    Menghitung jumlah booking aktif (Pending/Confirmed) dan total review yang sudah diberikan.
+    """
+    # 1. Hitung jumlah booking aktif
+    active_bookings_count = db.query(Booking).filter(
+        Booking.user_id == current_user.id,
+        Booking.status.in_(["Pending", "Confirmed"])
+    ).count()
+
+    # 2. Hitung total review yang pernah diberikan user ini
+    total_reviews_count = db.query(Review).filter(
+        Review.user_id == current_user.id
+    ).count()
+
+    return {
+        "message": f"Selamat datang di Dashboard, {current_user.name}",
+        "user_info": {
+            "name": current_user.name,
+            "email": current_user.email
+        },
+        "stats": {
+            "active_bookings_count": active_bookings_count,
+            "total_reviews_given": total_reviews_count
+        }
     }

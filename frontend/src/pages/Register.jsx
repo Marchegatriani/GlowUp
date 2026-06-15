@@ -1,8 +1,49 @@
 import { useState } from "react";
+import axiosClient from "../api/axiosClient";
+import { useNavigate } from "react-router-dom";
 
 export default function Index() {
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  
+  // State untuk form input
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!agreed) {
+      setError("Anda harus menyetujui Syarat & Ketentuan.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await axiosClient.post("/register", {
+        name,
+        email,
+        password,
+        role: "customer" // Default role
+      });
+      
+      console.log("Registrasi berhasil:", response.data);
+      // Redirect ke halaman login setelah registrasi sukses
+      navigate("/login"); 
+    } catch (err) {
+      console.error("Gagal mendaftar:", err);
+      setError(
+        err.response?.data?.detail || "Terjadi kesalahan saat melakukan pendaftaran."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col font-inter" style={{ background: "#FCF9F8" }}>
@@ -139,9 +180,16 @@ export default function Index() {
                     Silakan lengkapi data di bawah ini untuk mendaftar.
                   </p>
                 </div>
+                
+                {/* Error Message Display */}
+                {error && (
+                  <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
 
                 {/* Form fields */}
-                <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+                <form className="flex flex-col gap-6" onSubmit={handleRegister}>
 
                   {/* Name */}
                   <div className="flex flex-col gap-1">
@@ -162,6 +210,9 @@ export default function Index() {
                         id="name"
                         type="text"
                         placeholder="Masukkan nama lengkap"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
                         className="w-full pl-12 pr-4 py-[18px] rounded-[20px] text-base outline-none transition-all focus:ring-2"
                         style={{
                           border: "1px solid rgba(210, 195, 199, 0.30)",
@@ -192,6 +243,9 @@ export default function Index() {
                         id="email"
                         type="email"
                         placeholder="contoh@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                         className="w-full pl-12 pr-4 py-[18px] rounded-[20px] text-base outline-none transition-all focus:ring-2"
                         style={{
                           border: "1px solid rgba(210, 195, 199, 0.30)",
@@ -221,6 +275,10 @@ export default function Index() {
                         id="password"
                         type={showPassword ? "text" : "password"}
                         placeholder="Minimal 8 karakter"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        minLength={8}
                         className="w-full pl-12 pr-12 py-[18px] rounded-[20px] text-base outline-none transition-all focus:ring-2"
                         style={{
                           border: "1px solid rgba(210, 195, 199, 0.30)",
@@ -279,13 +337,14 @@ export default function Index() {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-[20px] text-lg font-bold text-center transition-opacity hover:opacity-90 active:opacity-80"
+                      disabled={isLoading}
+                      className={`w-full py-4 rounded-[20px] text-lg font-bold text-center transition-opacity hover:opacity-90 active:opacity-80 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
                       style={{
                         background: "linear-gradient(100deg, #F8C8DC 0%, #EFE4A2 100%)",
                         color: "#2E1221",
                       }}
                     >
-                      Daftar Sekarang
+                      {isLoading ? "Memproses..." : "Daftar Sekarang"}
                     </button>
                   </div>
 
@@ -304,7 +363,7 @@ export default function Index() {
                   {/* Login link */}
                   <p className="text-center text-base font-medium" style={{ color: "#4F4448" }}>
                     Sudah memiliki akun?{" "}
-                    <a href="#" className="font-bold hover:underline" style={{ color: "#795465" }}>
+                    <a href="/login" className="font-bold hover:underline" style={{ color: "#795465" }}>
                       Masuk ke Akun
                     </a>
                   </p>
