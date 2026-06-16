@@ -75,22 +75,21 @@ const DotsIcon = () => (
   </svg>
 );
 
-const bookingHistory = [
-  { service: "Manicure & Pedicure", salon: "The Nail Bar", date: "15 Sep 2024", price: "Rp 350.000", status: "SELESAI", action: "Ulas", statusColor: "bg-yellow-50 text-yellow-600" },
-  { service: "Facial Anti-Aging", salon: "Derma Glow", date: "02 Sep 2024", price: "Rp 750.000", status: "SELESAI", action: "Re-book", statusColor: "bg-yellow-50 text-yellow-600" },
-  { service: "Hair Cut (Signature)", salon: "Vogue Studio", date: "20 Agt 2024", price: "Rp 450.000", status: "DIBATALKAN", action: "Detail", statusColor: "bg-red-50 text-red-500" },
-];
-
 export default function Index() {
   const [userData, setUserData] = useState(null);
+  const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await axiosClient.get("/customer/dashboard");
-        setUserData(response.data);
+        const [dashboardRes, bookingsRes] = await Promise.all([
+          axiosClient.get("/customer/dashboard"),
+          axiosClient.get("/bookings/me")
+        ]);
+        setUserData(dashboardRes.data);
+        setBookings(bookingsRes.data);
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
         // Jika token tidak valid / unauthorized
@@ -109,6 +108,26 @@ export default function Index() {
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     navigate("/login");
+  };
+
+  const getStatusStyle = (status) => {
+    switch (status.toLowerCase()) {
+      case "pending": return "bg-yellow-50 text-yellow-600";
+      case "confirmed": return "bg-blue-50 text-blue-600";
+      case "completed": return "bg-green-50 text-green-600";
+      case "cancelled": return "bg-red-50 text-red-500";
+      default: return "bg-gray-50 text-gray-600";
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch (status.toLowerCase()) {
+      case "pending": return "MENUNGGU PEMBAYARAN";
+      case "confirmed": return "DIKONFIRMASI";
+      case "completed": return "SELESAI";
+      case "cancelled": return "DIBATALKAN";
+      default: return status.toUpperCase();
+    }
   };
 
   if (loading) {
@@ -137,14 +156,11 @@ export default function Index() {
             <Link to="/user/jelajah" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
               Jelajahi Salon
             </Link>
-            <Link to="/booking" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
+            <Link to="/user/beranda" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
               Booking
             </Link>
-            <Link to="/review" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
+            <Link to="/user/jelajah" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
               Review
-            </Link>
-            <Link to="/tentang" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
-              Tentang
             </Link>
           </nav>
 
@@ -342,30 +358,38 @@ export default function Index() {
                   </tr>
                 </thead>
                 <tbody>
-                  {bookingHistory.map((row, idx) => (
-                    <tr key={idx} className={idx > 0 ? "border-t border-gray-50" : ""}>
-                      <td className="px-8 py-6 text-sm font-bold text-gray-700 whitespace-nowrap">{row.service}</td>
-                      <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">{row.salon}</td>
-                      <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">{row.date}</td>
-                      <td className="px-6 py-6 text-sm font-bold text-gray-800 whitespace-nowrap">{row.price}</td>
-                      <td className="px-6 py-6">
-                        <span
-                          className={`inline-flex px-3 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wide ${
-                            row.status === "SELESAI"
-                              ? "bg-yellow-50 text-yellow-600"
-                              : "bg-red-50 text-red-500"
-                          }`}
-                        >
-                          {row.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-6 text-right">
-                        <button className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
-                          {row.action}
-                        </button>
-                      </td>
+                  {bookings.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" className="text-center py-8 text-gray-500 text-sm">Belum ada riwayat reservasi</td>
                     </tr>
-                  ))}
+                  ) : (
+                    bookings.map((row, idx) => (
+                      <tr key={row.id} className={idx > 0 ? "border-t border-gray-50" : ""}>
+                        <td className="px-8 py-6 text-sm font-bold text-gray-700 whitespace-nowrap">
+                          Booking #{row.id}
+                        </td>
+                        <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">ID Salon: {row.salon_id}</td>
+                        <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">
+                          {new Date(row.booking_time).toLocaleString("id-ID", { dateStyle: "medium" })}
+                        </td>
+                        <td className="px-6 py-6 text-sm font-bold text-gray-800 whitespace-nowrap">
+                          Rp {row.total_price.toLocaleString("id-ID")}
+                        </td>
+                        <td className="px-6 py-6">
+                          <span
+                            className={`inline-flex px-3 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wide ${getStatusStyle(row.status)}`}
+                          >
+                            {getStatusText(row.status)}
+                          </span>
+                        </td>
+                        <td className="px-6 py-6 text-right">
+                          <Link to={`/user/detail-booking/${row.id}`} className="text-sm font-bold text-[#8B6B7A] hover:underline">
+                            Detail
+                          </Link>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

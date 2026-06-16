@@ -71,14 +71,11 @@ export default function Jelajah() {
             <Link to="/user/jelajah" className="text-base font-medium pb-0.5 border-b-2 leading-6" style={{ color: "#8B6B7A", borderColor: "#8B6B7A" }}>
               Jelajahi Salon
             </Link>
-            <Link to="/booking" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
+            <Link to="/user/beranda" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
               Booking
             </Link>
-            <Link to="/review" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
+            <Link to="/user/jelajah" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
               Review
-            </Link>
-            <Link to="/tentang" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
-              Tentang
             </Link>
           </nav>
           <div className="flex items-center gap-6">

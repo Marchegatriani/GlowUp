@@ -58,6 +58,7 @@ def create_booking(
         raise HTTPException(status_code=400, detail="Jadwal pada jam tersebut sudah di-booking oleh orang lain. Silakan pilih waktu lain.")
 
     total_price = 0
+    total_duration_minutes = 0
     valid_services = []
 
     # 2. Loop list layanan yang dikirim oleh user, cek dan hitung harganya
@@ -74,23 +75,28 @@ def create_booking(
             )
         
         total_price += salon_service.price
+        total_duration_minutes += salon_service.duration_minutes
         valid_services.append(salon_service)
 
     if not valid_services:
         raise HTTPException(status_code=400, detail="Minimal pilih satu layanan untuk di-booking")
 
-    # 3. Insert ke tabel bookings
+    # 3. Hitung end_time berdasarkan total durasi
+    end_time = booking_in.booking_time + timedelta(minutes=total_duration_minutes)
+
+    # 4. Insert ke tabel bookings
     new_booking = Booking(
         user_id=current_user.id,
         salon_id=booking_in.salon_id,
         booking_time=booking_in.booking_time,
+        end_time=end_time,
         total_price=total_price,
         status="pending"
     )
     db.add(new_booking)
     db.flush() # Mirip commit, tapi menyimpannya ke memori sementara untuk mendapatkan ID new_booking
 
-    # 4. Insert ke tabel booking_services
+    # 5. Insert ke tabel booking_services
     for srv in valid_services:
         booking_service = BookingService(
             booking_id=new_booking.id,
@@ -102,7 +108,7 @@ def create_booking(
     db.commit() # Simpan semuanya ke database permanen
     db.refresh(new_booking)
 
-    # 5. Otomatis buat Payment (Status = Pending)
+    # 6. Otomatis buat Payment (Status = Pending)
     new_payment = Payment(
         booking_id=new_booking.id,
         amount=new_booking.total_price,

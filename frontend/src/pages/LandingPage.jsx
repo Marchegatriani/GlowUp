@@ -4,10 +4,9 @@ import { useState } from "react";
 const NAV_LINKS = [
   { label: "Beranda", href: "/" },
   { label: "Jelajahi Salon", href: "/user/jelajah" },
-  { label: "Layanan", href: "/layanan" },
-  { label: "Booking", href: "/booking" },
-  { label: "Review", href: "/review" },
-  { label: "Tentang", href: "/tentang" },
+  { label: "Layanan", href: "/user/jelajah" },
+  { label: "Booking", href: "/user/beranda" },
+  { label: "Review", href: "/user/jelajah" },
 ];
 
 const SERVICE_CARDS = [

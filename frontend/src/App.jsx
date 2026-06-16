@@ -5,6 +5,9 @@ import LandingPage from './pages/LandingPage';
 import Beranda from './pages/user/Beranda';
 import Jelajah from './pages/user/Jelajah';
 import Detail from './pages/user/Detail';
+import Booking from './pages/user/Booking';
+import Pembayaran from './pages/user/Pembayaran';
+import DetailBooking from './pages/user/DetailBooking';
 
 // Komponen PrivateRoute untuk mengecek apakah user sudah login
 const PrivateRoute = ({ children }) => {
@@ -44,6 +47,30 @@ function App() {
             element={
               <PrivateRoute>
                 <Detail />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/user/booking/:id" 
+            element={
+              <PrivateRoute>
+                <Booking />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/user/pembayaran/:id" 
+            element={
+              <PrivateRoute>
+                <Pembayaran />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/user/detail-booking/:id" 
+            element={
+              <PrivateRoute>
+                <DetailBooking />
               </PrivateRoute>
             } 
           />
