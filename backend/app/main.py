@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
-from app.database import engine, Base
+from app.database import engine, Base, SessionLocal
+from app.utils.hash import hash_password
 
 # 1. Import semua model di sini agar SQLAlchemy mendeteksinya
 from app.models.user import User
@@ -15,6 +16,37 @@ from app.models.review import Review
 from app.routers import user, salon, service, booking, payment, review
 
 app = FastAPI()
+
+@app.on_event("startup")
+def startup_setup():
+    db = SessionLocal()
+    try:
+        # 1. Jalankan migrasi mandiri untuk kolom image_url jika belum ada
+        try:
+            db.execute(text("ALTER TABLE salons ADD COLUMN image_url VARCHAR(255) NULL"))
+            db.commit()
+            print("Database migration: Added image_url column to salons table successfully.")
+        except Exception as e:
+            # Jika kolom sudah ada, abaikan error
+            db.rollback()
+        
+        # 2. Inisialisasi akun admin default
+        admin = db.query(User).filter(User.role == "admin").first()
+        if not admin:
+            default_admin = User(
+                name="Admin GlowUp",
+                email="admin@glowup.com",
+                password=hash_password("admin123"),
+                role="admin",
+                is_active=True
+            )
+            db.add(default_admin)
+            db.commit()
+            print("Initial admin created: admin@glowup.com / admin123")
+    except Exception as e:
+        print(f"Error during startup setup: {e}")
+    finally:
+        db.close()
 
 # Konfigurasi CORS
 origins = [

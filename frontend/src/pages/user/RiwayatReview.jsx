@@ -49,7 +49,7 @@ export default function RiwayatReview() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-50">
-                  <th className="text-left text-xs font-bold text-gray-400 px-8 py-5">Review ID</th>
+                  <th className="text-left text-xs font-bold text-gray-400 px-8 py-5">No</th>
                   <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Salon</th>
                   <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Rating</th>
                   <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Komentar</th>
@@ -68,9 +68,11 @@ export default function RiwayatReview() {
                   reviews.map((row, idx) => (
                     <tr key={row.id} className={idx > 0 ? "border-t border-gray-50" : ""}>
                       <td className="px-8 py-6 text-sm font-bold text-gray-700 whitespace-nowrap">
-                        Review #{row.id}
+                        {idx + 1}
                       </td>
-                      <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">ID Salon: {row.salon_id}</td>
+                      <td className="px-6 py-6 text-sm text-gray-800 font-semibold whitespace-nowrap">
+                        {row.salon?.name || `Salon #${row.salon_id}`}
+                      </td>
                       <td className="px-6 py-6 text-sm font-bold text-yellow-500 whitespace-nowrap">
                         {row.rating} / 5
                       </td>

@@ -69,10 +69,10 @@ export default function Jelajah() {
                   key={salon.id}
                   className="bg-white rounded-[24px] overflow-hidden border border-gray-100 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-10px_rgba(0,0,0,0.1)] transition-all group"
                 >
-                  {/* Dummy Image for now */}
+                  {/* Salon Image */}
                   <div className="h-48 bg-gray-200 relative overflow-hidden">
                     <img 
-                      src={`https://api.builder.io/api/v1/image/assets/TEMP/${salon.id % 2 === 0 ? "4295490d2b008bb111491f419e44fca5db04c803" : "f522a522b78a02f7f219e665307f41b3cc812db9"}?width=600`}
+                      src={salon.image_url || (salon.id % 2 === 0 ? "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80" : "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80")}
                       alt={salon.name} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />

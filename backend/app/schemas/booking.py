@@ -3,6 +3,8 @@ from typing import List, Optional
 from datetime import datetime
 from app.schemas.salon import SalonResponse
 from app.schemas.service import SalonServiceResponse
+from app.schemas.user import UserResponse
+from app.schemas.review import ReviewResponse
 
 # Schema untuk response detail layanan yang di-booking
 class BookingServiceResponse(BaseModel):
@@ -34,6 +36,8 @@ class BookingResponse(BookingBase):
     total_price: int
     services: List[BookingServiceResponse] # Menampilkan list layanan di dalam object ini
     salon: Optional[SalonResponse] = None
+    user: Optional[UserResponse] = None
+    review: Optional[ReviewResponse] = None
 
     class Config:
         from_attributes = True

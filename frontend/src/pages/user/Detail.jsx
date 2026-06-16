@@ -128,8 +128,8 @@ export default function Detail() {
           <div className="grid grid-cols-4 grid-rows-2 gap-3 sm:gap-4 h-[220px] sm:h-[360px] lg:h-[480px]">
             <div className="col-span-2 row-span-2 rounded-[24px] overflow-hidden shadow-sm">
               <img
-                src={`https://api.builder.io/api/v1/image/assets/TEMP/${salon.id % 2 === 0 ? "4295490d2b008bb111491f419e44fca5db04c803" : "f522a522b78a02f7f219e665307f41b3cc812db9"}?width=739`}
-                alt="Salon interior"
+                src={salon.image_url || (salon.id % 2 === 0 ? "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80" : "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80")}
+                alt={salon.name}
                 className="w-full h-full object-cover"
               />
             </div>

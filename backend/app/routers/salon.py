@@ -20,6 +20,14 @@ def create_salon(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_owner)  # WAJIB OWNER / ADMIN
 ):
+    # Cek apakah owner sudah mendaftarkan salon
+    existing_salon = db.query(Salon).filter(Salon.owner_id == current_user.id).first()
+    if existing_salon:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Anda sudah memiliki salon yang terdaftar. Silakan edit profil salon Anda jika ada perubahan."
+        )
+
     new_salon = Salon(
         owner_id=current_user.id, # Ambil ID owner dari token yang sedang login
         name=salon.name,
@@ -27,7 +35,8 @@ def create_salon(
         phone_number=salon.phone_number,
         description=salon.description,
         open_time=salon.open_time,
-        close_time=salon.close_time
+        close_time=salon.close_time,
+        image_url=salon.image_url
     )
     db.add(new_salon)
     db.commit()

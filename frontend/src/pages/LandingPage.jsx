@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axiosClient from "../api/axiosClient";
 
 const NAV_LINKS = [
   { label: "Beranda", href: "/" },
@@ -328,47 +329,65 @@ function FeaturesSection() {
   );
 }
 
-function ServicesSection() {
+function SalonsSection({ salons, loading }) {
   return (
     <section className="bg-[#FCF9F8] py-16 lg:py-20">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div className="flex flex-col gap-2">
             <h2 className="text-[#1B1C1C] font-bold text-3xl sm:text-4xl lg:text-[40px] leading-[1.2] tracking-[-0.4px]">
-              Layanan Terpopuler
+              Daftar Salon Terpopuler
             </h2>
             <p className="text-[#5E5F5B] text-base leading-6">
-              Pilih kategori layanan yang paling sesuai dengan kebutuhan kecantikanmu.
+              Temukan dan kunjungi salon kecantikan terbaik di sekitar Anda.
             </p>
           </div>
-          <Link to="/layanan" className="text-glow-mauve font-bold text-base leading-6 shrink-0 hover:underline">
+          <Link to="/user/jelajah" className="text-glow-mauve font-bold text-base leading-6 shrink-0 hover:underline">
             Lihat Semua
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {SERVICE_CARDS.map((card) => (
-            <div key={card.title} className="flex flex-col gap-1 group cursor-pointer">
-              <div
-                className="w-full aspect-square rounded-[24px] sm:rounded-[32px] overflow-hidden"
-                style={{ boxShadow: "0 10px 40px -12px rgba(0, 0, 0, 0.08)" }}
+        {loading ? (
+          <div className="text-center py-20 text-gray-500 font-medium">
+            Memuat daftar salon...
+          </div>
+        ) : salons.length === 0 ? (
+          <div className="text-center py-20 text-gray-500 font-medium">
+            Belum ada salon terdaftar saat ini.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {salons.map((salon) => (
+              <Link
+                to={`/user/salon/${salon.id}`}
+                key={salon.id}
+                className="bg-white rounded-[24px] overflow-hidden border border-gray-100 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-10px_rgba(0,0,0,0.1)] transition-all p-4 group flex flex-col justify-between"
               >
-                <img
-                  src={card.img}
-                  alt={card.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="pt-4">
-                <h4 className="text-[#1B1C1C] font-bold text-base sm:text-xl leading-7">{card.title}</h4>
-                <p className="text-sm leading-5">
-                  <span className="text-[#5E5F5B]">Mulai dari </span>
-                  <span className="text-glow-mauve">{card.price}</span>
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+                <div>
+                  <div className="w-full aspect-[4/3] rounded-[18px] overflow-hidden bg-gray-100 mb-4">
+                    <img
+                      src={salon.image_url || "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=540&q=80"}
+                      alt={salon.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <h4 className="text-[#1B1C1C] font-bold text-lg leading-7 group-hover:text-glow-mauve transition-colors truncate">
+                    {salon.name}
+                  </h4>
+                  <p className="text-sm text-[#5E5F5B] line-clamp-1 mt-1">
+                    {salon.address || "Lokasi belum tersedia"}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-450 mt-4 border-t border-gray-50 pt-3">
+                  <span>
+                    {salon.open_time?.substring(0, 5) || "09:00"} - {salon.close_time?.substring(0, 5) || "21:00"}
+                  </span>
+                  <span className="text-glow-mauve font-bold group-hover:underline">Detail →</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
@@ -493,13 +512,30 @@ function Footer() {
 }
 
 export default function Index() {
+  const [salons, setSalons] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSalons = async () => {
+      try {
+        const response = await axiosClient.get("/salons");
+        setSalons(response.data.slice(0, 4)); // Get top 4 salons
+      } catch (error) {
+        console.error("Gagal mengambil data salon:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSalons();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#FCF9F8]">
       <Navbar />
       <main>
         <HeroSection />
         <FeaturesSection />
-        <ServicesSection />
+        <SalonsSection salons={salons} loading={loading} />
         <CTASection />
       </main>
       <Footer />

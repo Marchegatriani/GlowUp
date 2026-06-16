@@ -12,6 +12,15 @@ import Pembayaran from './pages/user/Pembayaran';
 import DetailBooking from './pages/user/DetailBooking';
 import UserLayout from './components/UserLayout';
 
+import OwnerDashboard from './pages/owner/Dashboard';
+import KelolaLayananOwner from './pages/owner/KelolaLayanan';
+import KelolaSalonOwner from './pages/owner/KelolaSalon';
+import KelolaBooking from './pages/owner/KelolaBooking';
+
+import AdminLayout from './components/AdminLayout';
+import KelolaUser from './pages/admin/KelolaUser';
+import KelolaMasterLayanan from './pages/admin/KelolaMasterLayanan';
+
 // Komponen PrivateRoute untuk mengecek apakah user sudah login
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = !!localStorage.getItem("access_token");
@@ -40,9 +49,18 @@ function App() {
             <Route path="/user/detail-booking/:id" element={<DetailBooking />} />
           </Route>
 
-          {/* Placeholder untuk rute lain nanti */}
-          <Route path="/owner/dashboard" element={<PrivateRoute><h2>Dashboard Owner Salon (Placeholder)</h2></PrivateRoute>} />
-          <Route path="/admin/dashboard" element={<PrivateRoute><h2>Dashboard Admin (Placeholder)</h2></PrivateRoute>} />
+          {/* 3. Halaman Protected untuk Admin */}
+          <Route element={<PrivateRoute><AdminLayout /></PrivateRoute>}>
+            <Route path="/admin/dashboard" element={<KelolaUser />} />
+            <Route path="/admin/users" element={<KelolaUser />} />
+            <Route path="/admin/master-services" element={<KelolaMasterLayanan />} />
+          </Route>
+
+          {/* 4. Halaman Protected untuk Owner */}
+          <Route path="/owner/dashboard" element={<PrivateRoute><OwnerDashboard /></PrivateRoute>} />
+          <Route path="/owner/bookings" element={<PrivateRoute><KelolaBooking /></PrivateRoute>} />
+          <Route path="/owner/services" element={<PrivateRoute><KelolaLayananOwner /></PrivateRoute>} />
+          <Route path="/owner/salon-profile" element={<PrivateRoute><KelolaSalonOwner /></PrivateRoute>} />
         </Routes>
       </div>
     </Router>

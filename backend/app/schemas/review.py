@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
+from app.schemas.salon import SalonResponse
 
 # Schema untuk input saat user membuat review
 class ReviewCreate(BaseModel):
@@ -17,7 +18,8 @@ class ReviewResponse(BaseModel):
     booking_id: int
     rating: int
     comment: Optional[str]
-    created_at: datetime
+    created_at: Optional[datetime] = None
+    salon: Optional[SalonResponse] = None
 
     class Config:
         from_attributes = True

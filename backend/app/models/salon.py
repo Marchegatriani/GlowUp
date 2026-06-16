@@ -15,6 +15,7 @@ class Salon(Base):
     open_time = Column(Time, nullable=False, default=time(9, 0))
     close_time = Column(Time, nullable=False, default=time(21, 0))
     is_active = Column(Boolean, default=True)
+    image_url = Column(String(255), nullable=True)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
