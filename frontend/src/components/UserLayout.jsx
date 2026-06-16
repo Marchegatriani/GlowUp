@@ -45,10 +45,10 @@ export default function UserLayout() {
             <Link to="/user/jelajah" className={getLinkClass('/user/jelajah')}>
               Jelajahi Salon
             </Link>
-            <Link to="/user/beranda" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
+            <Link to="/user/riwayat-booking" className={getLinkClass('/user/riwayat-booking')}>
               Booking
             </Link>
-            <Link to="/user/jelajah" className="text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors">
+            <Link to="/user/riwayat-review" className={getLinkClass('/user/riwayat-review')}>
               Review
             </Link>
           </nav>

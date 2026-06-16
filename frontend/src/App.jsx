@@ -6,6 +6,8 @@ import Beranda from './pages/user/Beranda';
 import Jelajah from './pages/user/Jelajah';
 import Detail from './pages/user/Detail';
 import Booking from './pages/user/Booking';
+import RiwayatBooking from './pages/user/RiwayatBooking';
+import RiwayatReview from './pages/user/RiwayatReview';
 import Pembayaran from './pages/user/Pembayaran';
 import DetailBooking from './pages/user/DetailBooking';
 import UserLayout from './components/UserLayout';
@@ -32,6 +34,8 @@ function App() {
             <Route path="/user/jelajah" element={<Jelajah />} />
             <Route path="/user/salon/:id" element={<Detail />} />
             <Route path="/user/booking/:id" element={<Booking />} />
+            <Route path="/user/riwayat-booking" element={<RiwayatBooking />} />
+            <Route path="/user/riwayat-review" element={<RiwayatReview />} />
             <Route path="/user/pembayaran/:id" element={<Pembayaran />} />
             <Route path="/user/detail-booking/:id" element={<DetailBooking />} />
           </Route>
