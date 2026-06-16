@@ -1,34 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate
-from app.utils.hash import hash_password
+from app.schemas.user import UserCreate, UserLogin
+from app.utils.hash import hash_password, verify_password
 from app.utils.auth import get_current_user
-
-from app.schemas.user import (
-    UserCreate,
-    UserLogin
-)
-
-from app.utils.hash import (
-    hash_password,
-    verify_password
-)
-
 from app.utils.jwt import create_access_token
 from app.utils.permissions import require_admin, require_owner
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/register")
@@ -48,7 +29,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         name=user.name,
         email=user.email,
         password=hash_password(user.password),
-        role=user.role
+        role="user"
     )
 
     db.add(new_user)
@@ -140,7 +121,7 @@ def customer_dashboard_data(
     # 1. Hitung jumlah booking aktif
     active_bookings_count = db.query(Booking).filter(
         Booking.user_id == current_user.id,
-        Booking.status.in_(["Pending", "Confirmed"])
+        Booking.status.in_(["pending", "confirmed"])
     ).count()
 
     # 2. Hitung total review yang pernah diberikan user ini

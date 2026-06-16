@@ -1,6 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
-from datetime import datetime
 from app.database import Base
 
 class Payment(Base):
@@ -13,7 +12,7 @@ class Payment(Base):
     method = Column(String(50), nullable=True) 
     # Status: pending, paid, cancelled
     status = Column(String(50), default="pending") 
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
 
     # Relasi balik ke Booking
     booking = relationship("Booking", back_populates="payment")

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime, timedelta
 
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.booking import Booking, BookingService
 from app.models.salon import Salon
 from app.models.service import SalonService
@@ -18,13 +18,6 @@ router = APIRouter(
     prefix="/bookings",
     tags=["Bookings"]
 )
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # 1. User Membuat Booking Baru
 @router.post("/", response_model=BookingResponse, status_code=status.HTTP_201_CREATED)
@@ -123,6 +116,29 @@ def create_booking(
 @router.get("/me", response_model=List[BookingResponse])
 def get_my_bookings(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return db.query(Booking).filter(Booking.user_id == current_user.id).all()
+
+# 2a. User/Owner/Admin Melihat Detail Booking Spesifik
+@router.get("/{booking_id}", response_model=BookingResponse)
+def get_booking_by_id(
+    booking_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    booking = db.query(Booking).filter(Booking.id == booking_id).first()
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking tidak ditemukan")
+    
+    # Pastikan user yang login adalah pemilik booking ini, atau owner salon bersangkutan, atau admin
+    salon = db.query(Salon).filter(Salon.id == booking.salon_id).first()
+    if (
+        booking.user_id != current_user.id 
+        and (not salon or salon.owner_id != current_user.id) 
+        and current_user.role != "admin"
+    ):
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    
+    return booking
+
 
 # 3. Owner/Admin Memperbarui Status Booking
 @router.put("/{booking_id}/status", response_model=BookingResponse)

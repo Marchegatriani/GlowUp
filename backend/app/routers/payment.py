@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.payment import Payment
 from app.models.booking import Booking
 from app.models.user import User
@@ -13,13 +13,6 @@ router = APIRouter(
     prefix="/payments",
     tags=["Payments"]
 )
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # 1. Memilih Metode Pembayaran (Sesuai request POST /payments)
 @router.post("/", response_model=PaymentResponse)

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import os
 
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.user import User
 
 load_dotenv()
@@ -17,13 +17,6 @@ oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="login"
 )
 
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 def get_current_user(

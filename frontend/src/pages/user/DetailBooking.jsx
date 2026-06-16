@@ -10,9 +10,8 @@ export default function DetailBooking() {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        const response = await axiosClient.get("/bookings/me");
-        const found = response.data.find((b) => b.id === parseInt(id));
-        setBooking(found);
+        const response = await axiosClient.get(`/bookings/${id}`);
+        setBooking(response.data);
       } catch (error) {
         console.error("Gagal memuat detail booking:", error);
       } finally {

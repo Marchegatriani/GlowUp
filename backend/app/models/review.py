@@ -1,6 +1,5 @@
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
-from datetime import datetime
 from app.database import Base
 
 class Review(Base):
@@ -12,7 +11,7 @@ class Review(Base):
     booking_id = Column(Integer, ForeignKey("bookings.id"), nullable=False, unique=True)
     rating = Column(Integer, nullable=False)
     comment = Column(Text, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
 
     # Relasi
     user = relationship("User")

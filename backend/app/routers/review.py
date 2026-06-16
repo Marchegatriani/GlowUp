@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.review import Review
 from app.models.booking import Booking
 from app.models.salon import Salon
@@ -12,13 +12,6 @@ from app.schemas.review import ReviewCreate, ReviewResponse
 from app.utils.auth import get_current_user
 
 router = APIRouter(tags=["Reviews"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # 1. POST /reviews - User membuat review
 @router.post("/reviews", response_model=ReviewResponse, status_code=status.HTTP_201_CREATED)
@@ -67,3 +60,11 @@ def get_salon_reviews(salon_id: int, db: Session = Depends(get_db)):
         
     reviews = db.query(Review).filter(Review.salon_id == salon_id).all()
     return reviews
+
+# 3. GET /reviews/me - Lihat semua review milik user yang login
+@router.get("/reviews/me", response_model=List[ReviewResponse])
+def get_my_reviews(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return db.query(Review).filter(Review.user_id == current_user.id).all()

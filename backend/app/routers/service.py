@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.service import Service, SalonService
 from app.models.salon import Salon
 from app.models.user import User
@@ -10,13 +10,6 @@ from app.schemas.service import ServiceCreate, ServiceResponse, SalonServiceCrea
 from app.utils.permissions import require_admin, require_owner
 
 router = APIRouter(tags=["Services"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # ==========================================
 # MASTER SERVICES (Dikelola oleh Admin)

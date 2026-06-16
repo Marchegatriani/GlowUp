@@ -1,6 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
-from datetime import datetime
 from app.database import Base
 
 # 1. Tabel Utama Booking
@@ -16,7 +15,7 @@ class Booking(Base):
     # Status bisa berupa: pending, confirmed, completed, cancelled
     status = Column(String(50), default="pending") 
     total_price = Column(Integer, nullable=False, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
 
     # Relasi
     user = relationship("User", backref="bookings")

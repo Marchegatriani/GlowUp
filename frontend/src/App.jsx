@@ -41,9 +41,8 @@ function App() {
           </Route>
 
           {/* Placeholder untuk rute lain nanti */}
-          <Route path="/user/dashboard" element={<h2>Dashboard Customer (Placeholder)</h2>} />
-          <Route path="/owner/dashboard" element={<h2>Dashboard Owner Salon (Placeholder)</h2>} />
-          <Route path="/admin/dashboard" element={<h2>Dashboard Admin (Placeholder)</h2>} />
+          <Route path="/owner/dashboard" element={<PrivateRoute><h2>Dashboard Owner Salon (Placeholder)</h2></PrivateRoute>} />
+          <Route path="/admin/dashboard" element={<PrivateRoute><h2>Dashboard Admin (Placeholder)</h2></PrivateRoute>} />
         </Routes>
       </div>
     </Router>

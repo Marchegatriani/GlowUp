@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.salon import Salon
 from app.models.user import User
 from app.schemas.salon import SalonCreate, SalonUpdate, SalonResponse
@@ -12,13 +12,6 @@ router = APIRouter(
     prefix="/salons",
     tags=["Salons"]
 )
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # 1. Create Salon
 @router.post("/", response_model=SalonResponse, status_code=status.HTTP_201_CREATED)

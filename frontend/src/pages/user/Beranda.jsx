@@ -105,11 +105,6 @@ export default function Index() {
     fetchDashboardData();
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    navigate("/login");
-  };
-
   const getStatusStyle = (status) => {
     switch (status.toLowerCase()) {
       case "pending": return "bg-yellow-50 text-yellow-600";
@@ -129,6 +124,14 @@ export default function Index() {
       default: return status.toUpperCase();
     }
   };
+
+  const upcomingBookings = bookings
+    .filter((b) => {
+      const status = b.status?.toLowerCase();
+      return (status === "pending" || status === "confirmed") && new Date(b.booking_time) >= new Date();
+    })
+    .sort((a, b) => new Date(a.booking_time) - new Date(b.booking_time))
+    .slice(0, 2);
 
   if (loading) {
     return (
@@ -205,81 +208,83 @@ export default function Index() {
               <h2 className="text-xl font-bold text-gray-800 leading-7">Booking Mendatang</h2>
               <p className="text-sm text-gray-500 leading-5">Layanan yang akan segera datang untuk Anda</p>
             </div>
-            <button className="flex items-center gap-1 text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors">
+            <Link to="/user/riwayat-booking" className="flex items-center gap-1 text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors">
               Lihat Semua
               <ArrowRightIcon />
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Booking Card 1 - Radiant */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-4 flex items-center gap-6 min-h-[162px]">
-              <div className="relative flex-shrink-0 w-32 h-32">
-                <img
-                  src="https://api.builder.io/api/v1/image/assets/TEMP/24d932a9f3f57b187f2bc2feab59d59b22706e1f?width=256"
-                  alt="Radiant"
-                  className="w-full h-full object-cover rounded-xl"
-                />
-                <div
-                  className="absolute -right-2 -top-2 w-6 h-6 rounded-full flex items-center justify-center shadow-md"
-                  style={{ background: "#8B6B7A" }}
-                >
-                  <CheckIcon />
-                </div>
+            {upcomingBookings.length === 0 ? (
+              <div className="col-span-1 md:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 text-center flex flex-col items-center justify-center min-h-[162px]">
+                <p className="text-gray-500 font-medium mb-2">Belum ada booking mendatang.</p>
+                <Link to="/user/jelajah" className="text-sm font-bold text-[#8B6B7A] hover:underline">
+                  Cari Salon & Reservasi Sekarang
+                </Link>
               </div>
-              <div className="flex flex-col flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-2 mb-1">
-                  <h3 className="text-lg font-bold text-gray-800 leading-7">Radiant</h3>
-                  <span className="flex-shrink-0 px-2 py-0.5 rounded-full bg-pink-100 text-pink-600 text-[10px] font-bold tracking-wide uppercase">
-                    TERKONFIRMASI
-                  </span>
-                </div>
-                <p className="text-sm text-gray-400 leading-5 mb-4">Balayage & Hair Treatment</p>
-                <div className="flex items-center gap-6">
-                  <div className="flex items-center gap-1">
-                    <SmallCalendarIcon />
-                    <span className="text-xs text-gray-500">24 Okt 2024</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <SmallClockIcon />
-                    <span className="text-xs text-gray-500">14:00 WIB</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Booking Card 2 - Ethereal Spa */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-4 flex items-center gap-6 min-h-[162px]">
-              <div className="relative flex-shrink-0 w-32 h-32">
-                <img
-                  src="https://api.builder.io/api/v1/image/assets/TEMP/ad3d9159d888d82e69677580f606801dd9b3f940?width=256"
-                  alt="Ethereal Spa"
-                  className="w-full h-full object-cover rounded-xl"
-                />
-                <div className="absolute -right-2 -top-2 w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center shadow-md">
-                  <DotsIcon />
-                </div>
-              </div>
-              <div className="flex flex-col flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-2 mb-1">
-                  <h3 className="text-lg font-bold text-gray-800 leading-7">Ethereal Spa</h3>
-                  <span className="flex-shrink-0 px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 text-[10px] font-bold tracking-wide uppercase">
-                    MENUNGGU
-                  </span>
-                </div>
-                <p className="text-sm text-gray-400 leading-5 mb-4">Aromatherapy Massage</p>
-                <div className="flex items-center gap-6">
-                  <div className="flex items-center gap-1">
-                    <SmallCalendarIcon />
-                    <span className="text-xs text-gray-500">27 Okt 2024</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <SmallClockIcon />
-                    <span className="text-xs text-gray-500">10:00 WIB</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ) : (
+              upcomingBookings.map((b) => {
+                const isConfirmed = b.status?.toLowerCase() === "confirmed";
+                const servicesText = b.services?.map(s => s.salon_service?.service?.name).join(", ") || "Layanan Salon";
+                
+                return (
+                  <Link
+                    key={b.id}
+                    to={`/user/detail-booking/${b.id}`}
+                    className="bg-white rounded-2xl border border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-4 flex items-center gap-6 min-h-[162px] hover:translate-y-[-2px] transition-transform select-none"
+                  >
+                    <div className="relative flex-shrink-0 w-32 h-32">
+                      <img
+                        src={`https://api.builder.io/api/v1/image/assets/TEMP/${b.salon_id % 2 === 0 ? "4295490d2b008bb111491f419e44fca5db04c803" : "f522a522b78a02f7f219e665307f41b3cc812db9"}?width=256`}
+                        alt={b.salon?.name || "Salon"}
+                        className="w-full h-full object-cover rounded-xl"
+                      />
+                      <div
+                        className={`absolute -right-2 -top-2 w-6 h-6 rounded-full flex items-center justify-center shadow-md ${
+                          isConfirmed ? "bg-[#8B6B7A]" : "bg-yellow-500"
+                        }`}
+                      >
+                        {isConfirmed ? <CheckIcon /> : <DotsIcon />}
+                      </div>
+                    </div>
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h3 className="text-lg font-bold text-gray-800 leading-7 truncate">
+                          {b.salon?.name || `Salon #${b.salon_id}`}
+                        </h3>
+                        <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase ${
+                          isConfirmed ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"
+                        }`}>
+                          {isConfirmed ? "Dikonfirmasi" : "Menunggu"}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-400 leading-5 mb-4 truncate">{servicesText}</p>
+                      <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-1">
+                          <SmallCalendarIcon />
+                          <span className="text-xs text-gray-500">
+                            {new Date(b.booking_time).toLocaleString("id-ID", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric"
+                            })}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <SmallClockIcon />
+                          <span className="text-xs text-gray-500">
+                            {new Date(b.booking_time).toLocaleString("id-ID", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })} WIB
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })
+            )}
           </div>
         </section>
 

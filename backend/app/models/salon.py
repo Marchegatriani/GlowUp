@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, DateTime, Time
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, DateTime, Time, func
 from sqlalchemy.orm import relationship
-from datetime import datetime, time
+from datetime import time
 from app.database import Base
 
 class Salon(Base):
@@ -15,8 +15,8 @@ class Salon(Base):
     open_time = Column(Time, nullable=False, default=time(9, 0))
     close_time = Column(Time, nullable=False, default=time(21, 0))
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
     # Relasi ke tabel users (owner)
     # Di backend, kita bisa mengakses data owner dari sebuah salon melalui `salon.owner`

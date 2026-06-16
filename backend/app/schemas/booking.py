@@ -1,14 +1,17 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import datetime
+from app.schemas.salon import SalonResponse
+from app.schemas.service import SalonServiceResponse
 
 # Schema untuk response detail layanan yang di-booking
 class BookingServiceResponse(BaseModel):
     salon_service_id: int
     price: int
+    salon_service: Optional[SalonServiceResponse] = None
     
     class Config:
-        from_attributes = True
+      from_attributes = True
 
 # Base data untuk pembuatan booking
 class BookingBase(BaseModel):
@@ -30,6 +33,7 @@ class BookingResponse(BookingBase):
     status: str
     total_price: int
     services: List[BookingServiceResponse] # Menampilkan list layanan di dalam object ini
+    salon: Optional[SalonResponse] = None
 
     class Config:
         from_attributes = True

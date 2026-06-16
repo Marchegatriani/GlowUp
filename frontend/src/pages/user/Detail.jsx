@@ -318,20 +318,9 @@ export default function Detail() {
             {/* Price Summary */}
             <div className="flex flex-col gap-3 p-5 rounded-xl bg-gray-50 border border-gray-100">
               <div className="flex justify-between items-center">
-                <span className="text-gray-500 text-sm">Subtotal</span>
-                <span className="text-gray-800 text-sm font-medium">
-                  {selectedService ? `Rp ${selectedService.price.toLocaleString("id-ID")}` : "Rp 0"}
-                </span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-500 text-sm">Biaya Layanan</span>
-                <span className="text-gray-800 text-sm font-medium">Rp 10.000</span>
-              </div>
-              <div className="h-px bg-gray-200 my-1" />
-              <div className="flex justify-between items-center">
                 <span className="text-gray-800 text-base font-bold">Total</span>
                 <span className="text-[#8B6B7A] text-lg font-bold">
-                  {selectedService ? `Rp ${(selectedService.price + 10000).toLocaleString("id-ID")}` : "Rp 0"}
+                  {selectedService ? `Rp ${selectedService.price.toLocaleString("id-ID")}` : "Rp 0"}
                 </span>
               </div>
             </div>

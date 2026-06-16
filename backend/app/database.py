@@ -16,3 +16,12 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+# Dependency untuk mendapatkan session database
+# Import fungsi ini di semua router/utils: from app.database import get_db
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
