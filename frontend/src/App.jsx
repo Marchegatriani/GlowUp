@@ -8,6 +8,7 @@ import Detail from './pages/user/Detail';
 import Booking from './pages/user/Booking';
 import Pembayaran from './pages/user/Pembayaran';
 import DetailBooking from './pages/user/DetailBooking';
+import UserLayout from './components/UserLayout';
 
 // Komponen PrivateRoute untuk mengecek apakah user sudah login
 const PrivateRoute = ({ children }) => {
@@ -26,54 +27,14 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           {/* 2. Halaman Protected untuk Customer */}
-          <Route 
-            path="/user/beranda" 
-            element={
-              <PrivateRoute>
-                <Beranda />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/user/jelajah" 
-            element={
-              <PrivateRoute>
-                <Jelajah />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/user/salon/:id" 
-            element={
-              <PrivateRoute>
-                <Detail />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/user/booking/:id" 
-            element={
-              <PrivateRoute>
-                <Booking />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/user/pembayaran/:id" 
-            element={
-              <PrivateRoute>
-                <Pembayaran />
-              </PrivateRoute>
-            } 
-          />
-          <Route 
-            path="/user/detail-booking/:id" 
-            element={
-              <PrivateRoute>
-                <DetailBooking />
-              </PrivateRoute>
-            } 
-          />
+          <Route element={<PrivateRoute><UserLayout /></PrivateRoute>}>
+            <Route path="/user/beranda" element={<Beranda />} />
+            <Route path="/user/jelajah" element={<Jelajah />} />
+            <Route path="/user/salon/:id" element={<Detail />} />
+            <Route path="/user/booking/:id" element={<Booking />} />
+            <Route path="/user/pembayaran/:id" element={<Pembayaran />} />
+            <Route path="/user/detail-booking/:id" element={<DetailBooking />} />
+          </Route>
 
           {/* Placeholder untuk rute lain nanti */}
           <Route path="/user/dashboard" element={<h2>Dashboard Customer (Placeholder)</h2>} />
