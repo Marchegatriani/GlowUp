@@ -112,8 +112,8 @@ export default function RiwayatReview() {
               >
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-[#8B6B7A] tracking-wider uppercase">
-                      Ulasan #{idx + 1}
+                    <span className="text-[10px] font-bold text-glowup-brand tracking-wider uppercase">
+                      Ulasan
                     </span>
                     <span className="text-xs text-gray-400 font-medium">
                       {new Date(row.created_at).toLocaleDateString("id-ID", {
@@ -135,7 +135,7 @@ export default function RiwayatReview() {
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-650 italic mt-1 bg-[#FCF9F8] p-4 rounded-xl border border-gray-50">
+                  <p className="text-sm text-gray-650 italic mt-1 bg-glowup-bg p-4 rounded-xl border border-gray-50">
                     "{row.comment || "Tidak ada komentar tertulis"}"
                   </p>
                 </div>
@@ -201,7 +201,7 @@ export default function RiwayatReview() {
                   onChange={(e) => setEditComment(e.target.value)}
                   rows="4"
                   placeholder="Ceritakan pengalaman perawatan Anda..."
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors resize-none text-gray-800 font-medium"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors resize-none text-gray-800 font-medium"
                 />
               </div>
 
@@ -219,7 +219,7 @@ export default function RiwayatReview() {
                   type="submit"
                   disabled={saving}
                   className="flex-1 py-3 rounded-xl text-white font-bold text-sm tracking-wide transition-all shadow-md disabled:opacity-70"
-                  style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+                  style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
                 >
                   {saving ? "Menyimpan..." : "Simpan Ulasan"}
                 </button>

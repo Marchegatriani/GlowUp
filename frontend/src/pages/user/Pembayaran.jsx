@@ -81,7 +81,7 @@ export default function Pembayaran() {
     return (
       <div className="min-h-screen bg-[#FAFAFA] flex flex-col items-center justify-center gap-4">
         <p className="text-gray-500 font-medium">Data pembayaran tidak ditemukan.</p>
-        <Link to="/user/beranda" className="text-[#8B6B7A] hover:underline">Kembali ke Beranda</Link>
+        <Link to="/user/beranda" className="text-glowup-brand hover:underline">Kembali ke Beranda</Link>
       </div>
     );
   }
@@ -102,7 +102,7 @@ export default function Pembayaran() {
 
         <div className="bg-gray-50 rounded-xl p-6 mb-8 text-center border border-gray-100">
           <p className="text-gray-500 text-sm font-medium mb-1">Total Pembayaran</p>
-          <p className="text-3xl font-bold text-[#8B6B7A]">Rp {payment.amount.toLocaleString("id-ID")}</p>
+          <p className="text-3xl font-bold text-glowup-brand">Rp {payment.amount.toLocaleString("id-ID")}</p>
         </div>
 
         <div className="flex flex-col gap-4 mb-8">
@@ -110,7 +110,7 @@ export default function Pembayaran() {
           
           <button
             onClick={() => setSelectedMethod("ewallet")}
-            className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${selectedMethod === "ewallet" ? "border-[#8B6B7A] bg-pink-50/30" : "border-gray-200 hover:border-gray-300"}`}
+            className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${selectedMethod === "ewallet" ? "border-glowup-brand bg-pink-50/30" : "border-gray-200 hover:border-gray-300"}`}
           >
             <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg">E</div>
             <div className="text-left">
@@ -121,7 +121,7 @@ export default function Pembayaran() {
 
           <button
             onClick={() => setSelectedMethod("transfer")}
-            className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${selectedMethod === "transfer" ? "border-[#8B6B7A] bg-pink-50/30" : "border-gray-200 hover:border-gray-300"}`}
+            className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${selectedMethod === "transfer" ? "border-glowup-brand bg-pink-50/30" : "border-gray-200 hover:border-gray-300"}`}
           >
             <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-lg">B</div>
             <div className="text-left">
@@ -132,7 +132,7 @@ export default function Pembayaran() {
 
           <button
             onClick={() => setSelectedMethod("cash")}
-            className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${selectedMethod === "cash" ? "border-[#8B6B7A] bg-pink-50/30" : "border-gray-200 hover:border-gray-300"}`}
+            className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${selectedMethod === "cash" ? "border-glowup-brand bg-pink-50/30" : "border-gray-200 hover:border-gray-300"}`}
           >
             <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 font-bold text-lg">C</div>
             <div className="text-left">
@@ -146,7 +146,7 @@ export default function Pembayaran() {
           onClick={handlePay}
           disabled={isProcessing}
           className={`w-full py-4 rounded-xl text-white text-base font-bold tracking-wide transition-all shadow-md ${isProcessing ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg hover:-translate-y-0.5'}`}
-          style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+          style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
         >
           {isProcessing ? "Memproses..." : "Bayar Sekarang"}
         </button>

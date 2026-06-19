@@ -145,7 +145,7 @@ export default function KelolaLayanan() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#FCF9F8] font-inter">
+    <div className="flex min-h-screen bg-glowup-bg font-inter">
       <Sidebar />
       <main className="flex-1 ml-[280px] min-h-screen">
         <div className="max-w-[1160px] mx-auto px-8 lg:px-16 py-10 flex flex-col gap-10">
@@ -164,7 +164,7 @@ export default function KelolaLayanan() {
               <button
                 onClick={() => setShowAddModal(true)}
                 className="px-6 py-3 rounded-xl text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 shrink-0"
-                style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+                style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
               >
                 Tambah Layanan Baru
               </button>
@@ -197,7 +197,7 @@ export default function KelolaLayanan() {
               <p className="text-gray-500 font-medium mb-2">Salon Anda belum memiliki layanan perawatan aktif.</p>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="text-sm font-bold text-[#8B6B7A] hover:underline"
+                className="text-sm font-bold text-glowup-brand hover:underline"
               >
                 Tambahkan treatment pertama sekarang
               </button>
@@ -231,7 +231,7 @@ export default function KelolaLayanan() {
                         <td className="px-8 py-6 text-sm text-gray-650 font-semibold whitespace-nowrap">
                           {msvc.duration_minutes} Menit
                         </td>
-                        <td className="px-8 py-6 text-sm font-bold text-[#8B6B7A] whitespace-nowrap">
+                        <td className="px-8 py-6 text-sm font-bold text-glowup-brand whitespace-nowrap">
                           Rp {msvc.price.toLocaleString("id-ID")}
                         </td>
                         <td className="px-8 py-6 text-center whitespace-nowrap flex items-center justify-center gap-3">
@@ -282,7 +282,7 @@ export default function KelolaLayanan() {
                       placeholder="Contoh: Potong Rambut Premium"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                     />
                   </div>
 
@@ -293,7 +293,7 @@ export default function KelolaLayanan() {
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       rows="3"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors resize-none"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors resize-none"
                     />
                   </div>
 
@@ -305,7 +305,7 @@ export default function KelolaLayanan() {
                       placeholder="Contoh: 150000"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                     />
                   </div>
 
@@ -315,7 +315,7 @@ export default function KelolaLayanan() {
                       required
                       value={duration}
                       onChange={(e) => setDuration(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                     >
                       <option value="15">15 Menit</option>
                       <option value="30">30 Menit</option>
@@ -338,7 +338,7 @@ export default function KelolaLayanan() {
                       type="submit"
                       disabled={saving}
                       className="flex-1 py-3.5 rounded-xl text-white text-sm font-bold transition-all shadow-sm"
-                      style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+                      style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
                     >
                       {saving ? "Menyimpan..." : "Tambahkan"}
                     </button>
@@ -377,7 +377,7 @@ export default function KelolaLayanan() {
                       placeholder="Contoh: Potong Rambut Premium"
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                     />
                   </div>
 
@@ -388,7 +388,7 @@ export default function KelolaLayanan() {
                       value={editDescription}
                       onChange={(e) => setEditDescription(e.target.value)}
                       rows="3"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors resize-none"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors resize-none"
                     />
                   </div>
 
@@ -400,7 +400,7 @@ export default function KelolaLayanan() {
                       placeholder="Contoh: 150000"
                       value={editPrice}
                       onChange={(e) => setEditPrice(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                     />
                   </div>
 
@@ -410,7 +410,7 @@ export default function KelolaLayanan() {
                       required
                       value={editDuration}
                       onChange={(e) => setEditDuration(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                     >
                       <option value="15">15 Menit</option>
                       <option value="30">30 Menit</option>
@@ -436,7 +436,7 @@ export default function KelolaLayanan() {
                       type="submit"
                       disabled={saving}
                       className="flex-1 py-3.5 rounded-xl text-white text-sm font-bold transition-all shadow-sm"
-                      style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+                      style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
                     >
                       {saving ? "Menyimpan..." : "Simpan Perubahan"}
                     </button>

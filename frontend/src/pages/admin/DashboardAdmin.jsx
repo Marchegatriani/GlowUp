@@ -33,7 +33,7 @@ export default function DashboardAdmin() {
           Dashboard Admin
         </h1>
         <p className="text-[#5E5F5B] text-base font-normal leading-6">
-          Selamat datang kembali, <span className="font-semibold text-[#8B6B7A]">{adminName || "Admin"}</span>. Pantau aktivitas dan pertumbuhan platform GlowUp.
+          Selamat datang kembali, <span className="font-semibold text-glowup-brand">{adminName || "Admin"}</span>. Pantau aktivitas dan pertumbuhan platform GlowUp.
         </p>
       </header>
 
@@ -58,7 +58,7 @@ export default function DashboardAdmin() {
                   {stats?.total_users || 0}
                 </h2>
               </div>
-              <div className="p-4 bg-[rgba(121,84,101,0.05)] rounded-2xl text-[#8B6B7A]">
+              <div className="p-4 bg-[rgba(121,84,101,0.05)] rounded-2xl text-glowup-brand">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
                 </svg>
@@ -78,7 +78,7 @@ export default function DashboardAdmin() {
 
             <Link
               to="/admin/users"
-              className="text-[#8B6B7A] font-bold text-sm hover:text-[#795465] transition-colors mt-2 inline-flex items-center gap-1 group self-start"
+              className="text-glowup-brand font-bold text-sm hover:text-[#795465] transition-colors mt-2 inline-flex items-center gap-1 group self-start"
             >
               Kelola Pengguna
               <span className="group-hover:translate-x-1 transition-transform">→</span>
@@ -94,7 +94,7 @@ export default function DashboardAdmin() {
                   {stats?.total_salons || 0}
                 </h2>
               </div>
-              <div className="p-4 bg-[rgba(121,84,101,0.05)] rounded-2xl text-[#8B6B7A]">
+              <div className="p-4 bg-[rgba(121,84,101,0.05)] rounded-2xl text-glowup-brand">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
                 </svg>
@@ -107,7 +107,7 @@ export default function DashboardAdmin() {
 
             <Link
               to="/admin/salons"
-              className="text-[#8B6B7A] font-bold text-sm hover:text-[#795465] transition-colors mt-2 inline-flex items-center gap-1 group self-start"
+              className="text-glowup-brand font-bold text-sm hover:text-[#795465] transition-colors mt-2 inline-flex items-center gap-1 group self-start"
             >
               Kelola Mitra Salon
               <span className="group-hover:translate-x-1 transition-transform">→</span>

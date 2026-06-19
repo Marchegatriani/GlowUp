@@ -64,7 +64,7 @@ export default function DetailBooking() {
     return (
       <div className="min-h-screen bg-[#FAFAFA] flex flex-col items-center justify-center gap-4">
         <p className="text-gray-500 font-medium">Booking tidak ditemukan.</p>
-        <Link to="/user/beranda" className="text-[#8B6B7A] hover:underline">Kembali ke Beranda</Link>
+        <Link to="/user/beranda" className="text-glowup-brand hover:underline">Kembali ke Beranda</Link>
       </div>
     );
   }
@@ -104,7 +104,7 @@ export default function DetailBooking() {
 
           <div className="flex flex-col gap-1 border-b border-gray-100 pb-4">
             <span className="text-gray-500 text-sm font-medium">Total Harga</span>
-            <span className="text-[#8B6B7A] text-xl font-bold">
+            <span className="text-glowup-brand text-xl font-bold">
               Rp {booking.total_price.toLocaleString("id-ID")}
             </span>
           </div>
@@ -186,7 +186,7 @@ export default function DetailBooking() {
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     rows="3"
-                    className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors resize-none font-medium text-gray-800"
+                    className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors resize-none font-medium text-gray-800"
                   />
                 </div>
 
@@ -194,7 +194,7 @@ export default function DetailBooking() {
                   type="submit"
                   disabled={submitting}
                   className="w-full py-3.5 rounded-xl text-white text-sm font-bold tracking-wide transition-all shadow-sm hover:shadow-md disabled:opacity-75"
-                  style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+                  style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
                 >
                   {submitting ? "Mengirim..." : "Kirim Ulasan"}
                 </button>
@@ -208,7 +208,7 @@ export default function DetailBooking() {
             <Link
               to={`/user/pembayaran/${booking.id}`}
               className="w-full py-4 rounded-xl text-white text-center text-base font-bold tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
-              style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+              style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
             >
               Lanjutkan Pembayaran
             </Link>

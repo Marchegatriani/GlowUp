@@ -3,6 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from app.database import engine, Base, SessionLocal
 from app.utils.hash import hash_password
+from fastapi.staticfiles import StaticFiles
+import os
+
+# Buat direktori uploads jika belum ada
+os.makedirs("uploads", exist_ok=True)
 
 # 1. Import semua model di sini agar SQLAlchemy mendeteksinya
 from app.models.user import User
@@ -16,6 +21,9 @@ from app.models.review import Review
 from app.routers import user, salon, service, booking, payment, review
 
 app = FastAPI()
+
+# Mount direktori uploads
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 @app.on_event("startup")
 def startup_setup():

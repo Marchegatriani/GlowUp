@@ -125,7 +125,7 @@ export default function Detail() {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-20">
         <p className="text-gray-500 font-medium">Salon tidak ditemukan.</p>
-        <Link to="/user/jelajah" className="text-[#8B6B7A] hover:underline">Kembali ke Jelajah</Link>
+        <Link to="/user/jelajah" className="text-glowup-brand hover:underline">Kembali ke Jelajah</Link>
       </div>
     );
   }
@@ -139,39 +139,12 @@ export default function Detail() {
         <div className="lg:col-span-8 flex flex-col gap-10">
 
           {/* Photo Gallery */}
-          <div className="grid grid-cols-4 grid-rows-2 gap-3 sm:gap-4 h-[220px] sm:h-[360px] lg:h-[480px]">
-            <div className="col-span-2 row-span-2 rounded-[24px] overflow-hidden shadow-sm">
-              <img
-                src={salon.image_url || (salon.id % 2 === 0 ? "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80" : "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80")}
-                alt={salon.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="col-span-2 row-span-1 rounded-[24px] overflow-hidden shadow-sm">
-              <img
-                src="https://api.builder.io/api/v1/image/assets/TEMP/f522a522b78a02f7f219e665307f41b3cc812db9?width=739"
-                alt="Salon products"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="col-span-1 row-span-1 rounded-[24px] overflow-hidden shadow-sm">
-              <img
-                src="https://api.builder.io/api/v1/image/assets/TEMP/424d3877fb119231d00f071b20fd5b01c2ece842?width=353"
-                alt="Treatment"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="col-span-1 row-span-1 rounded-[24px] overflow-hidden shadow-sm relative">
-              <img
-                src="https://api.builder.io/api/v1/image/assets/TEMP/945999b432db93751ee3ff8fc7d5b006b7b6119d?width=353"
-                alt="More photos"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
-                <span className="text-white text-lg font-bold leading-7">+12</span>
-                <span className="text-white/90 text-xs font-medium hidden sm:block">Foto Lainnya</span>
-              </div>
-            </div>
+          <div className="w-full h-[220px] sm:h-[360px] lg:h-[480px] rounded-[24px] overflow-hidden shadow-sm">
+            <img
+              src={salon.image_url || "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80"}
+              alt={salon.name}
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
           </div>
 
           {/* Salon Info */}
@@ -183,7 +156,7 @@ export default function Detail() {
                 </h1>
                 <div className="flex items-center gap-2">
                   <svg width="16" height="20" viewBox="0 0 16 20" fill="none">
-                    <path d="M8 10C8.55 10 9.02083 9.80417 9.4125 9.4125C9.80417 9.02083 10 8.55 10 8C10 7.45 9.80417 6.97917 9.4125 6.5875C9.02083 6.19583 8.55 6 8 6C7.45 6 6.97917 6.19583 6.5875 6.5875C6.19583 6.97917 6 7.45 6 8C6 8.55 6.19583 9.02083 6.5875 9.4125C6.97917 9.80417 7.45 10 8 10ZM8 17.35C10.0333 15.4833 11.5417 13.7875 12.525 12.2625C13.5083 10.7375 14 9.38333 14 8.2C14 6.38333 13.4208 4.89583 12.2625 3.7375C11.1042 2.57917 9.68333 2 8 2C6.31667 2 4.89583 2.57917 3.7375 3.7375C2.57917 4.89583 2 6.38333 2 8.2C2 9.38333 2.49167 10.7375 3.475 12.2625C4.45833 13.7875 5.96667 15.4833 8 17.35ZM8 20C5.31667 17.7167 3.3125 15.5958 1.9875 13.6375C0.6625 11.6792 0 9.86667 0 8.2C0 5.7 0.804167 3.70833 2.4125 2.225C4.02083 0.741667 5.88333 0 8 0C10.1167 0 11.9792 0.741667 13.5875 2.225C15.1958 3.70833 16 5.7 16 8.2C16 9.86667 15.3375 11.6792 14.0125 13.6375C12.6875 15.5958 10.6833 17.7167 8 20Z" fill="#8B6B7A"/>
+                    <path d="M8 10C8.55 10 9.02083 9.80417 9.4125 9.4125C9.80417 9.02083 10 8.55 10 8C10 7.45 9.80417 6.97917 9.4125 6.5875C9.02083 6.19583 8.55 6 8 6C7.45 6 6.97917 6.19583 6.5875 6.5875C6.19583 6.97917 6 7.45 6 8C6 8.55 6.19583 9.02083 6.5875 9.4125C6.97917 9.80417 7.45 10 8 10ZM8 17.35C10.0333 15.4833 11.5417 13.7875 12.525 12.2625C13.5083 10.7375 14 9.38333 14 8.2C14 6.38333 13.4208 4.89583 12.2625 3.7375C11.1042 2.57917 9.68333 2 8 2C6.31667 2 4.89583 2.57917 3.7375 3.7375C2.57917 4.89583 2 6.38333 2 8.2C2 9.38333 2.49167 10.7375 3.475 12.2625C4.45833 13.7875 5.96667 15.4833 8 17.35ZM8 20C5.31667 17.7167 3.3125 15.5958 1.9875 13.6375C0.6625 11.6792 0 9.86667 0 8.2C0 5.7 0.804167 3.70833 2.4125 2.225C4.02083 0.741667 5.88333 0 8 0C10.1167 0 11.9792 0.741667 13.5875 2.225C15.1958 3.70833 16 5.7 16 8.2C16 9.86667 15.3375 11.6792 14.0125 13.6375C12.6875 15.5958 10.6833 17.7167 8 20Z" fill="#DB2777"/>
                   </svg>
                   <span className="text-gray-500 text-base font-medium">{salon.address || "Lokasi belum tersedia"}</span>
                 </div>
@@ -236,7 +209,7 @@ export default function Detail() {
                       <span className="px-4 py-1 rounded-full bg-gray-50 text-gray-600 text-sm font-medium">
                         {svc.duration_minutes} Menit
                       </span>
-                      <span className="text-[#8B6B7A] text-lg font-bold">Rp {svc.price.toLocaleString("id-ID")}</span>
+                      <span className="text-glowup-brand text-lg font-bold">Rp {svc.price.toLocaleString("id-ID")}</span>
                     </div>
                   </div>
                 ))
@@ -283,7 +256,7 @@ export default function Detail() {
                           key={s.id}
                           onClick={() => { setSelectedService(s); setIsServiceOpen(false); }}
                           className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-gray-50 ${
-                            selectedService?.id === s.id ? "text-[#8B6B7A] font-bold bg-pink-50/30" : "text-gray-700"
+                            selectedService?.id === s.id ? "text-glowup-brand font-bold bg-pink-50/30" : "text-gray-700"
                           }`}
                         >
                           {s.name}
@@ -302,7 +275,7 @@ export default function Detail() {
                   value={selectedDate}
                   min={getTodayDateString()}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#8B6B7A]"
+                  className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-glowup-brand"
                 />
               </div>
 
@@ -319,8 +292,8 @@ export default function Detail() {
                         !slot.available
                           ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                           : selectedTime === slot.time
-                          ? "bg-[#8B6B7A] text-white shadow-md"
-                          : "border border-gray-200 bg-white text-gray-700 hover:border-[#8B6B7A] hover:text-[#8B6B7A]"
+                          ? "bg-glowup-brand text-white shadow-md"
+                          : "border border-gray-200 bg-white text-gray-700 hover:border-glowup-brand hover:text-glowup-brand"
                       }`}
                     >
                       {slot.time}
@@ -334,7 +307,7 @@ export default function Detail() {
             <div className="flex flex-col gap-3 p-5 rounded-xl bg-gray-50 border border-gray-100">
               <div className="flex justify-between items-center">
                 <span className="text-gray-800 text-base font-bold">Total</span>
-                <span className="text-[#8B6B7A] text-lg font-bold">
+                <span className="text-glowup-brand text-lg font-bold">
                   {selectedService ? `Rp ${selectedService.price.toLocaleString("id-ID")}` : "Rp 0"}
                 </span>
               </div>
@@ -347,7 +320,7 @@ export default function Detail() {
               className={`w-full py-4 rounded-xl text-white text-base font-bold tracking-wide transition-all shadow-md ${
                 isBooking || services.length === 0 ? "opacity-70 cursor-not-allowed" : "hover:shadow-lg hover:-translate-y-0.5"
               }`}
-              style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+              style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
             >
               {isBooking ? "Memproses..." : "Konfirmasi Booking"}
             </button>

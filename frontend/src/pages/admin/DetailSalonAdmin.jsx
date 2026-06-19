@@ -92,7 +92,7 @@ export default function DetailSalonAdmin() {
       <div>
         <Link
           to="/admin/salons"
-          className="text-sm font-bold text-[#8B6B7A] hover:text-[#795465] transition-colors flex items-center gap-1.5"
+          className="text-sm font-bold text-glowup-brand hover:text-[#795465] transition-colors flex items-center gap-1.5"
         >
           ← Kembali ke Kelola Salon
         </Link>

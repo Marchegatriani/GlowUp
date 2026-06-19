@@ -85,7 +85,7 @@ export default function KelolaBooking() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#FCF9F8] font-inter">
+    <div className="flex min-h-screen bg-glowup-bg font-inter">
       <Sidebar />
       <main className="flex-1 ml-[280px] min-h-screen">
         <div className="max-w-[1160px] mx-auto px-8 lg:px-16 py-10 flex flex-col gap-10">
@@ -184,7 +184,7 @@ export default function KelolaBooking() {
                               </span>
                             </div>
                           </td>
-                          <td className="px-8 py-6 text-sm font-bold text-[#8B6B7A]">
+                          <td className="px-8 py-6 text-sm font-bold text-glowup-brand">
                             Rp {booking.total_price.toLocaleString("id-ID")}
                           </td>
                           <td className="px-8 py-6">

@@ -39,17 +39,6 @@ const SmallClockIcon = () => (
   </svg>
 );
 
-const FilterIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M2 2.66667C2 2.29872 2.29872 2 2.66667 2H13.3333C13.7013 2 14 2.29872 14 2.66667V4.39067C14 4.56746 13.9297 4.737 13.8047 4.862L9.52867 9.138C9.40363 9.263 9.33337 9.43254 9.33333 9.60933V11.3333L6.66667 14V9.60933C6.66663 9.43254 6.59637 9.263 6.47133 9.138L2.19533 4.862C2.0703 4.737 2.00004 4.56746 2 4.39067V2.66667V2.66667" stroke="#1F2937" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const ReportIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6.00016 11.3333V10M8.00016 11.3333V8.66667M10.0002 11.3333V7.33333M11.3335 14H4.66683C3.93094 14 3.3335 13.4026 3.3335 12.6667V3.33333C3.3335 2.59745 3.93094 2 4.66683 2H8.39083C8.56763 2.00004 8.73717 2.0703 8.86216 2.19533L12.4715 5.80467C12.5965 5.92966 12.6668 6.0992 12.6668 6.276V12.6667C12.6668 13.4026 12.0694 14 11.3335 14L6.00016 11.3333" stroke="#1F2937" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
 
 const HelpIcon = () => (
   <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -209,7 +198,7 @@ export default function Index() {
             {upcomingBookings.length === 0 ? (
               <div className="col-span-1 md:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 text-center flex flex-col items-center justify-center min-h-[162px]">
                 <p className="text-gray-500 font-medium mb-2">Belum ada booking mendatang.</p>
-                <Link to="/user/jelajah" className="text-sm font-bold text-[#8B6B7A] hover:underline">
+                <Link to="/user/jelajah" className="text-sm font-bold text-glowup-brand hover:underline">
                   Cari Salon & Reservasi Sekarang
                 </Link>
               </div>
@@ -232,7 +221,7 @@ export default function Index() {
                       />
                       <div
                         className={`absolute -right-2 -top-2 w-6 h-6 rounded-full flex items-center justify-center shadow-md ${
-                          isConfirmed ? "bg-[#8B6B7A]" : "bg-yellow-500"
+                          isConfirmed ? "bg-glowup-brand" : "bg-yellow-500"
                         }`}
                       >
                         {isConfirmed ? <CheckIcon /> : <DotsIcon />}
@@ -286,16 +275,6 @@ export default function Index() {
               <h2 className="text-xl font-bold text-gray-800 leading-7">Riwayat Booking</h2>
               <p className="text-sm text-gray-500 leading-5">Daftar layanan yang telah Anda selesaikan</p>
             </div>
-            <div className="flex items-center gap-2">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors">
-                <FilterIcon />
-                Filter
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors">
-                <ReportIcon />
-                Laporan
-              </button>
-            </div>
           </div>
 
           {/* Table */}
@@ -344,7 +323,7 @@ export default function Index() {
                           </span>
                         </td>
                         <td className="px-6 py-6 text-right">
-                          <Link to={`/user/detail-booking/${row.id}`} className="text-sm font-bold text-[#8B6B7A] hover:underline">
+                          <Link to={`/user/detail-booking/${row.id}`} className="text-sm font-bold text-glowup-brand hover:underline">
                             Detail
                           </Link>
                         </td>

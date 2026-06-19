@@ -61,7 +61,7 @@ export default function Login() {
           />
           <div
             className="absolute inset-0"
-            style={{ background: "linear-gradient(45deg, rgba(121,84,101,0.80) 0%, rgba(121,84,101,0.20) 50%, rgba(121,84,101,0.00) 100%)" }}
+            style={{ background: "linear-gradient(45deg, rgba(219,39,119,0.80) 0%, rgba(219,39,119,0.20) 50%, transparent 100%)" }}
           />
           <div className="relative z-10 flex flex-col justify-end p-16 h-full">
             <div className="flex items-center gap-2 px-4 py-1 rounded-full border border-white/20 bg-white/10 backdrop-blur-[6px] w-fit mb-4">
@@ -171,8 +171,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full flex items-center justify-center gap-3 py-4 px-6 rounded-[20px] font-semibold text-base text-glowup-dark hover:opacity-90 active:opacity-80 transition-opacity ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-                style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)" }}
+                className={`w-full flex items-center justify-center gap-3 py-4 px-6 rounded-[20px] font-semibold text-base text-glowup-dark hover:opacity-90 active:opacity-80 transition-opacity bg-glow-gradient ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
                 <span>{isLoading ? "Memproses..." : "Masuk Ke Akun"}</span>
                 {!isLoading && (

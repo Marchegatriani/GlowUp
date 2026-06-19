@@ -2,17 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axiosClient from "../../api/axiosClient";
 
-const FilterIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M2 4.5H14M4.5 8H11.5M7 11.5H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const ReportIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M14 10V12.6667C14 13.0203 13.8595 13.3594 13.6095 13.6095C13.3594 13.8595 13.0203 14 12.6667 14H3.33333C2.97971 14 2.64057 13.8595 2.39052 13.6095C2.14048 13.3594 2 13.0203 2 12.6667V10M4.66667 7.33333L8 10.6667M8 10.6667L11.3333 7.33333M8 10.6667V2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
 
 export default function RiwayatBooking() {
   const [bookings, setBookings] = useState([]);
@@ -71,16 +60,6 @@ export default function RiwayatBooking() {
             <h2 className="text-xl font-bold text-gray-800 leading-7">Riwayat Booking</h2>
             <p className="text-sm text-gray-500 leading-5">Daftar layanan yang telah Anda pesan</p>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors">
-              <FilterIcon />
-              Filter
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors">
-              <ReportIcon />
-              Laporan
-            </button>
-          </div>
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.05)] overflow-hidden">
@@ -132,7 +111,7 @@ export default function RiwayatBooking() {
                         </span>
                       </td>
                       <td className="px-6 py-6 text-right">
-                        <Link to={`/user/detail-booking/${row.id}`} className="text-sm font-bold text-[#8B6B7A] hover:underline">
+                        <Link to={`/user/detail-booking/${row.id}`} className="text-sm font-bold text-glowup-brand hover:underline">
                           Detail
                         </Link>
                       </td>

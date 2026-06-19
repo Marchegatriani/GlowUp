@@ -38,7 +38,7 @@ function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[rgba(210,195,199,0.10)] shadow-sm">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 h-20 flex items-center justify-between">
         <div className="flex items-center gap-10 lg:gap-16">
-          <Link to="/" className="text-glow-mauve font-bold text-2xl lg:text-[28px] leading-[42px]">
+          <Link to="/" className="text-glowup-brand font-bold text-2xl lg:text-[28px] leading-[42px]">
             GlowUp
           </Link>
           <nav className="hidden lg:flex items-center gap-8 xl:gap-10">
@@ -48,8 +48,8 @@ function Navbar() {
                 to={link.href}
                 className={`text-base leading-6 transition-colors relative pb-1 ${
                   i === 0
-                    ? "text-glow-mauve font-semibold after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-0.5 after:bg-glow-mauve"
-                    : "text-glow-medium font-normal hover:text-glow-mauve"
+                    ? "text-glowup-brand font-semibold after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-0.5 after:bg-glowup-brand"
+                    : "text-glowup-muted font-normal hover:text-glowup-brand"
                 }`}
               >
                 {link.label}
@@ -61,21 +61,20 @@ function Navbar() {
         <div className="hidden lg:flex items-center gap-4">
           <Link
             to="/login"
-            className="px-6 py-2 rounded-[20px] border border-[rgba(121,84,101,0.20)] text-glow-mauve text-base leading-6 hover:bg-[rgba(121,84,101,0.05)] transition-colors"
+            className="px-6 py-2 rounded-[20px] border border-[rgba(121,84,101,0.20)] text-glowup-brand text-base leading-6 hover:bg-[rgba(121,84,101,0.05)] transition-colors"
           >
             Masuk
           </Link>
           <Link
             to="/register"
-            className="px-6 py-2 rounded-[20px] text-[#2E1221] text-base leading-6 font-medium"
-            style={{ background: "linear-gradient(113deg, #F8C8DC 0%, #EFE4A2 100%)" }}
+            className="px-6 py-2 rounded-[20px] text-glowup-dark text-base leading-6 font-medium bg-glow-gradient"
           >
             Daftar
           </Link>
         </div>
 
         <button
-          className="lg:hidden p-2 text-glow-mauve"
+          className="lg:hidden p-2 text-glowup-brand"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
@@ -95,7 +94,7 @@ function Navbar() {
             <Link
               key={link.href}
               to={link.href}
-              className="text-glow-medium text-base py-2 hover:text-glow-mauve transition-colors"
+              className="text-glowup-muted text-base py-2 hover:text-glowup-brand transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               {link.label}
@@ -104,14 +103,13 @@ function Navbar() {
           <div className="flex gap-3 pt-2">
             <Link
               to="/login"
-              className="flex-1 text-center px-4 py-2 rounded-[20px] border border-[rgba(121,84,101,0.20)] text-glow-mauve text-sm"
+              className="flex-1 text-center px-4 py-2 rounded-[20px] border border-[rgba(121,84,101,0.20)] text-glowup-brand text-sm"
             >
               Masuk
             </Link>
             <Link
               to="/register"
-              className="flex-1 text-center px-4 py-2 rounded-[20px] text-[#2E1221] text-sm font-medium"
-              style={{ background: "linear-gradient(113deg, #F8C8DC 0%, #EFE4A2 100%)" }}
+              className="flex-1 text-center px-4 py-2 rounded-[20px] text-glowup-dark text-sm font-medium bg-glow-gradient"
             >
               Daftar
             </Link>
@@ -124,15 +122,14 @@ function Navbar() {
 
 function HeroSection() {
   return (
-    <section className="pt-20 min-h-screen bg-[#FCF9F8]">
+    <section className="pt-20 min-h-screen bg-glowup-bg">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center min-h-[calc(100vh-80px)]">
         {/* Left */}
         <div className="lg:col-span-6 flex flex-col gap-6">
           <h1 className="text-[#1B1C1C] font-bold text-4xl sm:text-5xl lg:text-[56px] leading-[1.1] tracking-[-1.12px]">
             <span>Temukan </span>
             <span
-              className="inline-flex px-3 py-1 rounded-[20px] text-white"
-              style={{ background: "#795465" }}
+              className="inline-flex px-3 py-1 rounded-[20px] text-white bg-glowup-brand"
             >
               GlowUp
             </span>
@@ -178,8 +175,7 @@ function HeroSection() {
               </div>
 
               <button
-                className="shrink-0 px-8 py-3 rounded-[20px] text-[#2E1221] font-bold text-base leading-6"
-                style={{ background: "linear-gradient(113deg, #F8C8DC 0%, #EFE4A2 100%)" }}
+                className="shrink-0 px-8 py-3 rounded-[20px] text-glowup-dark font-bold text-base leading-6 bg-glow-gradient"
               >
                 Cari
               </button>
@@ -220,7 +216,7 @@ function HeroSection() {
                 </svg>
               </div>
               <div className="flex flex-col gap-1">
-                <span className="text-glow-mauve font-bold text-base leading-4">4.9/5</span>
+                <span className="text-glowup-brand font-bold text-base leading-4">4.9/5</span>
                 <span className="text-[#5E5F5B] text-xs leading-[18px]">Rating Tertinggi</span>
               </div>
             </div>
@@ -235,9 +231,9 @@ function HeroSection() {
                 boxShadow: "0 10px 40px -12px rgba(0, 0, 0, 0.08)",
               }}
             >
-              <span className="text-glow-mauve font-bold text-xs leading-[18px]">Layanan Populer</span>
+              <span className="text-glowup-brand font-bold text-xs leading-[18px]">Layanan Populer</span>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="px-3 py-1 rounded-full bg-[rgba(121,84,101,0.10)] text-glow-mauve text-xs font-medium">Hair Cut</span>
+                <span className="px-3 py-1 rounded-full bg-glowup-pink-50 text-glowup-brand text-xs font-medium">Hair Cut</span>
                 <span className="px-3 py-1 rounded-full bg-[rgba(103,95,43,0.10)] text-[#675F2B] text-xs font-medium">Facial</span>
                 <span className="px-3 py-1 rounded-full bg-[rgba(94,95,91,0.10)] text-[#5E5F5B] text-xs font-medium">Nail Art</span>
               </div>
@@ -251,12 +247,11 @@ function HeroSection() {
 
 function FeaturesSection() {
   return (
-    <section className="bg-[#FCF9F8] py-16 lg:py-20">
+    <section className="bg-glowup-bg py-16 lg:py-20">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16">
         <div className="flex flex-col items-center gap-5 mb-16">
           <span
-            className="px-6 py-1.5 rounded-full text-glow-mauve text-xs font-bold tracking-[0.65px] uppercase"
-            style={{ background: "rgba(248, 200, 220, 0.40)" }}
+            className="px-6 py-1.5 rounded-full text-glowup-brand text-xs font-bold tracking-[0.65px] uppercase bg-glowup-pink-100"
           >
             KEUNGGULAN KAMI
           </span>
@@ -329,7 +324,7 @@ function FeaturesSection() {
 
 function SalonsSection({ salons, loading }) {
   return (
-    <section className="bg-[#FCF9F8] py-16 lg:py-20">
+    <section className="bg-glowup-bg py-16 lg:py-20">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div className="flex flex-col gap-2">
@@ -340,7 +335,7 @@ function SalonsSection({ salons, loading }) {
               Temukan dan kunjungi salon kecantikan terbaik di sekitar Anda.
             </p>
           </div>
-          <Link to="/user/jelajah" className="text-glow-mauve font-bold text-base leading-6 shrink-0 hover:underline">
+          <Link to="/user/jelajah" className="text-glowup-brand font-bold text-base leading-6 shrink-0 hover:underline">
             Lihat Semua
           </Link>
         </div>
@@ -369,7 +364,7 @@ function SalonsSection({ salons, loading }) {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-                  <h4 className="text-[#1B1C1C] font-bold text-lg leading-7 group-hover:text-glow-mauve transition-colors truncate">
+                  <h4 className="text-[#1B1C1C] font-bold text-lg leading-7 group-hover:text-glowup-brand transition-colors truncate">
                     {salon.name}
                   </h4>
                   <p className="text-sm text-[#5E5F5B] line-clamp-1 mt-1">
@@ -380,7 +375,7 @@ function SalonsSection({ salons, loading }) {
                   <span>
                     {salon.open_time?.substring(0, 5) || "09:00"} - {salon.close_time?.substring(0, 5) || "21:00"}
                   </span>
-                  <span className="text-glow-mauve font-bold group-hover:underline">Detail →</span>
+                  <span className="text-glowup-brand font-bold group-hover:underline">Detail →</span>
                 </div>
               </Link>
             ))}
@@ -393,10 +388,9 @@ function SalonsSection({ salons, loading }) {
 
 function CTASection() {
   return (
-    <section className="bg-[#FCF9F8] py-16 lg:py-20 px-4">
+    <section className="bg-glowup-bg py-16 lg:py-20 px-4">
       <div
-        className="max-w-[1280px] mx-auto rounded-[32px] px-6 py-16 sm:py-20 flex flex-col items-center gap-8"
-        style={{ background: "rgba(248, 200, 220, 0.25)" }}
+        className="max-w-[1280px] mx-auto rounded-[32px] px-6 py-16 sm:py-20 flex flex-col items-center gap-8 bg-glowup-pink-50"
       >
         <h2 className="text-[#1B1C1C] font-bold text-3xl sm:text-4xl lg:text-5xl leading-[1.2] tracking-[-0.5px] text-center max-w-xl">
           Siap Untuk Tampil Mempesona?
@@ -404,8 +398,7 @@ function CTASection() {
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
           <Link
             to="/register"
-            className="w-full sm:w-auto text-center px-12 py-[17px] rounded-[20px] text-[#2E1221] font-bold text-lg leading-7"
-            style={{ background: "linear-gradient(105deg, #F8C8DC 0%, #EFE4A2 100%)" }}
+            className="w-full sm:w-auto text-center px-12 py-[17px] rounded-[20px] text-glowup-dark font-bold text-lg leading-7 bg-glow-gradient"
           >
             Mulai Sekarang
           </Link>
@@ -429,7 +422,7 @@ function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-4 flex flex-col gap-6">
-            <Link to="/" className="text-glow-mauve font-bold text-[28px] leading-[42px]">GlowUp</Link>
+            <Link to="/" className="text-glowup-brand font-bold text-[28px] leading-[42px]">GlowUp</Link>
             <p className="text-[#5E5F5B] text-base leading-6 max-w-[320px]">
               Platform reservasi salon kecantikan premium pertama di Indonesia yang mengutamakan kenyamanan dan kualitas layanan.
             </p>
@@ -455,7 +448,7 @@ function Footer() {
             <h4 className="text-[#1B1C1C] font-bold text-xs leading-4 tracking-[0.6px] uppercase">NAVIGASI</h4>
             <div className="flex flex-col gap-4">
               {["Tentang Kami", "Kontak Kami", "Pusat Bantuan", "FAQ"].map((item) => (
-                <Link key={item} to="#" className="text-[#5E5F5B] text-sm leading-5 hover:text-glow-mauve transition-colors">
+                <Link key={item} to="#" className="text-[#5E5F5B] text-sm leading-5 hover:text-glowup-brand transition-colors">
                   {item}
                 </Link>
               ))}
@@ -467,7 +460,7 @@ function Footer() {
             <h4 className="text-[#1B1C1C] font-bold text-xs leading-4 tracking-[0.6px] uppercase">LEGALITAS</h4>
             <div className="flex flex-col gap-4">
               {["Kebijakan Privasi", "Syarat & Ketentuan"].map((item) => (
-                <Link key={item} to="#" className="text-[#5E5F5B] text-sm leading-5 hover:text-glow-mauve transition-colors">
+                <Link key={item} to="#" className="text-[#5E5F5B] text-sm leading-5 hover:text-glowup-brand transition-colors">
                   {item}
                 </Link>
               ))}
@@ -484,10 +477,10 @@ function Footer() {
               <input
                 type="email"
                 placeholder="Masukkan email Anda"
-                className="flex-1 px-5 py-[17px] rounded-[20px] bg-[#F6F3F2] text-[#6B7280] text-sm outline-none placeholder-[#6B7280] focus:ring-2 focus:ring-glow-mauve/30"
+                className="flex-1 px-5 py-[17px] rounded-[20px] bg-[#F6F3F2] text-[#6B7280] text-sm outline-none placeholder-[#6B7280] focus:ring-2 focus:ring-glowup-brand/30"
               />
               <button
-                className="w-14 h-14 rounded-[20px] bg-glow-mauve flex items-center justify-center shrink-0 hover:bg-[#6a4858] transition-colors"
+                className="w-14 h-14 rounded-[20px] bg-glowup-brand flex items-center justify-center shrink-0 hover:bg-glowup-pink-400 transition-colors"
                 style={{ boxShadow: "0 10px 15px -3px rgba(0,0,0,0.10), 0 4px 6px -4px rgba(0,0,0,0.10)" }}
               >
                 <svg width="19" height="16" viewBox="0 0 19 16" fill="none">
@@ -533,7 +526,7 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FCF9F8]">
+    <div className="min-h-screen bg-glowup-bg">
       <Navbar />
       <main>
         <HeroSection />

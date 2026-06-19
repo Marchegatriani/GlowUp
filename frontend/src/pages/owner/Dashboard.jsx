@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import axiosClient from "../../api/axiosClient";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export default function Index() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -53,7 +54,7 @@ export default function Index() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-[#FCF9F8] font-inter">
+      <div className="flex min-h-screen bg-glowup-bg font-inter">
         <Sidebar />
         <main className="flex-1 ml-[280px] flex items-center justify-center">
           <p className="text-gray-500 font-medium">Memuat data ringkasan bisnis...</p>
@@ -65,7 +66,7 @@ export default function Index() {
   // If owner doesn't have a salon yet
   if (dashboardData && !dashboardData.has_salon) {
     return (
-      <div className="flex min-h-screen bg-[#FCF9F8] font-inter">
+      <div className="flex min-h-screen bg-glowup-bg font-inter">
         <Sidebar />
         <main className="flex-1 ml-[280px] min-h-screen">
           <div className="max-w-[1160px] mx-auto px-8 lg:px-16 py-10 flex flex-col gap-10">
@@ -79,7 +80,7 @@ export default function Index() {
             </header>
 
             <div className="bg-white rounded-3xl border border-gray-100 p-12 text-center shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center gap-6">
-              <div className="w-16 h-16 rounded-full bg-pink-50 flex items-center justify-center text-[#8B6B7A]">
+              <div className="w-16 h-16 rounded-full bg-pink-50 flex items-center justify-center text-glowup-brand">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
                 </svg>
@@ -93,7 +94,7 @@ export default function Index() {
               <Link
                 to="/owner/salon-profile"
                 className="px-8 py-3.5 rounded-xl text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all"
-                style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+                style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
               >
                 Mulai Isi Profil Salon
               </Link>
@@ -110,7 +111,7 @@ export default function Index() {
   const popularServices = dashboardData?.popular_services || [];
 
   return (
-    <div className="flex min-h-screen bg-[#FCF9F8] font-inter">
+    <div className="flex min-h-screen bg-glowup-bg font-inter">
       <Sidebar />
 
       {/* Main content */}
@@ -219,41 +220,39 @@ export default function Index() {
                 <p className="text-gray-400 text-sm font-normal">Tren penjualan 7 hari terakhir</p>
               </div>
 
-              {/* Bar Chart */}
-              <div className="flex items-end justify-between gap-2 h-[260px] relative">
-                {/* Grid lines */}
-                <div className="absolute inset-x-0 top-0 bottom-8 flex flex-col justify-between pointer-events-none">
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-full border-t border-gray-50" />
-                  ))}
-                </div>
-
+              {/* Line Chart */}
+              <div className="w-full h-[260px]">
                 {weeklyRevenue.length === 0 ? (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm pb-8">
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
                     Belum ada data grafik penjualan.
                   </div>
                 ) : (
-                  weeklyRevenue.map((bar, i) => (
-                    <div key={i} className="flex flex-col items-center gap-2 flex-1 h-full justify-end group">
-                      <div className="relative w-full flex flex-col items-center justify-end" style={{ height: "calc(100% - 32px)" }}>
-                        {/* Tooltip */}
-                        <div
-                          className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded-lg text-white text-[11px] leading-[16.5px] bg-[#795465] font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10"
-                          style={{ bottom: `calc(${bar.height}% + 10px)` }}
-                        >
-                          {bar.label}
-                        </div>
-                        {/* Bar */}
-                        <div
-                          className="w-full max-w-[36px] rounded-t-xl transition-all bg-[rgba(121,84,101,0.20)] hover:bg-[#8B6B7A] cursor-pointer"
-                          style={{ height: `${bar.height}%` }}
-                        />
-                      </div>
-                      <span className="text-xs leading-[18px] font-semibold text-gray-500">
-                        {bar.day}
-                      </span>
-                    </div>
-                  ))
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={weeklyRevenue} margin={{ top: 20, right: 10, left: 10, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+                      <XAxis 
+                        dataKey="day" 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fontSize: 12, fill: '#6B7280', fontWeight: 600 }}
+                        dy={10}
+                      />
+                      <YAxis hide={true} domain={[0, 100]} />
+                      <Tooltip 
+                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px -10px rgba(0,0,0,0.1)', fontWeight: 'bold', color: '#DB2777' }}
+                        formatter={(value, name, props) => [props.payload.label, ""]}
+                        labelStyle={{ display: 'none' }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="height" 
+                        stroke="#DB2777" 
+                        strokeWidth={3} 
+                        dot={{ r: 4, strokeWidth: 2, fill: '#fff', stroke: '#DB2777' }} 
+                        activeDot={{ r: 6, fill: '#DB2777', stroke: '#fff', strokeWidth: 2 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
                 )}
               </div>
             </div>

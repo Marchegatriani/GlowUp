@@ -188,7 +188,7 @@ export default function KelolaUser() {
         <button
           onClick={() => setShowAddModal(true)}
           className="px-6 py-3 rounded-xl text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 shrink-0"
-          style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+          style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
         >
           Tambah Pengguna
         </button>
@@ -215,7 +215,7 @@ export default function KelolaUser() {
             placeholder="Cari nama atau email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B6B7A] transition-colors bg-gray-50"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-glowup-brand transition-colors bg-gray-50"
           />
           <svg
             className="absolute left-3.5 top-3.5 text-gray-400"
@@ -239,7 +239,7 @@ export default function KelolaUser() {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B6B7A] transition-colors bg-gray-50"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-glowup-brand transition-colors bg-gray-50"
           >
             <option value="all">Semua Peran</option>
             <option value="customer">Customer / User</option>
@@ -349,7 +349,7 @@ export default function KelolaUser() {
                   placeholder="Nama Lengkap"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                 />
               </div>
 
@@ -361,7 +361,7 @@ export default function KelolaUser() {
                   placeholder="email@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                 />
               </div>
 
@@ -373,7 +373,7 @@ export default function KelolaUser() {
                   placeholder="Minimal 6 karakter"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                 />
               </div>
 
@@ -382,7 +382,7 @@ export default function KelolaUser() {
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                 >
                   <option value="user">Customer biasa</option>
                   <option value="owner">Owner Salon (Pemilik)</option>
@@ -402,7 +402,7 @@ export default function KelolaUser() {
                   type="submit"
                   disabled={saving}
                   className="flex-1 py-3.5 rounded-xl text-white text-sm font-bold transition-all shadow-sm"
-                  style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+                  style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
                 >
                   {saving ? "Menyimpan..." : "Simpan Akun"}
                 </button>
@@ -441,7 +441,7 @@ export default function KelolaUser() {
                   placeholder="Nama Lengkap"
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                 />
               </div>
 
@@ -453,7 +453,7 @@ export default function KelolaUser() {
                   placeholder="email@example.com"
                   value={editEmail}
                   onChange={(e) => setEditEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                 />
               </div>
 
@@ -464,7 +464,7 @@ export default function KelolaUser() {
                   placeholder="Kosongkan jika tidak ingin diubah"
                   value={editPassword}
                   onChange={(e) => setEditPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
                 />
               </div>
 
@@ -474,7 +474,7 @@ export default function KelolaUser() {
                   value={editRole}
                   onChange={(e) => setEditRole(e.target.value)}
                   disabled={me?.id === editingUser.id}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-[#8B6B7A] transition-colors disabled:opacity-50"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors disabled:opacity-50"
                 >
                   <option value="user">Customer biasa</option>
                   <option value="owner">Owner Salon (Pemilik)</option>
@@ -491,7 +491,7 @@ export default function KelolaUser() {
                       name="isActive"
                       checked={editIsActive === true}
                       onChange={() => setEditIsActive(true)}
-                      className="text-[#8B6B7A] focus:ring-[#8B6B7A]"
+                      className="text-glowup-brand focus:ring-glowup-brand"
                       disabled={me?.id === editingUser.id}
                     />
                     Aktif
@@ -502,7 +502,7 @@ export default function KelolaUser() {
                       name="isActive"
                       checked={editIsActive === false}
                       onChange={() => setEditIsActive(false)}
-                      className="text-[#8B6B7A] focus:ring-[#8B6B7A]"
+                      className="text-glowup-brand focus:ring-glowup-brand"
                       disabled={me?.id === editingUser.id}
                     />
                     Nonaktif
@@ -525,7 +525,7 @@ export default function KelolaUser() {
                   type="submit"
                   disabled={saving}
                   className="flex-1 py-3.5 rounded-xl text-white text-sm font-bold transition-all shadow-sm"
-                  style={{ background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }}
+                  style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
                 >
                   {saving ? "Menyimpan..." : "Simpan Perubahan"}
                 </button>

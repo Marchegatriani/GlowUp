@@ -29,15 +29,12 @@ export default function Sidebar() {
   const getLinkClass = (path) => {
     const isActive = location.pathname === path;
     return isActive
-      ? "flex items-center gap-3 px-6 py-4 rounded-xl text-white font-bold transition-all shadow-sm"
-      : "flex items-center gap-3 px-6 py-4 rounded-xl text-[#5E5F5B] hover:text-[#795465] hover:bg-[rgba(121,84,101,0.05)] font-medium transition-all";
+      ? "flex items-center gap-3 px-6 py-4 rounded-xl text-glowup-dark font-bold transition-all shadow-sm bg-glow-gradient"
+      : "flex items-center gap-3 px-6 py-4 rounded-xl text-[#5E5F5B] hover:text-glowup-brand hover:bg-glowup-pink-50 font-medium transition-all";
   };
 
   const getLinkStyle = (path) => {
-    const isActive = location.pathname === path;
-    return isActive
-      ? { background: "linear-gradient(102deg, #8B6B7A 0%, #A98495 100%)" }
-      : {};
+    return {};
   };
 
   // Navigations based on Role
@@ -89,7 +86,7 @@ export default function Sidebar() {
       <div className="flex flex-col gap-10">
         {/* Brand */}
         <div className="px-4">
-          <Link to="/" className="text-2xl font-bold leading-8 text-[#8B6B7A] block">
+          <Link to="/" className="text-2xl font-bold leading-8 text-glowup-brand block">
             GlowUp
           </Link>
           <span className="text-[10px] uppercase font-bold tracking-widest text-gray-400 mt-1 block">

@@ -45,7 +45,7 @@ export default function Jelajah() {
   const [selectedLokasi, setSelectedLokasi] = useState("Semua Lokasi");
   const [maxPrice, setMaxPrice] = useState(1000000);
   const [selectedRatings, setSelectedRatings] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("Rambut");
+  const [selectedCategory, setSelectedCategory] = useState("");
   
   // Sorting and Pagination states
   const [sortBy, setSortBy] = useState("popularitas");
@@ -127,7 +127,7 @@ export default function Jelajah() {
     value ? `Rp ${Number(value).toLocaleString("id-ID")}` : "Hubungi salon";
 
   return (
-    <div className="bg-[#FCF9F8] min-h-screen flex flex-col justify-between">
+    <div className="bg-glowup-bg min-h-screen flex flex-col justify-between">
       {/* Main Content */}
       <main className="max-w-[1280px] w-full mx-auto px-6 sm:px-10 lg:px-16 py-12 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-10">
@@ -142,7 +142,7 @@ export default function Jelajah() {
               <select 
                 value={selectedLokasi}
                 onChange={(e) => setSelectedLokasi(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#8B6B7A]"
+                className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-glowup-brand"
               >
                 <option value="Semua Lokasi">Semua Lokasi</option>
                 <option value="Jakarta">Jakarta</option>
@@ -160,7 +160,7 @@ export default function Jelajah() {
                 step="50000"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-full accent-[#8B6B7A] cursor-pointer" 
+                className="w-full accent-glowup-brand cursor-pointer" 
               />
               <div className="flex justify-between text-xs text-gray-400">
                 <span>Rp 0</span>
@@ -175,7 +175,7 @@ export default function Jelajah() {
                 <label key={r} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
                   <input 
                     type="checkbox" 
-                    className="accent-[#8B6B7A]" 
+                    className="accent-glowup-brand" 
                     checked={selectedRatings.includes(r)}
                     onChange={() => {
                       if (selectedRatings.includes(r)) {
@@ -201,8 +201,8 @@ export default function Jelajah() {
                     onClick={() => setSelectedCategory(selectedCategory === cat ? "" : cat)}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                       selectedCategory === cat
-                        ? "bg-[#8B6B7A] text-white border-[#8B6B7A]"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-[#8B6B7A]"
+                        ? "bg-glowup-brand text-white border-glowup-brand"
+                        : "bg-white text-gray-600 border-gray-200 hover:border-glowup-brand"
                     }`}
                   >
                     {cat}
@@ -233,7 +233,7 @@ export default function Jelajah() {
                   <input
                     type="text"
                     placeholder="Cari nama salon atau lokasi..."
-                    className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8B6B7A] focus:border-transparent transition-all"
+                    className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-glowup-brand focus:border-transparent transition-all"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
@@ -252,8 +252,8 @@ export default function Jelajah() {
                       onClick={() => setSortBy(opt.key)}
                       className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
                         sortBy === opt.key
-                          ? "bg-[#8B6B7A] text-white"
-                          : "bg-white border border-gray-200 text-gray-600 hover:border-[#8B6B7A]"
+                          ? "bg-glowup-brand text-white"
+                          : "bg-white border border-gray-200 text-gray-600 hover:border-glowup-brand"
                       }`}
                     >
                       {opt.label}
@@ -301,13 +301,13 @@ export default function Jelajah() {
 
                         {/* Card details */}
                         <div className="p-5 flex flex-col gap-3">
-                          <span className="text-[10px] font-bold tracking-wider text-[#8B6B7A] uppercase">
+                          <span className="text-[10px] font-bold tracking-wider text-glowup-brand uppercase">
                             {getCategory(salon)}
                           </span>
                           <div className="flex flex-col gap-1 -mt-1">
                             <h3 className="text-lg font-bold text-gray-800 truncate">{salon.name}</h3>
                             <p className="text-sm text-gray-500 line-clamp-1 flex items-center gap-1">
-                              <svg width="12" height="15" viewBox="0 0 16 20" fill="none" className="text-[#8B6B7A] shrink-0">
+                              <svg width="12" height="15" viewBox="0 0 16 20" fill="none" className="text-glowup-brand shrink-0">
                                 <path d="M8 10C8.55 10 9.02083 9.80417 9.4125 9.4125C9.80417 9.02083 10 8.55 10 8C10 7.45 9.80417 6.97917 9.4125 6.5875C9.02083 6.19583 8.55 6 8 6C7.45 6 6.97917 6.19583 6.5875 6.5875C6.19583 6.97917 6 7.45 6 8C6 8.55 6.19583 9.02083 6.5875 9.4125C6.97917 9.80417 7.45 10 8 10ZM8 17.35C10.0333 15.4833 11.5417 13.7875 12.525 12.2625C13.5083 10.7375 14 9.38333 14 8.2C14 6.38333 13.4208 4.89583 12.2625 3.7375C11.1042 2.57917 9.68333 2 8 2C6.31667 2 4.89583 2.57917 3.7375 3.7375C2.57917 4.89583 2 6.38333 2 8.2C2 9.38333 2.49167 10.7375 3.475 12.2625C4.45833 13.7875 5.96667 15.4833 8 17.35ZM8 20C5.31667 17.7167 3.3125 15.5958 1.9875 13.6375C0.6625 11.6792 0 9.86667 0 8.2C0 5.7 0.804167 3.70833 2.4125 2.225C4.02083 0.741667 5.88333 0 8 0C10.1167 0 11.9792 0.741667 13.5875 2.225C15.1958 3.70833 16 5.7 16 8.2C16 9.86667 15.3375 11.6792 14.0125 13.6375C12.6875 15.5958 10.6833 17.7167 8 20Z" fill="currentColor"/>
                               </svg>
                               <span>{salon.address || "Lokasi belum tersedia"}</span>
@@ -325,7 +325,7 @@ export default function Jelajah() {
                             {formatRupiah(getMinPrice(salon))}
                           </span>
                         </div>
-                        <span className="bg-[#8B6B7A] text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-[#73525f] transition-colors">
+                        <span className="bg-glowup-brand text-white text-xs font-semibold px-4 py-2 rounded-xl hover:bg-glowup-pink-600 transition-colors">
                           Detail
                         </span>
                       </div>
@@ -355,7 +355,7 @@ export default function Jelajah() {
                     onClick={() => setCurrentPage(page)}
                     className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold transition-all ${
                       currentPage === page
-                        ? "bg-[#8B6B7A] text-white shadow-sm"
+                        ? "bg-glowup-brand text-white shadow-sm"
                         : "text-gray-600 hover:bg-gray-100"
                     }`}
                   >
@@ -381,7 +381,7 @@ export default function Jelajah() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10">
             {/* Brand Column */}
             <div className="sm:col-span-2 lg:col-span-4 flex flex-col gap-6">
-              <Link to="/" className="text-[#8B6B7A] font-bold text-[28px] leading-[42px]">GlowUp</Link>
+              <Link to="/" className="text-glowup-brand font-bold text-[28px] leading-[42px]">GlowUp</Link>
               <p className="text-[#5E5F5B] text-base leading-6 max-w-[320px]">
                 Solusi terpercaya untuk reservasi salon kecantikan premium dan eksklusif di seluruh Indonesia. Rasakan kemudahan dalam setiap sentuhan.
               </p>
@@ -408,7 +408,7 @@ export default function Jelajah() {
               <h4 className="text-[#1B1C1C] font-bold text-xs leading-4 tracking-[0.6px] uppercase">LAYANAN</h4>
               <div className="flex flex-col gap-4">
                 {["Reservasi Salon", "Home Service", "Voucher Hadiah", "Membership"].map((item) => (
-                  <Link key={item} to="#" className="text-[#5E5F5B] text-sm leading-5 hover:text-[#8B6B7A] transition-colors">
+                  <Link key={item} to="#" className="text-[#5E5F5B] text-sm leading-5 hover:text-glowup-brand transition-colors">
                     {item}
                   </Link>
                 ))}
@@ -420,7 +420,7 @@ export default function Jelajah() {
               <h4 className="text-[#1B1C1C] font-bold text-xs leading-4 tracking-[0.6px] uppercase">INFORMASI</h4>
               <div className="flex flex-col gap-4">
                 {["Tentang Kami", "Kontak", "Karir", "FAQ"].map((item) => (
-                  <Link key={item} to="#" className="text-[#5E5F5B] text-sm leading-5 hover:text-[#8B6B7A] transition-colors">
+                  <Link key={item} to="#" className="text-[#5E5F5B] text-sm leading-5 hover:text-glowup-brand transition-colors">
                     {item}
                   </Link>
                 ))}
@@ -437,10 +437,10 @@ export default function Jelajah() {
                 <input
                   type="email"
                   placeholder="Email Anda"
-                  className="flex-1 px-5 py-[17px] rounded-[20px] bg-[#F6F3F2] text-[#6B7280] text-sm outline-none placeholder-[#6B7280] focus:ring-2 focus:ring-[#8B6B7A]/30"
+                  className="flex-1 px-5 py-[17px] rounded-[20px] bg-[#F6F3F2] text-[#6B7280] text-sm outline-none placeholder-[#6B7280] focus:ring-2 focus:ring-glowup-brand/30"
                 />
                 <button
-                  className="w-14 h-14 rounded-[20px] bg-[#8B6B7A] flex items-center justify-center shrink-0 hover:bg-[#6a4858] transition-colors shadow-md"
+                  className="w-14 h-14 rounded-[20px] bg-glowup-brand flex items-center justify-center shrink-0 hover:bg-[#6a4858] transition-colors shadow-md"
                 >
                   <svg width="19" height="16" viewBox="0 0 19 16" fill="none">
                     <path d="M0 16V0L19 8L0 16ZM2 13L13.85 8L2 3V6.5L8 8L2 9.5V13ZM2 13V8V3V6.5V9.5V13Z" fill="white"/>
@@ -458,8 +458,8 @@ export default function Jelajah() {
               © 2024 GlowUp. Semua Hak Dilindungi.
             </p>
             <div className="flex gap-6 text-[13px] font-medium">
-              <Link to="#" className="text-[#5E5F5B] hover:text-[#8B6B7A]">Kebijakan Privasi</Link>
-              <Link to="#" className="text-[#5E5F5B] hover:text-[#8B6B7A]">Syarat & Ketentuan</Link>
+              <Link to="#" className="text-[#5E5F5B] hover:text-glowup-brand">Kebijakan Privasi</Link>
+              <Link to="#" className="text-[#5E5F5B] hover:text-glowup-brand">Syarat & Ketentuan</Link>
             </div>
           </div>
         </div>

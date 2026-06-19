@@ -117,7 +117,7 @@ export default function KelolaSalonAdmin() {
             placeholder="Cari salon, owner, lokasi..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B6B7A] transition-colors bg-gray-50"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-glowup-brand transition-colors bg-gray-50"
           />
           <svg
             className="absolute left-3.5 top-3.5 text-gray-400"
@@ -141,7 +141,7 @@ export default function KelolaSalonAdmin() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-[#8B6B7A] transition-colors bg-gray-50"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-gray-200 text-sm outline-none focus:border-glowup-brand transition-colors bg-gray-50"
           >
             <option value="all">Semua Status</option>
             <option value="active">Aktif</option>
@@ -198,7 +198,7 @@ export default function KelolaSalonAdmin() {
                     <td className="px-8 py-6 whitespace-nowrap text-center flex items-center justify-center gap-3">
                       <Link
                         to={`/admin/salons/${salon.id}`}
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#8B6B7A] text-white hover:bg-[#795465] transition-all inline-block shadow-sm"
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-glowup-brand text-white hover:bg-[#795465] transition-all inline-block shadow-sm"
                       >
                         Detail
                       </Link>

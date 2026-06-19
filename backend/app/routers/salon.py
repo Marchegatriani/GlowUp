@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Form, UploadFile, File
+import os
+import uuid
+import shutil
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -36,7 +39,13 @@ def get_admin_salons_list(
 # 1. Create Salon
 @router.post("/", response_model=SalonResponse, status_code=status.HTTP_201_CREATED)
 def create_salon(
-    salon: SalonCreate,
+    name: str = Form(...),
+    address: str = Form(...),
+    phone_number: str = Form(...),
+    open_time: str = Form(...),
+    close_time: str = Form(...),
+    description: str = Form(None),
+    image: UploadFile = File(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(require_owner)  # WAJIB OWNER / ADMIN
 ):
@@ -48,15 +57,24 @@ def create_salon(
             detail="Anda sudah memiliki salon yang terdaftar. Silakan edit profil salon Anda jika ada perubahan."
         )
 
+    image_url = None
+    if image and image.filename:
+        ext = image.filename.split('.')[-1]
+        filename = f"{uuid.uuid4()}.{ext}"
+        filepath = os.path.join("uploads", filename)
+        with open(filepath, "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+        image_url = f"http://localhost:8000/uploads/{filename}"
+
     new_salon = Salon(
         owner_id=current_user.id, # Ambil ID owner dari token yang sedang login
-        name=salon.name,
-        address=salon.address,
-        phone_number=salon.phone_number,
-        description=salon.description,
-        open_time=salon.open_time,
-        close_time=salon.close_time,
-        image_url=salon.image_url
+        name=name,
+        address=address,
+        phone_number=phone_number,
+        description=description,
+        open_time=open_time,
+        close_time=close_time,
+        image_url=image_url
     )
     db.add(new_salon)
     db.commit()
@@ -81,7 +99,13 @@ def get_salon_detail(salon_id: int, db: Session = Depends(get_db)):
 @router.put("/{salon_id}", response_model=SalonResponse)
 def update_salon(
     salon_id: int,
-    salon_update: SalonUpdate,
+    name: str = Form(None),
+    address: str = Form(None),
+    phone_number: str = Form(None),
+    open_time: str = Form(None),
+    close_time: str = Form(None),
+    description: str = Form(None),
+    image: UploadFile = File(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(require_owner)  # WAJIB OWNER / ADMIN
 ):
@@ -93,9 +117,20 @@ def update_salon(
     if salon.owner_id != current_user.id and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Akses ditolak. Anda bukan pemilik salon ini.")
 
-    update_data = salon_update.dict(exclude_unset=True) # Hanya ambil data yang dikirimkan (tidak None)
-    for key, value in update_data.items():
-        setattr(salon, key, value)
+    if name is not None: salon.name = name
+    if address is not None: salon.address = address
+    if phone_number is not None: salon.phone_number = phone_number
+    if description is not None: salon.description = description
+    if open_time is not None: salon.open_time = open_time
+    if close_time is not None: salon.close_time = close_time
+
+    if image and image.filename:
+        ext = image.filename.split('.')[-1]
+        filename = f"{uuid.uuid4()}.{ext}"
+        filepath = os.path.join("uploads", filename)
+        with open(filepath, "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+        salon.image_url = f"http://localhost:8000/uploads/{filename}"
 
     db.commit()
     db.refresh(salon)

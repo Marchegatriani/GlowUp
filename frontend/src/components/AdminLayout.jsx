@@ -8,7 +8,7 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#FCF9F8] font-inter">
+    <div className="flex min-h-screen bg-glowup-bg font-inter">
       <Sidebar />
       <main className="flex-1 ml-[280px] min-h-screen">
         <Outlet />
