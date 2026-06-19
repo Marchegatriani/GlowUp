@@ -90,10 +90,7 @@ export default function DetailBooking() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-1 border-b border-gray-100 pb-4">
-            <span className="text-gray-500 text-sm font-medium">ID Reservasi</span>
-            <span className="text-gray-800 font-bold">#GLOW-{booking.id.toString().padStart(4, '0')}</span>
-          </div>
+
 
           <div className="flex flex-col gap-1 border-b border-gray-100 pb-4">
             <span className="text-gray-500 text-sm font-medium">Tanggal & Waktu</span>

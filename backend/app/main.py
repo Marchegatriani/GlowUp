@@ -7,7 +7,7 @@ from app.utils.hash import hash_password
 # 1. Import semua model di sini agar SQLAlchemy mendeteksinya
 from app.models.user import User
 from app.models.salon import Salon
-from app.models.service import Service, SalonService
+from app.models.service import SalonService
 from app.models.booking import Booking, BookingService
 from app.models.payment import Payment
 from app.models.review import Review
@@ -30,6 +30,45 @@ def startup_setup():
             # Jika kolom sudah ada, abaikan error
             db.rollback()
         
+        # 1b. Jalankan migrasi mandiri untuk name & description pada salon_services jika belum ada
+        try:
+            db.execute(text("ALTER TABLE salon_services ADD COLUMN name VARCHAR(100) NULL"))
+            db.execute(text("ALTER TABLE salon_services ADD COLUMN description TEXT NULL"))
+            db.commit()
+            print("Database migration: Added name and description columns to salon_services table successfully.")
+        except Exception as e:
+            db.rollback()
+
+        # Migrate data dari tabel services ke salon_services (jika kolom service_id ada dan services ada)
+        try:
+            db.execute(text("UPDATE salon_services ss JOIN services s ON ss.service_id = s.id SET ss.name = s.name, ss.description = s.description WHERE ss.name IS NULL"))
+            db.commit()
+            print("Database migration: Migrated data from services to salon_services successfully.")
+        except Exception as e:
+            db.rollback()
+
+        # 1c. Hapus foreign key constraint dan kolom service_id pada salon_services jika masih ada
+        try:
+            db.execute(text("ALTER TABLE salon_services DROP FOREIGN KEY salon_services_ibfk_2"))
+            db.commit()
+            print("Database migration: Dropped foreign key salon_services_ibfk_2 successfully.")
+        except Exception as e:
+            db.rollback()
+
+        try:
+            db.execute(text("ALTER TABLE salon_services MODIFY COLUMN service_id INT NULL"))
+            db.commit()
+            print("Database migration: Made service_id column nullable successfully.")
+        except Exception as e:
+            db.rollback()
+
+        try:
+            db.execute(text("ALTER TABLE salon_services DROP COLUMN service_id"))
+            db.commit()
+            print("Database migration: Dropped column service_id successfully.")
+        except Exception as e:
+            db.rollback()
+
         # 2. Inisialisasi akun admin default
         admin = db.query(User).filter(User.role == "admin").first()
         if not admin:

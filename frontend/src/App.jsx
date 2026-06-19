@@ -19,7 +19,9 @@ import KelolaBooking from './pages/owner/KelolaBooking';
 
 import AdminLayout from './components/AdminLayout';
 import KelolaUser from './pages/admin/KelolaUser';
-import KelolaMasterLayanan from './pages/admin/KelolaMasterLayanan';
+import DashboardAdmin from './pages/admin/DashboardAdmin';
+import KelolaSalonAdmin from './pages/admin/KelolaSalonAdmin';
+import DetailSalonAdmin from './pages/admin/DetailSalonAdmin';
 
 // Komponen PrivateRoute untuk mengecek apakah user sudah login
 const PrivateRoute = ({ children }) => {
@@ -37,23 +39,27 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* 2. Halaman Protected untuk Customer */}
-          <Route element={<PrivateRoute><UserLayout /></PrivateRoute>}>
-            <Route path="/user/beranda" element={<Beranda />} />
+          {/* 2. Halaman Customer */}
+          <Route element={<UserLayout />}>
+            {/* Halaman Publik untuk Browsing */}
             <Route path="/user/jelajah" element={<Jelajah />} />
             <Route path="/user/salon/:id" element={<Detail />} />
-            <Route path="/user/booking/:id" element={<Booking />} />
-            <Route path="/user/riwayat-booking" element={<RiwayatBooking />} />
-            <Route path="/user/riwayat-review" element={<RiwayatReview />} />
-            <Route path="/user/pembayaran/:id" element={<Pembayaran />} />
-            <Route path="/user/detail-booking/:id" element={<DetailBooking />} />
+
+            {/* Halaman Terproteksi (Wajib Login) */}
+            <Route path="/user/beranda" element={<PrivateRoute><Beranda /></PrivateRoute>} />
+            <Route path="/user/booking/:id" element={<PrivateRoute><Booking /></PrivateRoute>} />
+            <Route path="/user/riwayat-booking" element={<PrivateRoute><RiwayatBooking /></PrivateRoute>} />
+            <Route path="/user/riwayat-review" element={<PrivateRoute><RiwayatReview /></PrivateRoute>} />
+            <Route path="/user/pembayaran/:id" element={<PrivateRoute><Pembayaran /></PrivateRoute>} />
+            <Route path="/user/detail-booking/:id" element={<PrivateRoute><DetailBooking /></PrivateRoute>} />
           </Route>
 
           {/* 3. Halaman Protected untuk Admin */}
           <Route element={<PrivateRoute><AdminLayout /></PrivateRoute>}>
-            <Route path="/admin/dashboard" element={<KelolaUser />} />
+            <Route path="/admin/dashboard" element={<DashboardAdmin />} />
             <Route path="/admin/users" element={<KelolaUser />} />
-            <Route path="/admin/master-services" element={<KelolaMasterLayanan />} />
+            <Route path="/admin/salons" element={<KelolaSalonAdmin />} />
+            <Route path="/admin/salons/:id" element={<DetailSalonAdmin />} />
           </Route>
 
           {/* 4. Halaman Protected untuk Owner */}

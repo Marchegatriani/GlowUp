@@ -3,38 +3,13 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.database import get_db
-from app.models.service import Service, SalonService
+from app.models.service import SalonService
 from app.models.salon import Salon
 from app.models.user import User
-from app.schemas.service import ServiceCreate, ServiceResponse, SalonServiceCreate, SalonServiceResponse
-from app.utils.permissions import require_admin, require_owner
+from app.schemas.service import SalonServiceCreate, SalonServiceUpdate, SalonServiceResponse
+from app.utils.permissions import require_owner
 
 router = APIRouter(tags=["Services"])
-
-# ==========================================
-# MASTER SERVICES (Dikelola oleh Admin)
-# ==========================================
-
-@router.post("/services/", response_model=ServiceResponse, status_code=status.HTTP_201_CREATED)
-def create_master_service(
-    service: ServiceCreate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(require_admin)  # HANYA ADMIN
-):
-    existing = db.query(Service).filter(Service.name == service.name).first()
-    if existing:
-        raise HTTPException(status_code=400, detail="Service dengan nama ini sudah ada")
-
-    new_service = Service(name=service.name, description=service.description)
-    db.add(new_service)
-    db.commit()
-    db.refresh(new_service)
-    return new_service
-
-@router.get("/services/", response_model=List[ServiceResponse])
-def get_all_master_services(db: Session = Depends(get_db)):
-    return db.query(Service).all()
-
 
 # ==========================================
 # SALON SERVICES (Dikelola oleh Owner)
@@ -55,17 +30,18 @@ def add_service_to_salon(
     if salon.owner_id != current_user.id and current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Akses ditolak. Anda bukan pemilik salon ini.")
 
-    # Cek apakah salon sudah memiliki layanan ini
+    # Cek apakah salon sudah memiliki layanan dengan nama yang sama
     existing_ss = db.query(SalonService).filter(
         SalonService.salon_id == salon_id,
-        SalonService.service_id == salon_service.service_id
+        SalonService.name == salon_service.name
     ).first()
     if existing_ss:
-        raise HTTPException(status_code=400, detail="Salon ini sudah memiliki layanan tersebut.")
+        raise HTTPException(status_code=400, detail="Salon ini sudah memiliki layanan dengan nama tersebut.")
 
     new_ss = SalonService(
         salon_id=salon_id,
-        service_id=salon_service.service_id,
+        name=salon_service.name,
+        description=salon_service.description,
         price=salon_service.price,
         duration_minutes=salon_service.duration_minutes
     )
@@ -80,9 +56,69 @@ def get_salon_services(salon_id: int, db: Session = Depends(get_db)):
     if not salon:
         raise HTTPException(status_code=404, detail="Salon tidak ditemukan")
 
-    # Akan me-return daftar layanan sekaligus include detail master layanannya
-    # karena kita punya relationship("Service") dan embedding di schema Pydantic
     services = db.query(SalonService).filter(SalonService.salon_id == salon_id).all()
     return services
 
-# Catatan: Endpoint DELETE /salons/{salon_id}/services/{id} bisa ditambahkan nanti jika perlu.
+@router.put("/salons/{salon_id}/services/{service_id}", response_model=SalonServiceResponse)
+def update_salon_service(
+    salon_id: int,
+    service_id: int,
+    salon_service_update: SalonServiceUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_owner)  # HANYA OWNER/ADMIN
+):
+    salon = db.query(Salon).filter(Salon.id == salon_id).first()
+    if not salon:
+        raise HTTPException(status_code=404, detail="Salon tidak ditemukan")
+
+    if salon.owner_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak. Anda bukan pemilik salon ini.")
+
+    ss = db.query(SalonService).filter(
+        SalonService.id == service_id,
+        SalonService.salon_id == salon_id
+    ).first()
+    if not ss:
+        raise HTTPException(status_code=404, detail="Layanan tidak ditemukan di salon ini")
+
+    # Jika mengubah nama, pastikan tidak duplikat dengan layanan lain di salon yang sama
+    if salon_service_update.name is not None and salon_service_update.name != ss.name:
+        existing = db.query(SalonService).filter(
+            SalonService.salon_id == salon_id,
+            SalonService.name == salon_service_update.name
+        ).first()
+        if existing:
+            raise HTTPException(status_code=400, detail="Salon ini sudah memiliki layanan dengan nama tersebut.")
+
+    update_data = salon_service_update.dict(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(ss, key, value)
+
+    db.commit()
+    db.refresh(ss)
+    return ss
+
+@router.delete("/salons/{salon_id}/services/{service_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_salon_service(
+    salon_id: int,
+    service_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_owner)  # HANYA OWNER/ADMIN
+):
+    salon = db.query(Salon).filter(Salon.id == salon_id).first()
+    if not salon:
+        raise HTTPException(status_code=404, detail="Salon tidak ditemukan")
+
+    if salon.owner_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak. Anda bukan pemilik salon ini.")
+
+    ss = db.query(SalonService).filter(
+        SalonService.id == service_id,
+        SalonService.salon_id == salon_id
+    ).first()
+    if not ss:
+        raise HTTPException(status_code=404, detail="Layanan tidak ditemukan di salon ini")
+
+    db.delete(ss)
+    db.commit()
+    return

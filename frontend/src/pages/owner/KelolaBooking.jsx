@@ -53,7 +53,7 @@ export default function KelolaBooking() {
         status: newStatus,
       });
 
-      setSuccess(`Status reservasi #${bookingId} berhasil diperbarui menjadi "${newStatus.toUpperCase()}"!`);
+      setSuccess(`Status reservasi berhasil diperbarui menjadi "${newStatus.toUpperCase()}"!`);
       
       // Refetch data
       const bookingsRes = await axiosClient.get(`/bookings/salons/${salon.id}`);
@@ -133,7 +133,7 @@ export default function KelolaBooking() {
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gray-50 border-b border-gray-100">
-                      <th className="px-8 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Booking ID</th>
+                      <th className="px-8 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider w-16">#</th>
                       <th className="px-8 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Pelanggan</th>
                       <th className="px-8 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Layanan</th>
                       <th className="px-8 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Tanggal & Waktu</th>
@@ -146,13 +146,13 @@ export default function KelolaBooking() {
                     {bookings.map((booking, idx) => {
                       const badge = getStatusBadge(booking.status);
                       const servicesText = booking.services
-                        ?.map((s) => s.salon_service?.service?.name)
+                        ?.map((s) => s.salon_service?.name)
                         .join(", ") || "Layanan Salon";
 
                       return (
                         <tr key={booking.id} className={idx > 0 ? "border-t border-gray-50" : ""}>
-                          <td className="px-8 py-6 text-sm font-bold text-gray-800">
-                            #{booking.id}
+                          <td className="px-8 py-6 text-sm font-bold text-gray-450">
+                            {idx + 1}
                           </td>
                           <td className="px-8 py-6">
                             <div className="flex flex-col">

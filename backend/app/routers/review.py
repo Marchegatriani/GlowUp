@@ -8,7 +8,7 @@ from app.models.booking import Booking
 from app.models.salon import Salon
 from app.models.user import User
 
-from app.schemas.review import ReviewCreate, ReviewResponse
+from app.schemas.review import ReviewCreate, ReviewResponse, ReviewUpdate
 from app.utils.auth import get_current_user
 
 router = APIRouter(tags=["Reviews"])
@@ -68,3 +68,42 @@ def get_my_reviews(
     current_user: User = Depends(get_current_user)
 ):
     return db.query(Review).filter(Review.user_id == current_user.id).all()
+
+# 4. PUT /reviews/{review_id} - User mengedit review
+@router.put("/reviews/{review_id}", response_model=ReviewResponse)
+def update_review(
+    review_id: int,
+    review_update: ReviewUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    review = db.query(Review).filter(Review.id == review_id).first()
+    if not review:
+        raise HTTPException(status_code=404, detail="Review tidak ditemukan")
+        
+    if review.user_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak. Anda tidak berhak mengubah review ini.")
+        
+    review.rating = review_update.rating
+    review.comment = review_update.comment
+    db.commit()
+    db.refresh(review)
+    return review
+
+# 5. DELETE /reviews/{review_id} - User menghapus review
+@router.delete("/reviews/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_review(
+    review_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    review = db.query(Review).filter(Review.id == review_id).first()
+    if not review:
+        raise HTTPException(status_code=404, detail="Review tidak ditemukan")
+        
+    if review.user_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak. Anda tidak berhak menghapus review ini.")
+        
+    db.delete(review)
+    db.commit()
+    return

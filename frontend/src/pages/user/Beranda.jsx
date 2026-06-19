@@ -172,7 +172,7 @@ export default function Index() {
         </section>
 
         {/* Stats Grid */}
-        <section className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Booking Aktif */}
           <div className="bg-white rounded-2xl border border-gray-50 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 flex flex-col items-center">
             <div className="w-12 h-12 rounded-lg bg-[#FDF2F8] flex items-center justify-center mb-4">
@@ -180,15 +180,6 @@ export default function Index() {
             </div>
             <p className="text-sm font-medium text-gray-400 mb-1">Booking Aktif</p>
             <p className="text-4xl font-bold text-gray-800">{userData?.stats?.active_bookings_count || 0}</p>
-          </div>
-
-          {/* Total Salon Favorit (Dummy for now) */}
-          <div className="bg-white rounded-2xl border border-gray-50 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 flex flex-col items-center">
-            <div className="w-12 h-12 rounded-lg bg-[#FEFCE8] flex items-center justify-center mb-4">
-              <StarIcon />
-            </div>
-            <p className="text-sm font-medium text-gray-400 mb-1">Total Salon Favorit</p>
-            <p className="text-4xl font-bold text-gray-800">12</p>
           </div>
 
           {/* Review Terkirim */}
@@ -225,7 +216,7 @@ export default function Index() {
             ) : (
               upcomingBookings.map((b) => {
                 const isConfirmed = b.status?.toLowerCase() === "confirmed";
-                const servicesText = b.services?.map(s => s.salon_service?.service?.name).join(", ") || "Layanan Salon";
+                const servicesText = b.services?.map(s => s.salon_service?.name).join(", ") || "Layanan Salon";
                 
                 return (
                   <Link
@@ -250,7 +241,7 @@ export default function Index() {
                     <div className="flex flex-col flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2 mb-1">
                         <h3 className="text-lg font-bold text-gray-800 leading-7 truncate">
-                          {b.salon?.name || `Salon #${b.salon_id}`}
+                          {b.salon?.name || "Salon"}
                         </h3>
                         <span className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase ${
                           isConfirmed ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"
@@ -313,7 +304,8 @@ export default function Index() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-50">
-                    <th className="text-left text-xs font-bold text-gray-400 px-8 py-5">Layanan</th>
+                    <th className="text-left text-xs font-bold text-gray-400 px-8 py-5">No</th>
+                    <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Layanan</th>
                     <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Salon</th>
                     <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Tanggal</th>
                     <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Harga</th>
@@ -324,15 +316,20 @@ export default function Index() {
                 <tbody>
                   {bookings.length === 0 ? (
                     <tr>
-                      <td colSpan="6" className="text-center py-8 text-gray-500 text-sm">Belum ada riwayat reservasi</td>
+                      <td colSpan="7" className="text-center py-8 text-gray-500 text-sm">Belum ada riwayat reservasi</td>
                     </tr>
                   ) : (
                     bookings.map((row, idx) => (
                       <tr key={row.id} className={idx > 0 ? "border-t border-gray-50" : ""}>
                         <td className="px-8 py-6 text-sm font-bold text-gray-700 whitespace-nowrap">
-                          Booking #{row.id}
+                          {idx + 1}
                         </td>
-                        <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">ID Salon: {row.salon_id}</td>
+                        <td className="px-6 py-6 text-sm text-gray-850 font-semibold truncate max-w-[200px] whitespace-nowrap">
+                          {row.services?.map(s => s.salon_service?.name).join(", ") || "Layanan Salon"}
+                        </td>
+                        <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">
+                          {row.salon?.name || "Salon"}
+                        </td>
                         <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">
                           {new Date(row.booking_time).toLocaleString("id-ID", { dateStyle: "medium" })}
                         </td>

@@ -70,9 +70,23 @@ export default function Detail() {
     navigate("/login");
   };
 
+  const getTodayDateString = () => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
   const handleBooking = async () => {
     if (!selectedService || !selectedDate || !selectedTime) {
       setError("Pilih layanan, tanggal, dan waktu terlebih dahulu.");
+      return;
+    }
+
+    const todayStr = getTodayDateString();
+    if (selectedDate < todayStr) {
+      setError("Tanggal booking tidak boleh di masa lalu.");
       return;
     }
 
@@ -215,8 +229,8 @@ export default function Detail() {
                     }`}
                   >
                     <div className="flex flex-col gap-1 md:w-1/2">
-                      <h4 className="text-gray-800 text-lg font-bold">{svc.service?.name}</h4>
-                      <p className="text-gray-500 text-sm">{svc.service?.description || "Tidak ada deskripsi"}</p>
+                      <h4 className="text-gray-800 text-lg font-bold">{svc.name}</h4>
+                      <p className="text-gray-500 text-sm">{svc.description || "Tidak ada deskripsi"}</p>
                     </div>
                     <div className="flex items-center justify-between md:w-1/2 md:justify-end gap-6">
                       <span className="px-4 py-1 rounded-full bg-gray-50 text-gray-600 text-sm font-medium">
@@ -256,7 +270,7 @@ export default function Detail() {
                     className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border transition-colors ${services.length === 0 ? "bg-gray-100 cursor-not-allowed border-gray-200" : "bg-gray-50 hover:bg-gray-100 border-gray-200"}`}
                   >
                     <span className="text-gray-800 text-base font-medium truncate pr-2">
-                      {selectedService ? selectedService.service?.name : "Tidak ada layanan"}
+                      {selectedService ? selectedService.name : "Tidak ada layanan"}
                     </span>
                     <svg width="12" height="8" viewBox="0 0 12 8" fill="none" className="shrink-0">
                       <path d="M6 7.4L0 1.4L1.4 0L6 4.6L10.6 0L12 1.4L6 7.4Z" fill="#6B7280"/>
@@ -272,7 +286,7 @@ export default function Detail() {
                             selectedService?.id === s.id ? "text-[#8B6B7A] font-bold bg-pink-50/30" : "text-gray-700"
                           }`}
                         >
-                          {s.service?.name}
+                          {s.name}
                         </button>
                       ))}
                     </div>
@@ -286,6 +300,7 @@ export default function Detail() {
                 <input 
                   type="date" 
                   value={selectedDate}
+                  min={getTodayDateString()}
                   onChange={(e) => setSelectedDate(e.target.value)}
                   className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-[#8B6B7A]"
                 />

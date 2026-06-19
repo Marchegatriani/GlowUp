@@ -1,34 +1,26 @@
 from pydantic import BaseModel
 from typing import Optional
 
-# --- Schemas untuk Master Services ---
-class ServiceBase(BaseModel):
+# --- Schemas untuk Salon Services ---
+class SalonServiceCreate(BaseModel):
     name: str
     description: Optional[str] = None
-
-class ServiceCreate(ServiceBase):
-    pass
-
-class ServiceResponse(ServiceBase):
-    id: int
-
-    class Config:
-        from_attributes = True
-
-# --- Schemas untuk Salon Services ---
-class SalonServiceBase(BaseModel):
-    service_id: int
     price: int
     duration_minutes: int
 
-class SalonServiceCreate(SalonServiceBase):
-    pass
+class SalonServiceUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[int] = None
+    duration_minutes: Optional[int] = None
 
-class SalonServiceResponse(SalonServiceBase):
+class SalonServiceResponse(BaseModel):
     id: int
     salon_id: int
-    
-    service: ServiceResponse 
+    name: str
+    description: Optional[str] = None
+    price: int
+    duration_minutes: int
 
     class Config:
-        from_attributes = True
+        from_attributes = True

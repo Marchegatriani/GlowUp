@@ -56,6 +56,19 @@ export default function Pembayaran() {
     }
   };
 
+  const handleCancel = async () => {
+    try {
+      setIsProcessing(true);
+      await axiosClient.delete(`/bookings/${id}`);
+      navigate("/user/beranda");
+    } catch (err) {
+      console.error("Gagal membatalkan booking:", err);
+      navigate("/user/beranda");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
@@ -139,9 +152,13 @@ export default function Pembayaran() {
         </button>
         
         <div className="mt-4 text-center">
-            <Link to="/user/beranda" className="text-sm text-gray-500 hover:text-gray-700">
-                Batalkan & Kembali
-            </Link>
+            <button 
+              onClick={handleCancel}
+              disabled={isProcessing}
+              className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer disabled:opacity-50"
+            >
+              Batalkan & Kembali
+            </button>
         </div>
       </div>
     </div>

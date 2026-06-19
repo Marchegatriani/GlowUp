@@ -182,3 +182,32 @@ def get_owner_bookings(
         raise HTTPException(status_code=403, detail="Akses ditolak. Anda bukan pemilik salon ini.")
 
     return db.query(Booking).filter(Booking.salon_id == salon_id).all()
+
+# 5. User/Owner/Admin Membatalkan/Menghapus Booking
+@router.delete("/{booking_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_booking(
+    booking_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    booking = db.query(Booking).filter(Booking.id == booking_id).first()
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking tidak ditemukan")
+    
+    # Pastikan user yang menghapus adalah pemilik booking ini, atau owner salon bersangkutan, atau admin
+    salon = db.query(Salon).filter(Salon.id == booking.salon_id).first()
+    if (
+        booking.user_id != current_user.id 
+        and (not salon or salon.owner_id != current_user.id) 
+        and current_user.role != "admin"
+    ):
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    
+    # Hapus booking_services terasosiasi
+    db.query(BookingService).filter(BookingService.booking_id == booking_id).delete()
+    # Hapus payment terasosiasi
+    db.query(Payment).filter(Payment.booking_id == booking_id).delete()
+    # Hapus booking
+    db.delete(booking)
+    db.commit()
+    return

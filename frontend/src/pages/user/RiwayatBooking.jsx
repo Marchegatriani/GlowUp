@@ -88,7 +88,8 @@ export default function RiwayatBooking() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-50">
-                  <th className="text-left text-xs font-bold text-gray-400 px-8 py-5">Layanan</th>
+                  <th className="text-left text-xs font-bold text-gray-400 px-8 py-5">No</th>
+                  <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Layanan</th>
                   <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Salon</th>
                   <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Tanggal</th>
                   <th className="text-left text-xs font-bold text-gray-400 px-6 py-5">Harga</th>
@@ -99,19 +100,24 @@ export default function RiwayatBooking() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="6" className="text-center py-8 text-gray-500 text-sm">Memuat data...</td>
+                    <td colSpan="7" className="text-center py-8 text-gray-500 text-sm">Memuat data...</td>
                   </tr>
                 ) : bookings.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="text-center py-8 text-gray-500 text-sm">Belum ada riwayat reservasi</td>
+                    <td colSpan="7" className="text-center py-8 text-gray-500 text-sm">Belum ada riwayat reservasi</td>
                   </tr>
                 ) : (
                   bookings.map((row, idx) => (
                     <tr key={row.id} className={idx > 0 ? "border-t border-gray-50" : ""}>
                       <td className="px-8 py-6 text-sm font-bold text-gray-700 whitespace-nowrap">
-                        Booking #{row.id}
+                        {idx + 1}
                       </td>
-                      <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">ID Salon: {row.salon_id}</td>
+                      <td className="px-6 py-6 text-sm text-gray-850 font-semibold truncate max-w-[200px] whitespace-nowrap">
+                        {row.services?.map(s => s.salon_service?.name).join(", ") || "Layanan Salon"}
+                      </td>
+                      <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">
+                        {row.salon?.name || "Salon"}
+                      </td>
                       <td className="px-6 py-6 text-sm text-gray-500 whitespace-nowrap">
                         {new Date(row.booking_time).toLocaleString("id-ID", { dateStyle: "medium" })}
                       </td>

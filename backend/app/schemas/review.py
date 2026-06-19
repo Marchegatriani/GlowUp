@@ -10,6 +10,11 @@ class ReviewCreate(BaseModel):
     rating: int = Field(..., ge=1, le=5, description="Rating harus antara 1 dan 5")
     comment: Optional[str] = None
 
+# Schema untuk input saat user mengupdate review
+class ReviewUpdate(BaseModel):
+    rating: int = Field(..., ge=1, le=5, description="Rating harus antara 1 dan 5")
+    comment: Optional[str] = None
+
 # Schema untuk response API
 class ReviewResponse(BaseModel):
     id: int

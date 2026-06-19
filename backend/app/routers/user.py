@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, UserLogin, UserCreateAdmin
+from app.schemas.user import UserCreate, UserLogin, UserCreateAdmin, UserUpdateAdmin
 from app.utils.hash import hash_password, verify_password
 from app.utils.auth import get_current_user
 from app.utils.jwt import create_access_token
@@ -90,11 +90,25 @@ def get_me(
 
 @router.get("/admin/dashboard")
 def admin_dashboard_data(
-    current_user: User = Depends(require_admin)
+    current_user: User = Depends(require_admin),
+    db: Session = Depends(get_db)
 ):
+    from app.models.salon import Salon
+    
+    total_users = db.query(User).count()
+    total_customers = db.query(User).filter(User.role == "user").count()
+    total_owners = db.query(User).filter(User.role == "owner").count()
+    total_salons = db.query(Salon).count()
+    
     return {
         "message": "Selamat datang di Dashboard Admin",
-        "admin_data": current_user.name
+        "admin_name": current_user.name,
+        "stats": {
+            "total_users": total_users,
+            "total_customers": total_customers,
+            "total_owners": total_owners,
+            "total_salons": total_salons
+        }
     }
 
 @router.get("/owner/dashboard")
@@ -105,7 +119,7 @@ def owner_dashboard_data(
     from app.models.salon import Salon
     from app.models.booking import Booking, BookingService
     from app.models.review import Review
-    from app.models.service import SalonService, Service
+    from app.models.service import SalonService
     from datetime import datetime, timedelta
     from sqlalchemy import func, desc
 
@@ -153,8 +167,8 @@ def owner_dashboard_data(
         # Ambil list layanan (concatenated)
         svc_names = []
         for bs in b.services:
-            if bs.salon_service and bs.salon_service.service:
-                svc_names.append(bs.salon_service.service.name)
+            if bs.salon_service:
+                svc_names.append(bs.salon_service.name)
         svc_str = ", ".join(svc_names) if svc_names else "Layanan Salon"
 
         status_text = b.status.upper()
@@ -240,10 +254,10 @@ def owner_dashboard_data(
     popular_services = []
     for item in popular_query:
         ss = db.query(SalonService).filter(SalonService.id == item.salon_service_id).first()
-        if ss and ss.service:
+        if ss:
             # Generate a consistent placeholder image based on service id
             popular_services.append({
-                "name": ss.service.name,
+                "name": ss.name,
                 "bookings": f"{item.count} Booking",
                 "price": f"Rp {ss.price:,}".replace(",", "."),
                 "img": f"https://api.builder.io/api/v1/image/assets/TEMP/bd798f11415ca0348620620846272411656ea963?width=112"
@@ -333,3 +347,87 @@ def admin_list_users(
     current_user: User = Depends(require_admin)
 ):
     return db.query(User).all()
+
+@router.put("/admin/users/{user_id}", response_model=UserResponse)
+def admin_update_user(
+    user_id: int,
+    user_update: UserUpdateAdmin,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User tidak ditemukan")
+
+    if user_update.email is not None and user_update.email != user.email:
+        existing = db.query(User).filter(User.email == user_update.email).first()
+        if existing:
+            raise HTTPException(status_code=400, detail="Email sudah terdaftar untuk user lain")
+
+    update_data = user_update.dict(exclude_unset=True)
+    if "password" in update_data and update_data["password"]:
+        user.password = hash_password(update_data["password"])
+        del update_data["password"]
+    elif "password" in update_data:
+        del update_data["password"]
+
+    for key, value in update_data.items():
+        setattr(user, key, value)
+
+    db.commit()
+    db.refresh(user)
+    return user
+
+@router.delete("/admin/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+def admin_delete_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin)
+):
+    from fastapi import status as fastapi_status
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User tidak ditemukan")
+
+    # Mencegah admin menghapus dirinya sendiri
+    if user.id == current_user.id:
+        raise HTTPException(status_code=400, detail="Admin tidak diperbolehkan menghapus akun sendiri")
+
+    from app.models.booking import Booking, BookingService
+    from app.models.review import Review
+    from app.models.payment import Payment
+    from app.models.salon import Salon
+    from app.models.service import SalonService
+
+    # 1. Cascade delete bookings and related tables (payments, reviews, booking_services)
+    # Jika user adalah Owner, hapus salon dan semua bookings di salon tersebut
+    if user.role == "owner":
+        salons = db.query(Salon).filter(Salon.owner_id == user.id).all()
+        for salon in salons:
+            bookings = db.query(Booking).filter(Booking.salon_id == salon.id).all()
+            for b in bookings:
+                db.query(BookingService).filter(BookingService.booking_id == b.id).delete(synchronize_session=False)
+                db.query(Review).filter(Review.booking_id == b.id).delete(synchronize_session=False)
+                db.query(Payment).filter(Payment.booking_id == b.id).delete(synchronize_session=False)
+                db.delete(b)
+            
+            db.query(Review).filter(Review.salon_id == salon.id).delete(synchronize_session=False)
+            db.query(SalonService).filter(SalonService.salon_id == salon.id).delete(synchronize_session=False)
+            db.delete(salon)
+
+    # Jika user adalah customer (user biasa), hapus bookings milik customer tersebut
+    else:
+        bookings = db.query(Booking).filter(Booking.user_id == user.id).all()
+        for b in bookings:
+            db.query(BookingService).filter(BookingService.booking_id == b.id).delete(synchronize_session=False)
+            db.query(Review).filter(Review.booking_id == b.id).delete(synchronize_session=False)
+            db.query(Payment).filter(Payment.booking_id == b.id).delete(synchronize_session=False)
+            db.delete(b)
+        
+        # Hapus review yang ditulis oleh user ini
+        db.query(Review).filter(Review.user_id == user.id).delete(synchronize_session=False)
+
+    # 2. Hapus User
+    db.delete(user)
+    db.commit()
+    return

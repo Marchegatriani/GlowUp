@@ -5,9 +5,6 @@ import axiosClient from "../api/axiosClient";
 const NAV_LINKS = [
   { label: "Beranda", href: "/" },
   { label: "Jelajahi Salon", href: "/user/jelajah" },
-  { label: "Layanan", href: "/user/jelajah" },
-  { label: "Booking", href: "/user/beranda" },
-  { label: "Review", href: "/user/jelajah" },
 ];
 
 const SERVICE_CARDS = [
