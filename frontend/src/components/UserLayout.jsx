@@ -1,14 +1,15 @@
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 import { HelpIcon, LogoutIcon } from "./icons";
 
 export default function UserLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const isAuthenticated = !!localStorage.getItem("access_token");
+  const { isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token");
+    logout();
     navigate("/login");
   };
 

@@ -12,6 +12,8 @@ import Pembayaran from './pages/user/Pembayaran';
 import DetailBooking from './pages/user/DetailBooking';
 import UserLayout from './components/UserLayout';
 
+import { AuthProvider, useAuth } from './context/AuthContext';
+
 import OwnerDashboard from './pages/owner/Dashboard';
 import KelolaLayananOwner from './pages/owner/KelolaLayanan';
 import KelolaSalonOwner from './pages/owner/KelolaSalon';
@@ -25,13 +27,14 @@ import DetailSalonAdmin from './pages/admin/DetailSalonAdmin';
 
 // Komponen PrivateRoute untuk mengecek apakah user sudah login
 const PrivateRoute = ({ children }) => {
-  const isAuthenticated = !!localStorage.getItem("access_token");
+  const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
   return (
-    <Router>
+    <AuthProvider>
+      <Router>
       <div className="app-container">
         <Routes>
           {/* 1. Halaman Publik */}
@@ -69,7 +72,8 @@ function App() {
           <Route path="/owner/salon-profile" element={<PrivateRoute><KelolaSalonOwner /></PrivateRoute>} />
         </Routes>
       </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 

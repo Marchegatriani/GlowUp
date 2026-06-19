@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
+import { useAuth } from "../context/AuthContext";
 
 const NAV_LINKS = [
   { label: "Beranda", href: "/" },
@@ -509,8 +510,13 @@ function Footer() {
 }
 
 export default function Index() {
+  const { isAuthenticated } = useAuth();
   const [salons, setSalons] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  if (isAuthenticated) {
+    return <Navigate to="/user/beranda" replace />;
+  }
 
   useEffect(() => {
     const fetchSalons = async () => {

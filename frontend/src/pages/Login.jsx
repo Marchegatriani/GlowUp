@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -9,6 +10,7 @@ export default function Login() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,8 +23,8 @@ export default function Login() {
         password
       });
 
-      // Simpan token ke localStorage
-      localStorage.setItem("access_token", response.data.access_token);
+      // Simpan token ke localStorage via AuthContext
+      login(response.data.access_token);
       
       console.log("Login berhasil:", response.data);
       
