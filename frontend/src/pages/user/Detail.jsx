@@ -122,7 +122,7 @@ export default function Detail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <p className="text-gray-500 font-medium">Memuat detail salon...</p>
       </div>
     );

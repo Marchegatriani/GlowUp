@@ -2,6 +2,7 @@ import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 import { LogoutIcon } from "./icons";
+import { PublicFooter } from "./PublicLayout";
 
 export default function UserLayout() {
   const navigate = useNavigate();
@@ -9,8 +10,10 @@ export default function UserLayout() {
   const { isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
-    logout();
     navigate("/");
+    setTimeout(() => {
+      logout();
+    }, 10);
   };
 
   const getLinkClass = (path) => {
@@ -25,9 +28,9 @@ export default function UserLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] font-['Inter',sans-serif]">
+    <div className="min-h-screen flex flex-col bg-transparent font-['Inter',sans-serif]">
       {/* Top Navigation */}
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[rgba(210,195,199,0.10)] shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
         <div className="max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-16 h-20 flex items-center justify-between">
           {/* Brand */}
           <Link to="/" className="text-2xl font-bold leading-8 text-glowup-brand">
@@ -87,7 +90,10 @@ export default function UserLayout() {
       </header>
 
       {/* Main Content Area */}
-      <Outlet />
+      <div className="flex-1">
+        <Outlet />
+      </div>
+      <PublicFooter />
     </div>
   );
 }

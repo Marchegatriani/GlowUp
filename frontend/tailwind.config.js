@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         glowup: {
-          bg: '#FAFAFA',      // Gray 50
+          bg: 'transparent',      // Was Gray 50
           brand: '#DB2777',   // Pink 600
           text: '#000000',    // Black
           muted: '#8E7D84',   // Kept for backward compatibility

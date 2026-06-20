@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
+import { PublicNavbar } from "../components/PublicLayout";
 
 export default function Index() {
   const [showPassword, setShowPassword] = useState(false);
@@ -46,7 +47,8 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col font-inter" style={{ background: "#FCF9F8" }}>
+    <div className="min-h-screen flex flex-col font-inter" style={{ background: "transparent" }}>
+      <PublicNavbar />
       {/* Background blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div
@@ -66,7 +68,7 @@ export default function Index() {
       </div>
 
       {/* Main content */}
-      <main className="flex-1 relative z-10">
+      <main className="flex-1 relative z-10 pt-24">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 py-12 lg:py-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
@@ -122,36 +124,7 @@ export default function Index() {
                   />
                 </div>
 
-                {/* Floating badge */}
-                <div
-                  className="flex items-center gap-4 px-6 py-5 rounded-[20px] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] self-end -mt-10 mr-0 sm:-mr-4 relative z-10"
-                  style={{
-                    border: "1px solid rgba(255, 255, 255, 0.60)",
-                    background: "rgba(255, 255, 255, 0.85)",
-                    backdropFilter: "blur(12px)",
-                    maxWidth: "340px",
-                  }}
-                >
-                  <div
-                    className="flex items-center justify-center w-14 h-14 rounded-full shrink-0"
-                    style={{
-                      background: "rgba(248, 200, 220, 0.80)",
-                      boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.05) inset",
-                    }}
-                  >
-                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M22.5 10L20.9375 6.5625L17.5 5L20.9375 3.4375L22.5 0L24.0625 3.4375L27.5 5L24.0625 6.5625L22.5 10ZM22.5 27.5L20.9375 24.0625L17.5 22.5L20.9375 20.9375L22.5 17.5L24.0625 20.9375L27.5 22.5L24.0625 24.0625L22.5 27.5ZM10 23.75L6.875 16.875L0 13.75L6.875 10.625L10 3.75L13.125 10.625L20 13.75L13.125 16.875L10 23.75ZM10 17.6875L11.25 15L13.9375 13.75L11.25 12.5L10 9.8125L8.75 12.5L6.0625 13.75L8.75 15L10 17.6875Z" fill="#795465" />
-                    </svg>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-lg font-bold leading-7" style={{ color: "#1B1C1C" }}>
-                      Kualitas Terjamin
-                    </span>
-                    <span className="text-sm font-medium" style={{ color: "#5E5F5B" }}>
-                      Layanan VIP untuk Anda
-                    </span>
-                  </div>
-                </div>
+
               </div>
             </div>
 
@@ -348,20 +321,8 @@ export default function Index() {
                     </button>
                   </div>
 
-                  {/* Divider */}
-                  <div className="flex items-center gap-4 py-2">
-                    <div className="flex-1 h-px" style={{ background: "rgba(210, 195, 199, 0.20)" }} />
-                    <span
-                      className="text-[11px] font-bold tracking-[1.65px] uppercase"
-                      style={{ color: "rgba(94, 95, 91, 0.60)" }}
-                    >
-                      ATAU
-                    </span>
-                    <div className="flex-1 h-px" style={{ background: "rgba(210, 195, 199, 0.20)" }} />
-                  </div>
-
                   {/* Login link */}
-                  <p className="text-center text-base font-medium" style={{ color: "#4F4448" }}>
+                  <p className="text-center text-base font-medium mt-4 pb-2" style={{ color: "#4F4448" }}>
                     Sudah memiliki akun?{" "}
                     <a href="/login" className="font-bold hover:underline" style={{ color: "#795465" }}>
                       Masuk ke Akun
@@ -384,48 +345,13 @@ export default function Index() {
           backdropFilter: "blur(6px)",
         }}
       >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-          <div className="flex flex-col gap-1">
-            <p className="text-sm font-semibold tracking-[0.14px]" style={{ color: "#5E5F5B" }}>
-              © 2024 GlowUp. Semua Hak Dilindungi.
-            </p>
-            <p className="text-xs font-medium" style={{ color: "rgba(94, 95, 91, 0.60)" }}>
-              Estetika Premium untuk Setiap Langkah Anda.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-8 sm:gap-10">
-            <a
-              href="#"
-              className="flex items-center gap-1.5 text-sm font-semibold transition-opacity hover:opacity-70"
-              style={{ color: "rgba(94, 95, 91, 0.80)" }}
-            >
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                <path d="M7.4625 12C7.725 12 7.94688 11.9094 8.12813 11.7281C8.30937 11.5469 8.4 11.325 8.4 11.0625C8.4 10.8 8.30937 10.5781 8.12813 10.3969C7.94688 10.2156 7.725 10.125 7.4625 10.125C7.2 10.125 6.97813 10.2156 6.79688 10.3969C6.61562 10.5781 6.525 10.8 6.525 11.0625C6.525 11.325 6.61562 11.5469 6.79688 11.7281C6.97813 11.9094 7.2 12 7.4625 12ZM6.7875 9.1125H8.175C8.175 8.7 8.22188 8.375 8.31563 8.1375C8.40938 7.9 8.675 7.575 9.1125 7.1625C9.4375 6.8375 9.69375 6.52812 9.88125 6.23438C10.0688 5.94063 10.1625 5.5875 10.1625 5.175C10.1625 4.475 9.90625 3.9375 9.39375 3.5625C8.88125 3.1875 8.275 3 7.575 3C6.8625 3 6.28437 3.1875 5.84062 3.5625C5.39687 3.9375 5.0875 4.3875 4.9125 4.9125L6.15 5.4C6.2125 5.175 6.35313 4.93125 6.57188 4.66875C6.79063 4.40625 7.125 4.275 7.575 4.275C7.975 4.275 8.275 4.38438 8.475 4.60313C8.675 4.82188 8.775 5.0625 8.775 5.325C8.775 5.575 8.7 5.80937 8.55 6.02812C8.4 6.24687 8.2125 6.45 7.9875 6.6375C7.4375 7.125 7.1 7.49375 6.975 7.74375C6.85 7.99375 6.7875 8.45 6.7875 9.1125ZM7.5 15C6.4625 15 5.4875 14.8031 4.575 14.4094C3.6625 14.0156 2.86875 13.4812 2.19375 12.8062C1.51875 12.1312 0.984375 11.3375 0.590625 10.425C0.196875 9.5125 0 8.5375 0 7.5C0 6.4625 0.196875 5.4875 0.590625 4.575C0.984375 3.6625 1.51875 2.86875 2.19375 2.19375C2.86875 1.51875 3.6625 0.984375 4.575 0.590625C5.4875 0.196875 6.4625 0 7.5 0C8.5375 0 9.5125 0.196875 10.425 0.590625C11.3375 0.984375 12.1312 1.51875 12.8062 2.19375C13.4812 2.86875 14.0156 3.6625 14.4094 4.575C14.8031 5.4875 15 6.4625 15 7.5C15 8.5375 14.8031 9.5125 14.4094 10.425C14.0156 11.3375 13.4812 12.1312 12.8062 12.8062C12.1312 13.4812 11.3375 14.0156 10.425 14.4094C9.5125 14.8031 8.5375 15 7.5 15ZM7.5 13.5C9.175 13.5 10.5938 12.9188 11.7563 11.7563C12.9188 10.5938 13.5 9.175 13.5 7.5C13.5 5.825 12.9188 4.40625 11.7563 3.24375C10.5938 2.08125 9.175 1.5 7.5 1.5C5.825 1.5 4.40625 2.08125 3.24375 3.24375C2.08125 4.40625 1.5 5.825 1.5 7.5C1.5 9.175 2.08125 10.5938 3.24375 11.7563C4.40625 12.9188 5.825 13.5 7.5 13.5Z" fill="#5E5F5B" fillOpacity="0.8" />
-              </svg>
-              Bantuan
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-1.5 text-sm font-semibold transition-opacity hover:opacity-70"
-              style={{ color: "rgba(94, 95, 91, 0.80)" }}
-            >
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                <path d="M9 9.75C9.2125 9.75 9.39688 9.67188 9.55313 9.51562C9.70938 9.35938 9.7875 9.175 9.7875 8.9625C9.7875 8.75 9.70938 8.56563 9.55313 8.40938C9.39688 8.25313 9.2125 8.175 9 8.175C8.7875 8.175 8.60312 8.25313 8.44687 8.40938C8.29062 8.56563 8.2125 8.75 8.2125 8.9625C8.2125 9.175 8.29062 9.35938 8.44687 9.51562C8.60312 9.67188 8.7875 9.75 9 9.75ZM8.4375 7.35H9.5625C9.5625 6.9875 9.6 6.72187 9.675 6.55312C9.75 6.38438 9.925 6.1625 10.2 5.8875C10.575 5.5125 10.825 5.20937 10.95 4.97813C11.075 4.74688 11.1375 4.475 11.1375 4.1625C11.1375 3.6 10.9406 3.14062 10.5469 2.78437C10.1531 2.42812 9.6375 2.25 9 2.25C8.4875 2.25 8.04063 2.39375 7.65938 2.68125C7.27813 2.96875 7.0125 3.35 6.8625 3.825L7.875 4.2375C7.9875 3.925 8.14062 3.69062 8.33438 3.53437C8.52813 3.37812 8.75 3.3 9 3.3C9.3 3.3 9.54375 3.38437 9.73125 3.55312C9.91875 3.72187 10.0125 3.95 10.0125 4.2375C10.0125 4.4125 9.9625 4.57812 9.8625 4.73438C9.7625 4.89062 9.5875 5.0875 9.3375 5.325C8.925 5.6875 8.67188 5.97187 8.57812 6.17812C8.48438 6.38438 8.4375 6.775 8.4375 7.35ZM4.5 12C4.0875 12 3.73438 11.8531 3.44062 11.5594C3.14687 11.2656 3 10.9125 3 10.5V1.5C3 1.0875 3.14687 0.734375 3.44062 0.440625C3.73438 0.146875 4.0875 0 4.5 0H13.5C13.9125 0 14.2656 0.146875 14.5594 0.440625C14.8531 0.734375 15 1.0875 15 1.5V10.5C15 10.9125 14.8531 11.2656 14.5594 11.5594C14.2656 11.8531 13.9125 12 13.5 12H4.5ZM4.5 10.5H13.5V1.5H4.5V10.5ZM1.5 15C1.0875 15 0.734375 14.8531 0.440625 14.5594C0.146875 14.2656 0 13.9125 0 13.5V3H1.5V13.5H12V15H1.5ZM4.5 1.5V10.5V1.5Z" fill="#5E5F5B" fillOpacity="0.8" />
-              </svg>
-              FAQ
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-1.5 text-sm font-semibold transition-opacity hover:opacity-70"
-              style={{ color: "rgba(94, 95, 91, 0.80)" }}
-            >
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                <path d="M7.5 15C6.4625 15 5.4875 14.8031 4.575 14.4094C3.6625 14.0156 2.86875 13.4812 2.19375 12.8062C1.51875 12.1312 0.984375 11.3375 0.590625 10.425C0.196875 9.5125 0 8.5375 0 7.5C0 6.4625 0.196875 5.4875 0.590625 4.575C0.984375 3.6625 1.51875 2.86875 2.19375 2.19375C2.86875 1.51875 3.6625 0.984375 4.575 0.590625C5.4875 0.196875 6.4625 0 7.5 0C8.5375 0 9.5125 0.196875 10.425 0.590625C11.3375 0.984375 12.1312 1.51875 12.8062 2.19375C13.4812 2.86875 14.0156 3.6625 14.4094 4.575C14.8031 5.4875 15 6.4625 15 7.5V8.5875C15 9.325 14.7469 9.95312 14.2406 10.4719C13.7344 10.9906 13.1125 11.25 12.375 11.25C11.9375 11.25 11.525 11.1562 11.1375 10.9688C10.75 10.7812 10.425 10.5125 10.1625 10.1625C9.8 10.525 9.39062 10.7969 8.93437 10.9781C8.47812 11.1594 8 11.25 7.5 11.25C6.4625 11.25 5.57812 10.8844 4.84688 10.1531C4.11563 9.42188 3.75 8.5375 3.75 7.5C3.75 6.4625 4.11563 5.57812 4.84688 4.84688C5.57812 4.11563 6.4625 3.75 7.5 3.75C8.5375 3.75 9.42188 4.11563 10.1531 4.84688C10.8844 5.57812 11.25 6.4625 11.25 7.5V8.5875C11.25 8.9125 11.3563 9.1875 11.5688 9.4125C11.7812 9.6375 12.05 9.75 12.375 9.75C12.7 9.75 12.9688 9.6375 13.1812 9.4125C13.3937 9.1875 13.5 8.9125 13.5 8.5875V7.5C13.5 5.825 12.9188 4.40625 11.7563 3.24375C10.5938 2.08125 9.175 1.5 7.5 1.5C5.825 1.5 4.40625 2.08125 3.24375 3.24375C2.08125 4.40625 1.5 5.825 1.5 7.5C1.5 9.175 2.08125 10.5938 3.24375 11.7563C4.40625 12.9188 5.825 13.5 7.5 13.5H11.25V15H7.5ZM7.5 9.75C8.125 9.75 8.65625 9.53125 9.09375 9.09375C9.53125 8.65625 9.75 8.125 9.75 7.5C9.75 6.875 9.53125 6.34375 9.09375 5.90625C8.65625 5.46875 8.125 5.25 7.5 5.25C6.875 5.25 6.34375 5.46875 5.90625 5.90625C5.46875 6.34375 5.25 6.875 5.25 7.5C5.25 8.125 5.46875 8.65625 5.90625 9.09375C6.34375 9.53125 6.875 9.75 7.5 9.75Z" fill="#5E5F5B" fillOpacity="0.8" />
-              </svg>
-              Kontak
-            </a>
-          </div>
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 flex flex-col items-center justify-center gap-2 text-center">
+          <p className="text-sm font-semibold tracking-[0.14px]" style={{ color: "#5E5F5B" }}>
+            © 2026 GlowUp. Semua Hak Dilindungi.
+          </p>
+          <p className="text-xs font-medium" style={{ color: "rgba(94, 95, 91, 0.60)" }}>
+            Estetika Premium untuk Setiap Langkah Anda.
+          </p>
         </div>
       </footer>
     </div>

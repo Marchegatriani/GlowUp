@@ -71,7 +71,7 @@ export default function Pembayaran() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
+      <div className="min-h-screen bg-transparent flex items-center justify-center">
         <p className="text-gray-500 font-medium">Memuat data pembayaran...</p>
       </div>
     );
@@ -79,7 +79,7 @@ export default function Pembayaran() {
 
   if (!payment) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-transparent flex flex-col items-center justify-center gap-4">
         <p className="text-gray-500 font-medium">Data pembayaran tidak ditemukan.</p>
         <Link to="/user/beranda" className="text-glowup-brand hover:underline">Kembali ke Beranda</Link>
       </div>
@@ -87,7 +87,7 @@ export default function Pembayaran() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] font-['Inter',sans-serif] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent font-['Inter',sans-serif] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md mx-auto bg-white rounded-[24px] shadow-sm border border-gray-100 p-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-800">Pembayaran</h1>

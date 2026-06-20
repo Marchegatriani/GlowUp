@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
+import { useAuth } from "../context/AuthContext";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [userRole, setUserRole] = useState("");
   const [userName, setUserName] = useState("");
+  const { logout } = useAuth();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -22,8 +24,10 @@ export default function Sidebar() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token");
     navigate("/");
+    setTimeout(() => {
+      logout();
+    }, 10);
   };
 
   const getLinkClass = (path) => {

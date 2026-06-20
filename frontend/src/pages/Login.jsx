@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
 import { useAuth } from "../context/AuthContext";
+import { PublicNavbar } from "../components/PublicLayout";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -49,7 +50,9 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-glowup-bg p-4 sm:p-8 lg:p-[72px_64px] font-inter">
+    <>
+      <PublicNavbar />
+      <div className="min-h-screen w-full flex items-center justify-center bg-transparent p-4 pt-24 sm:p-8 sm:pt-28 lg:p-[72px_64px] lg:pt-[120px] font-inter">
       <div className="w-full max-w-[1152px] rounded-[20px] bg-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.10)] overflow-hidden flex flex-col lg:grid lg:grid-cols-12 min-h-[600px] lg:min-h-[880px]">
 
         {/* Left Column — Brand Imagery (7 columns) */}
@@ -182,45 +185,7 @@ export default function Login() {
               </button>
             </form>
 
-            {/* Divider */}
-            <div className="flex items-center">
-              <div className="flex-1 border-t border-[rgba(210,195,199,0.20)]" />
-              <span className="px-4 text-[rgba(94,95,91,0.60)] text-sm font-medium tracking-[0.14px] whitespace-nowrap">
-                Atau masuk dengan
-              </span>
-              <div className="flex-1 border-t border-[rgba(210,195,199,0.20)]" />
-            </div>
 
-            {/* Social Buttons */}
-            <div className="grid grid-cols-2 gap-4">
-              <button
-                type="button"
-                className="flex items-center justify-center gap-2 py-[9px] px-4 rounded-[20px] border border-[rgba(210,195,199,0.30)] bg-white shadow-[0_2px_4px_0_rgba(0,0,0,0.02)] hover:bg-[#FAFAFA] transition-colors"
-              >
-                <img
-                  src="https://api.builder.io/api/v1/image/assets/TEMP/6f64a8ece3962d9b6b73cd6e71ff467382d02b41?width=40"
-                  alt="Google"
-                  className="w-5 h-5 shrink-0"
-                />
-                <span className="text-glowup-text font-medium text-sm tracking-[0.14px]">Google</span>
-              </button>
-              <button
-                type="button"
-                className="flex items-center justify-center gap-2 py-[9px] px-4 rounded-[20px] border border-[rgba(210,195,199,0.30)] bg-white shadow-[0_2px_4px_0_rgba(0,0,0,0.02)] hover:bg-[#FAFAFA] transition-colors"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
-                  <g clipPath="url(#clip_fb)">
-                    <path d="M20 10.0609C20 4.53835 15.5225 0.0608521 10 0.0608521C4.4775 0.0608521 0 4.53835 0 10.0609C0 15.0525 3.65667 19.1892 8.4375 19.9392V12.9517H5.89833V10.06H8.4375V7.85835C8.4375 5.35252 9.93083 3.96752 12.215 3.96752C13.3083 3.96752 14.4533 4.16335 14.4533 4.16335V6.62419H13.1917C11.9492 6.62419 11.5617 7.39502 11.5617 8.18585V10.0609H14.335L13.8917 12.9525H11.5617V19.94C16.3433 19.1892 20 15.0517 20 10.0609Z" fill="#1877F2"/>
-                  </g>
-                  <defs>
-                    <clipPath id="clip_fb">
-                      <rect width="20" height="20" fill="white"/>
-                    </clipPath>
-                  </defs>
-                </svg>
-                <span className="text-glowup-text font-medium text-sm tracking-[0.14px]">Facebook</span>
-              </button>
-            </div>
 
             {/* Registration Footer */}
             <div className="flex items-center justify-center gap-1 flex-wrap pb-1">
@@ -235,5 +200,6 @@ export default function Login() {
 
       </div>
     </div>
+    </>
   );
 }
