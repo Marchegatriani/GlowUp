@@ -101,7 +101,7 @@ export default function Index() {
                   className="text-base sm:text-lg font-light leading-relaxed max-w-lg"
                   style={{ color: "#5E5F5B", lineHeight: "1.6" }}
                 >
-                  Temukan layanan salon premium dan kelola reservasi Anda dengan kemudahan teknologi masa kini yang eksklusif untuk Anda.
+                  Temukan layanan salon premium dan kelola Booking Anda dengan kemudahan teknologi masa kini yang eksklusif untuk Anda.
                 </p>
               </div>
 

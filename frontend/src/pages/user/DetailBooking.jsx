@@ -83,7 +83,7 @@ export default function DetailBooking() {
     <div className="min-h-screen bg-[#FAFAFA] font-['Inter',sans-serif] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-xl mx-auto bg-white rounded-[24px] shadow-sm border border-gray-100 p-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-gray-800">Detail Reservasi</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Detail Booking</h1>
           <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getStatusColor(booking.status)}`}>
             {booking.status}
           </span>

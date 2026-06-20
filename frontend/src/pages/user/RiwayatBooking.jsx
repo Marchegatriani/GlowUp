@@ -83,7 +83,7 @@ export default function RiwayatBooking() {
                   </tr>
                 ) : bookings.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center py-8 text-gray-500 text-sm">Belum ada riwayat reservasi</td>
+                    <td colSpan="7" className="text-center py-8 text-gray-500 text-sm">Belum ada riwayat Booking</td>
                   </tr>
                 ) : (
                   bookings.map((row, idx) => (

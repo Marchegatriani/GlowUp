@@ -6,15 +6,20 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.database import get_db
-from app.models.salon import Salon
+from app.models.salon import Salon, SalonGallery, Category
 from app.models.user import User
-from app.schemas.salon import SalonCreate, SalonUpdate, SalonResponse
+from app.schemas.salon import SalonCreate, SalonUpdate, SalonResponse, SalonGalleryResponse, CategoryResponse
 from app.utils.permissions import require_owner, require_admin
 
 router = APIRouter(
     prefix="/salons",
     tags=["Salons"]
 )
+
+# 0. Get all categories
+@router.get("/categories", response_model=List[CategoryResponse])
+def get_categories(db: Session = Depends(get_db)):
+    return db.query(Category).all()
 
 # 1.5. Admin: Get All Salons with details
 @router.get("/admin/list")
@@ -45,6 +50,7 @@ def create_salon(
     open_time: str = Form(...),
     close_time: str = Form(...),
     description: str = Form(None),
+    category_ids: str = Form(None),
     image: UploadFile = File(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(require_owner)  # WAJIB OWNER / ADMIN
@@ -76,6 +82,12 @@ def create_salon(
         close_time=close_time,
         image_url=image_url
     )
+    
+    if category_ids:
+        cat_id_list = [int(cid.strip()) for cid in category_ids.split(",") if cid.strip().isdigit()]
+        categories = db.query(Category).filter(Category.id.in_(cat_id_list)).all()
+        new_salon.categories = categories
+
     db.add(new_salon)
     db.commit()
     db.refresh(new_salon)
@@ -105,6 +117,7 @@ def update_salon(
     open_time: str = Form(None),
     close_time: str = Form(None),
     description: str = Form(None),
+    category_ids: str = Form(None),
     image: UploadFile = File(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(require_owner)  # WAJIB OWNER / ADMIN
@@ -131,6 +144,14 @@ def update_salon(
         with open(filepath, "wb") as buffer:
             shutil.copyfileobj(image.file, buffer)
         salon.image_url = f"http://localhost:8000/uploads/{filename}"
+
+    if category_ids is not None:
+        if category_ids.strip() == "":
+            salon.categories = []
+        else:
+            cat_id_list = [int(cid.strip()) for cid in category_ids.split(",") if cid.strip().isdigit()]
+            categories = db.query(Category).filter(Category.id.in_(cat_id_list)).all()
+            salon.categories = categories
 
     db.commit()
     db.refresh(salon)
@@ -195,5 +216,69 @@ def get_admin_salon_detail(
             "id": salon.owner.id,
             "name": salon.owner.name,
             "email": salon.owner.email
-        }
+        },
+        "categories": [
+            {"id": c.id, "name": c.name} for c in salon.categories
+        ]
     }
+
+# 8. Owner: Add Photo to Gallery
+@router.post("/{salon_id}/gallery", response_model=SalonGalleryResponse, status_code=status.HTTP_201_CREATED)
+def add_gallery_photo(
+    salon_id: int,
+    image: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_owner)
+):
+    salon = db.query(Salon).filter(Salon.id == salon_id).first()
+    if not salon:
+        raise HTTPException(status_code=404, detail="Salon tidak ditemukan")
+    if salon.owner_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak. Anda bukan pemilik salon ini.")
+    
+    if image and image.filename:
+        ext = image.filename.split('.')[-1]
+        filename = f"{uuid.uuid4()}.{ext}"
+        filepath = os.path.join("uploads", filename)
+        with open(filepath, "wb") as buffer:
+            shutil.copyfileobj(image.file, buffer)
+        image_url = f"http://localhost:8000/uploads/{filename}"
+        
+        new_photo = SalonGallery(
+            salon_id=salon_id,
+            image_url=image_url
+        )
+        db.add(new_photo)
+        db.commit()
+        db.refresh(new_photo)
+        return new_photo
+    else:
+        raise HTTPException(status_code=400, detail="File gambar tidak valid")
+
+# 9. Owner: Delete Photo from Gallery
+@router.delete("/gallery/{photo_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_gallery_photo(
+    photo_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_owner)
+):
+    photo = db.query(SalonGallery).filter(SalonGallery.id == photo_id).first()
+    if not photo:
+        raise HTTPException(status_code=404, detail="Foto tidak ditemukan")
+        
+    salon = photo.salon
+    if salon.owner_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak. Anda bukan pemilik salon ini.")
+        
+    # Optional: Delete file from storage here if needed
+    filename = photo.image_url.split('/')[-1]
+    filepath = os.path.join("uploads", filename)
+    if os.path.exists(filepath):
+        try:
+            os.remove(filepath)
+        except:
+            pass
+            
+    db.delete(photo)
+    db.commit()
+    return

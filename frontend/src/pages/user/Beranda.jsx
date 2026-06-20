@@ -155,7 +155,7 @@ export default function Index() {
                 background: "linear-gradient(102deg, #F2D2D2 0%, #F7E6C4 100%)",
               }}
             >
-              Reservasi Sekarang
+              Booking Sekarang
             </Link>
           </div>
         </section>
@@ -199,7 +199,7 @@ export default function Index() {
               <div className="col-span-1 md:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 text-center flex flex-col items-center justify-center min-h-[162px]">
                 <p className="text-gray-500 font-medium mb-2">Belum ada booking mendatang.</p>
                 <Link to="/user/jelajah" className="text-sm font-bold text-glowup-brand hover:underline">
-                  Cari Salon & Reservasi Sekarang
+                  Cari Salon & Booking Sekarang
                 </Link>
               </div>
             ) : (
@@ -295,7 +295,7 @@ export default function Index() {
                 <tbody>
                   {bookings.length === 0 ? (
                     <tr>
-                      <td colSpan="7" className="text-center py-8 text-gray-500 text-sm">Belum ada riwayat reservasi</td>
+                      <td colSpan="7" className="text-center py-8 text-gray-500 text-sm">Belum ada riwayat Booking</td>
                     </tr>
                   ) : (
                     bookings.map((row, idx) => (

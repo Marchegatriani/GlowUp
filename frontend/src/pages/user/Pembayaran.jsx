@@ -91,7 +91,7 @@ export default function Pembayaran() {
       <div className="max-w-md mx-auto bg-white rounded-[24px] shadow-sm border border-gray-100 p-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-800">Pembayaran</h1>
-          <p className="text-gray-500 text-sm mt-2">Pilih metode pembayaran untuk menyelesaikan reservasi Anda.</p>
+          <p className="text-gray-500 text-sm mt-2">Pilih metode pembayaran untuk menyelesaikan Booking Anda.</p>
         </div>
 
         {error && (

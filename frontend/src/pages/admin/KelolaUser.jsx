@@ -386,7 +386,6 @@ export default function KelolaUser() {
                 >
                   <option value="user">Customer biasa</option>
                   <option value="owner">Owner Salon (Pemilik)</option>
-                  <option value="admin">Administrator</option>
                 </select>
               </div>
 
@@ -478,7 +477,6 @@ export default function KelolaUser() {
                 >
                   <option value="user">Customer biasa</option>
                   <option value="owner">Owner Salon (Pemilik)</option>
-                  <option value="admin">Administrator</option>
                 </select>
               </div>
 
@@ -544,7 +542,7 @@ export default function KelolaUser() {
               Apakah Anda yakin ingin menghapus akun <strong>{userToDelete.name}</strong> ({userToDelete.email})?
             </p>
             <p className="text-xs text-red-500 border border-red-100 bg-red-50/50 p-3 rounded-lg leading-5">
-              <strong>PENTING:</strong> Menghapus akun ini juga akan secara otomatis menghapus data reservasi, review, pembayaran, dan salon (jika owner) yang terkait dengan pengguna ini.
+              <strong>PENTING:</strong> Menghapus akun ini juga akan secara otomatis menghapus data Booking, review, pembayaran, dan salon (jika owner) yang terkait dengan pengguna ini.
             </p>
             <div className="flex gap-3">
               <button

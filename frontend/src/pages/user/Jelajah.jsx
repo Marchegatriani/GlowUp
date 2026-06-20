@@ -27,13 +27,10 @@ const getCategory = (salon) => {
 };
 
 const getMinPrice = (salon) => {
-  if (salon.name.toLowerCase().includes("ethereal")) return 450000;
-  if (salon.name.toLowerCase().includes("velvet")) return 250000;
-  if (salon.name.toLowerCase().includes("glow sanctuary")) return 600000;
-  if (salon.name.toLowerCase().includes("crown")) return 350000;
-  // Fallback based on ID
-  const prices = [150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 600000];
-  return prices[salon.id % prices.length];
+  if (salon.services && salon.services.length > 0) {
+    return Math.min(...salon.services.map(s => s.price));
+  }
+  return 0;
 };
 
 export default function Jelajah() {
@@ -42,7 +39,6 @@ export default function Jelajah() {
   
   // Filter and Search states
   const [search, setSearch] = useState("");
-  const [selectedLokasi, setSelectedLokasi] = useState("Semua Lokasi");
   const [maxPrice, setMaxPrice] = useState(1000000);
   const [selectedRatings, setSelectedRatings] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -68,18 +64,13 @@ export default function Jelajah() {
   // Reset pagination on filter change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, selectedLokasi, maxPrice, selectedRatings, selectedCategory]);
+  }, [search, maxPrice, selectedRatings, selectedCategory]);
 
   const filteredSalons = salons.filter((salon) => {
     // 1. Search text filter (name or address)
     const matchesSearch =
       salon.name.toLowerCase().includes(search.toLowerCase()) ||
       (salon.address && salon.address.toLowerCase().includes(search.toLowerCase()));
-
-    // 2. Location filter
-    const matchesLocation =
-      selectedLokasi === "Semua Lokasi" ||
-      (salon.address && salon.address.toLowerCase().includes(selectedLokasi.toLowerCase()));
 
     // 3. Price filter
     const price = getMinPrice(salon);
@@ -108,7 +99,7 @@ export default function Jelajah() {
       }
     }
 
-    return matchesSearch && matchesLocation && matchesPrice && matchesRating && matchesCategory;
+    return matchesSearch && matchesPrice && matchesRating && matchesCategory;
   });
 
   const sortedSalons = [...filteredSalons].sort((a, b) => {
@@ -135,20 +126,6 @@ export default function Jelajah() {
           {/* Sidebar Filter */}
           <aside className="bg-white rounded-[24px] border border-gray-100 p-6 h-fit sticky top-24 flex flex-col gap-6 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.03)]">
             <h2 className="text-base font-bold text-gray-800">Filter</h2>
-
-            {/* Location Select */}
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold text-gray-700">LOKASI</label>
-              <select 
-                value={selectedLokasi}
-                onChange={(e) => setSelectedLokasi(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-glowup-brand"
-              >
-                <option value="Semua Lokasi">Semua Lokasi</option>
-                <option value="Jakarta">Jakarta</option>
-                <option value="Bandung">Bandung</option>
-              </select>
-            </div>
 
             {/* Price Range Slider */}
             <div className="flex flex-col gap-2">
@@ -383,7 +360,7 @@ export default function Jelajah() {
             <div className="sm:col-span-2 lg:col-span-4 flex flex-col gap-6">
               <Link to="/" className="text-glowup-brand font-bold text-[28px] leading-[42px]">GlowUp</Link>
               <p className="text-[#5E5F5B] text-base leading-6 max-w-[320px]">
-                Solusi terpercaya untuk reservasi salon kecantikan premium dan eksklusif di seluruh Indonesia. Rasakan kemudahan dalam setiap sentuhan.
+                Solusi terpercaya untuk Booking salon kecantikan premium dan eksklusif di seluruh Indonesia. Rasakan kemudahan dalam setiap sentuhan.
               </p>
               {/* Social Icons */}
               <div className="flex items-center gap-4">
@@ -407,7 +384,7 @@ export default function Jelajah() {
             <div className="lg:col-span-2 flex flex-col gap-6">
               <h4 className="text-[#1B1C1C] font-bold text-xs leading-4 tracking-[0.6px] uppercase">LAYANAN</h4>
               <div className="flex flex-col gap-4">
-                {["Reservasi Salon", "Home Service", "Voucher Hadiah", "Membership"].map((item) => (
+                {["Booking Salon", "Home Service", "Voucher Hadiah", "Membership"].map((item) => (
                   <Link key={item} to="#" className="text-[#5E5F5B] text-sm leading-5 hover:text-glowup-brand transition-colors">
                     {item}
                   </Link>
@@ -427,27 +404,6 @@ export default function Jelajah() {
               </div>
             </div>
 
-            {/* Newsletter Column */}
-            <div className="sm:col-span-2 lg:col-span-4 flex flex-col gap-6">
-              <h4 className="text-[#1B1C1C] font-bold text-xs leading-4 tracking-[0.6px] uppercase">LANGGANAN NEWSLETTER</h4>
-              <p className="text-[#5E5F5B] text-sm leading-5">
-                Dapatkan info promo dan update salon terbaru.
-              </p>
-              <div className="flex items-stretch gap-2">
-                <input
-                  type="email"
-                  placeholder="Email Anda"
-                  className="flex-1 px-5 py-[17px] rounded-[20px] bg-[#F6F3F2] text-[#6B7280] text-sm outline-none placeholder-[#6B7280] focus:ring-2 focus:ring-glowup-brand/30"
-                />
-                <button
-                  className="w-14 h-14 rounded-[20px] bg-glowup-brand flex items-center justify-center shrink-0 hover:bg-[#6a4858] transition-colors shadow-md"
-                >
-                  <svg width="19" height="16" viewBox="0 0 19 16" fill="none">
-                    <path d="M0 16V0L19 8L0 16ZM2 13L13.85 8L2 3V6.5L8 8L2 9.5V13ZM2 13V8V3V6.5V9.5V13Z" fill="white"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 

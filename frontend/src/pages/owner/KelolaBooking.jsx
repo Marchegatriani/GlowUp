@@ -33,7 +33,7 @@ export default function KelolaBooking() {
       }
     } catch (err) {
       console.error("Gagal memuat data booking:", err);
-      setError("Gagal memuat data reservasi. Pastikan profil salon sudah didaftarkan.");
+      setError("Gagal memuat data Booking. Pastikan profil salon sudah didaftarkan.");
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ export default function KelolaBooking() {
         status: newStatus,
       });
 
-      setSuccess(`Status reservasi berhasil diperbarui menjadi "${newStatus.toUpperCase()}"!`);
+      setSuccess(`Status Booking berhasil diperbarui menjadi "${newStatus.toUpperCase()}"!`);
       
       // Refetch data
       const bookingsRes = await axiosClient.get(`/bookings/salons/${salon.id}`);
@@ -63,7 +63,7 @@ export default function KelolaBooking() {
       setBookings(sortedBookings);
     } catch (err) {
       console.error("Gagal mengubah status booking:", err);
-      setError(err.response?.data?.detail || "Gagal memperbarui status reservasi.");
+      setError(err.response?.data?.detail || "Gagal memperbarui status Booking.");
     } finally {
       setUpdatingId(null);
     }
@@ -93,10 +93,10 @@ export default function KelolaBooking() {
           {/* Header */}
           <header className="flex flex-col gap-2">
             <h1 className="text-[#1B1C1C] font-bold text-[32px] leading-[48px] tracking-[-0.8px]">
-              Kelola Reservasi Pelanggan
+              Kelola Booking Pelanggan
             </h1>
             <p className="text-[#5E5F5B] text-base font-normal leading-6">
-              Pantau jadwal, konfirmasi reservasi, dan perbarui status kunjungan treatment pelanggan Anda.
+              Pantau jadwal, konfirmasi Booking, dan perbarui status kunjungan treatment pelanggan Anda.
             </p>
           </header>
 
@@ -114,13 +114,13 @@ export default function KelolaBooking() {
 
           {loading ? (
             <div className="py-20 text-center text-gray-500 font-medium">
-              Memuat data reservasi...
+              Memuat data Booking...
             </div>
           ) : !salon ? (
             <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-12 text-center flex flex-col items-center justify-center gap-4">
               <p className="text-gray-500 font-medium">Anda belum mendaftarkan profil salon.</p>
               <p className="text-sm text-gray-400 max-w-sm">
-                Lengkapi profil fisik salon Anda terlebih dahulu agar pelanggan dapat melakukan reservasi dan datanya muncul di sini.
+                Lengkapi profil fisik salon Anda terlebih dahulu agar pelanggan dapat melakukan Booking dan datanya muncul di sini.
               </p>
             </div>
           ) : bookings.length === 0 ? (
@@ -219,8 +219,9 @@ export default function KelolaBooking() {
                                 <>
                                   <button
                                     onClick={() => handleUpdateStatus(booking.id, "completed")}
-                                    disabled={updatingId !== null}
-                                    className="px-3 py-1.5 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 text-xs font-bold transition-all disabled:opacity-50"
+                                    disabled={updatingId !== null || new Date(booking.booking_time) > new Date()}
+                                    title={new Date(booking.booking_time) > new Date() ? "Booking belum bisa diselesaikan karena waktu appointment belum tiba" : ""}
+                                    className="px-3 py-1.5 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                   >
                                     Selesai Treatment
                                   </button>

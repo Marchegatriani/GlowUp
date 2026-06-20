@@ -10,6 +10,10 @@ export default function KelolaSalon() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [galleries, setGalleries] = useState([]);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [allCategories, setAllCategories] = useState([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
 
   // Form states
   const [name, setName] = useState("");
@@ -30,7 +34,11 @@ export default function KelolaSalon() {
       const userRes = await axiosClient.get("/me");
       setCurrentUser(userRes.data);
 
-      // 2. Get all salons and find mine
+      // 2. Get all categories
+      const catRes = await axiosClient.get("/salons/categories");
+      setAllCategories(catRes.data);
+
+      // 3. Get all salons and find mine
       const salonsRes = await axiosClient.get("/salons/");
       const mySalon = salonsRes.data.find(s => s.owner_id === userRes.data.id);
 
@@ -46,6 +54,10 @@ export default function KelolaSalon() {
         const formatTime = (timeStr) => timeStr ? timeStr.substring(0, 5) : "";
         setOpenTime(formatTime(mySalon.open_time) || "09:00");
         setCloseTime(formatTime(mySalon.close_time) || "21:00");
+        setGalleries(mySalon.galleries || []);
+        if (mySalon.categories) {
+          setSelectedCategoryIds(mySalon.categories.map(c => c.id));
+        }
       }
     } catch (err) {
       console.error("Gagal memuat data profil salon:", err);
@@ -72,6 +84,7 @@ export default function KelolaSalon() {
     if (description) formData.append("description", description);
     formData.append("open_time", openTime);
     formData.append("close_time", closeTime);
+    formData.append("category_ids", selectedCategoryIds.join(","));
     if (imageFile) {
       formData.append("image", imageFile);
     }
@@ -101,6 +114,55 @@ export default function KelolaSalon() {
       setError(err.response?.data?.detail || "Gagal menyimpan data salon.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleGalleryUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setUploadingGallery(true);
+      setError(null);
+      setSuccess(null);
+
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const res = await axiosClient.post(`/salons/${salon.id}/gallery`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      
+      setGalleries([...galleries, res.data]);
+      setSuccess("Foto galeri berhasil ditambahkan!");
+    } catch (err) {
+      console.error("Gagal upload foto galeri:", err);
+      setError(err.response?.data?.detail || "Gagal mengunggah foto.");
+    } finally {
+      setUploadingGallery(false);
+    }
+  };
+
+  const handleGalleryDelete = async (photoId) => {
+    if (!window.confirm("Hapus foto ini dari galeri?")) return;
+
+    try {
+      setError(null);
+      setSuccess(null);
+      await axiosClient.delete(`/salons/gallery/${photoId}`);
+      setGalleries(galleries.filter(g => g.id !== photoId));
+      setSuccess("Foto berhasil dihapus.");
+    } catch (err) {
+      console.error("Gagal hapus foto galeri:", err);
+      setError(err.response?.data?.detail || "Gagal menghapus foto.");
+    }
+  };
+
+  const handleCategoryToggle = (id) => {
+    if (selectedCategoryIds.includes(id)) {
+      setSelectedCategoryIds(selectedCategoryIds.filter(cid => cid !== id));
+    } else {
+      setSelectedCategoryIds([...selectedCategoryIds, id]);
     }
   };
 
@@ -199,6 +261,28 @@ export default function KelolaSalon() {
                         rows="3"
                         className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-gray-50 text-base outline-none focus:border-glowup-brand transition-colors font-medium text-gray-800 resize-none"
                       />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Kategori Salon</label>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {allCategories.map(cat => (
+                          <label key={cat.id} className={`cursor-pointer flex items-center px-4 py-2 rounded-full border text-sm font-medium transition-all ${
+                            selectedCategoryIds.includes(cat.id) 
+                            ? "bg-glowup-pink-50 border-glowup-brand text-glowup-brand shadow-sm" 
+                            : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                          }`}>
+                            <input 
+                              type="checkbox" 
+                              className="hidden" 
+                              checked={selectedCategoryIds.includes(cat.id)}
+                              onChange={() => handleCategoryToggle(cat.id)}
+                            />
+                            {cat.name}
+                          </label>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">Pilih satu atau lebih kategori untuk salon Anda.</p>
                     </div>
 
                     <div className="flex flex-col gap-2">
@@ -307,6 +391,20 @@ export default function KelolaSalon() {
                         <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Telepon / Kontak</span>
                         <span className="text-sm font-semibold text-gray-800">{salon.phone_number}</span>
                       </div>
+                      <div className="flex flex-col gap-1 col-span-2 mt-2">
+                        <span className="text-xs text-gray-400 font-bold uppercase tracking-wider">Kategori</span>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {salon.categories && salon.categories.length > 0 ? (
+                            salon.categories.map(c => (
+                              <span key={c.id} className="px-3 py-1 bg-glowup-pink-50 text-glowup-brand rounded-full text-xs font-semibold">
+                                {c.name}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-sm text-gray-500">-</span>
+                          )}
+                        </div>
+                      </div>
                     </div>
 
                     <div className="border-t border-gray-50 pt-5 mt-3">
@@ -314,6 +412,33 @@ export default function KelolaSalon() {
                       <p className="text-gray-650 text-base leading-7 whitespace-pre-line">
                         {salon.description || "Tidak ada deskripsi yang disediakan."}
                       </p>
+                    </div>
+
+                    <div className="border-t border-gray-50 pt-5 mt-3">
+                      <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-gray-800 text-sm font-bold uppercase tracking-wider">Galeri Hasil Kerja</h3>
+                        <label className="cursor-pointer px-4 py-2 rounded-xl text-white font-bold text-xs transition-all shadow-md hover:shadow-lg" style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}>
+                          {uploadingGallery ? "Mengunggah..." : "+ Tambah Foto"}
+                          <input type="file" accept="image/*" className="hidden" onChange={handleGalleryUpload} disabled={uploadingGallery} />
+                        </label>
+                      </div>
+                      
+                      {galleries.length === 0 ? (
+                        <p className="text-gray-500 text-sm text-center py-6 bg-gray-50 rounded-xl border border-gray-100">Belum ada foto galeri.</p>
+                      ) : (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                          {galleries.map(photo => (
+                            <div key={photo.id} className="relative group rounded-xl overflow-hidden aspect-square border border-gray-200">
+                              <img src={photo.image_url} alt="Gallery" className="w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button onClick={() => handleGalleryDelete(photo.id)} className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 shadow-lg">
+                                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

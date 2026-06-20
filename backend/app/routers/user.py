@@ -326,6 +326,9 @@ def admin_create_user(
     if existing_user:
         raise HTTPException(status_code=400, detail="Email sudah terdaftar")
     
+    if user_in.role == "admin":
+        raise HTTPException(status_code=400, detail="Tidak dapat membuat akun dengan role admin")
+    
     new_user = User(
         name=user_in.name,
         email=user_in.email,
@@ -363,6 +366,9 @@ def admin_update_user(
         existing = db.query(User).filter(User.email == user_update.email).first()
         if existing:
             raise HTTPException(status_code=400, detail="Email sudah terdaftar untuk user lain")
+
+    if user_update.role == "admin":
+        raise HTTPException(status_code=400, detail="Tidak dapat mengubah role menjadi admin")
 
     update_data = user_update.dict(exclude_unset=True)
     if "password" in update_data and update_data["password"]:

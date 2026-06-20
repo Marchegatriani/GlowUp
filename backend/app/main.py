@@ -11,7 +11,7 @@ os.makedirs("uploads", exist_ok=True)
 
 # 1. Import semua model di sini agar SQLAlchemy mendeteksinya
 from app.models.user import User
-from app.models.salon import Salon
+from app.models.salon import Salon, Category
 from app.models.service import SalonService
 from app.models.booking import Booking, BookingService
 from app.models.payment import Payment
@@ -90,6 +90,14 @@ def startup_setup():
             db.add(default_admin)
             db.commit()
             print("Initial admin created: admin@glowup.com / admin123")
+            
+        # 3. Inisialisasi Kategori Default
+        default_categories = ["Haircut", "Nail Art", "Spa", "Eyelash", "Barbershop", "Makeup", "Facial"]
+        for cat_name in default_categories:
+            existing = db.query(Category).filter(Category.name == cat_name).first()
+            if not existing:
+                db.add(Category(name=cat_name))
+        db.commit()
     except Exception as e:
         print(f"Error during startup setup: {e}")
     finally:

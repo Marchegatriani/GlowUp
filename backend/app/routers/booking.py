@@ -162,6 +162,12 @@ def update_booking_status(
     if status_update.status not in valid_statuses:
         raise HTTPException(status_code=400, detail="Status tidak valid")
 
+    if status_update.status == "completed" and booking.booking_time > datetime.now():
+        raise HTTPException(
+            status_code=400, 
+            detail="Booking belum bisa diselesaikan karena tanggal/waktu appointment belum tiba."
+        )
+
     booking.status = status_update.status
     db.commit()
     db.refresh(booking)

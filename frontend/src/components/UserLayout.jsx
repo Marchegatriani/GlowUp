@@ -10,16 +10,18 @@ export default function UserLayout() {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/");
   };
 
   const getLinkClass = (path) => {
     const isActive = path === "/" 
       ? location.pathname === "/"
       : location.pathname.startsWith(path);
-    return isActive
-      ? "text-base font-semibold pb-0.5 border-b-2 leading-6 text-glowup-brand border-glowup-brand"
-      : "text-base font-medium text-gray-500 hover:text-gray-700 leading-6 transition-colors";
+    return `text-base transition-colors relative pb-1 ${
+      isActive
+        ? "text-glowup-brand font-semibold after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-0.5 after:bg-glowup-brand"
+        : "text-gray-500 font-medium hover:text-glowup-brand"
+    }`;
   };
 
   return (

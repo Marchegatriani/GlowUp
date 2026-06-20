@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axiosClient from "../../api/axiosClient";
+import { useAuth } from "../../context/AuthContext";
 
 const HelpIcon = () => (
   <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,6 +33,7 @@ const timeSlots = [
 export default function Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [salon, setSalon] = useState(null);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +69,7 @@ export default function Detail() {
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
-    navigate("/login");
+    navigate("/");
   };
 
   const getTodayDateString = () => {
@@ -79,6 +81,11 @@ export default function Detail() {
   };
 
   const handleBooking = async () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+
     if (!selectedService || !selectedDate || !selectedTime) {
       setError("Pilih layanan, tanggal, dan waktu terlebih dahulu.");
       return;
@@ -222,7 +229,7 @@ export default function Detail() {
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-28 rounded-[24px] border border-gray-100 bg-white p-8 flex flex-col gap-8 shadow-[0_8px_30px_-10px_rgba(0,0,0,0.1)]">
             <div className="flex flex-col gap-1">
-              <h3 className="text-xl font-bold text-gray-800">Reservasi Sekarang</h3>
+              <h3 className="text-xl font-bold text-gray-800">Booking Sekarang</h3>
               <p className="text-gray-500 text-sm">Pilih waktu dan layanan untuk transformasi Anda</p>
             </div>
 

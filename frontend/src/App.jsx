@@ -25,10 +25,18 @@ import DashboardAdmin from './pages/admin/DashboardAdmin';
 import KelolaSalonAdmin from './pages/admin/KelolaSalonAdmin';
 import DetailSalonAdmin from './pages/admin/DetailSalonAdmin';
 
+import PublicLayout from './components/PublicLayout';
+
 // Komponen PrivateRoute untuk mengecek apakah user sudah login
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
+
+// Komponen Wrapper untuk halaman yang bisa diakses Public & User dengan Layout berbeda
+const PublicOrUserLayout = () => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <UserLayout /> : <PublicLayout />;
 };
 
 function App() {
@@ -42,12 +50,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* 2. Halaman Customer */}
-          <Route element={<UserLayout />}>
-            {/* Halaman Publik untuk Browsing */}
+          {/* Halaman Browsing (Guest atau User) */}
+          <Route element={<PublicOrUserLayout />}>
             <Route path="/user/jelajah" element={<Jelajah />} />
             <Route path="/user/salon/:id" element={<Detail />} />
+          </Route>
 
+          {/* 2. Halaman Customer */}
+          <Route element={<UserLayout />}>
             {/* Halaman Terproteksi (Wajib Login) */}
             <Route path="/user/beranda" element={<PrivateRoute><Beranda /></PrivateRoute>} />
             <Route path="/user/booking/:id" element={<PrivateRoute><Booking /></PrivateRoute>} />
