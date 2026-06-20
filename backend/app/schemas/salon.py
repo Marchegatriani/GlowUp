@@ -54,6 +54,8 @@ class SalonResponse(SalonBase):
     galleries: List[SalonGalleryResponse] = []
     categories: List[CategoryResponse] = []
     services: List[SalonServiceResponse] = []
+    rating: float = 0.0
+    reviews_count: int = 0
 
     class Config:
         # Memberitahu Pydantic untuk membaca data dari object SQLAlchemy (bukan cuma dari Dictionary)

@@ -163,21 +163,31 @@ export default function Index() {
         {/* Stats Grid */}
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Booking Aktif */}
-          <div className="bg-white rounded-2xl border border-gray-50 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 flex flex-col items-center">
-            <div className="w-12 h-12 rounded-lg bg-[#FDF2F8] flex items-center justify-center mb-4">
+          <div 
+            className="rounded-2xl border border-gray-50 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 flex flex-col items-center"
+            style={{
+              background: "linear-gradient(0deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.10) 100%), linear-gradient(90deg, #F5E0C7 0%, #F3D4D0 100%)",
+            }}
+          >
+            <div className="w-12 h-12 rounded-lg bg-white/40 flex items-center justify-center mb-4">
               <CalendarIcon />
             </div>
-            <p className="text-sm font-medium text-gray-400 mb-1">Booking Aktif</p>
-            <p className="text-4xl font-bold text-gray-800">{userData?.stats?.active_bookings_count || 0}</p>
+            <p className="text-sm font-medium text-black/70 mb-1">Booking Aktif</p>
+            <p className="text-4xl font-bold text-black">{userData?.stats?.active_bookings_count || 0}</p>
           </div>
 
           {/* Review Terkirim */}
-          <div className="bg-white rounded-2xl border border-gray-50 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 flex flex-col items-center">
-            <div className="w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center mb-4">
+          <div 
+            className="rounded-2xl border border-gray-50 shadow-[0_1px_2px_rgba(0,0,0,0.05)] p-8 flex flex-col items-center"
+            style={{
+              background: "linear-gradient(0deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.10) 100%), linear-gradient(90deg, #F5E0C7 0%, #F3D4D0 100%)",
+            }}
+          >
+            <div className="w-12 h-12 rounded-lg bg-white/40 flex items-center justify-center mb-4">
               <MessageIcon />
             </div>
-            <p className="text-sm font-medium text-gray-400 mb-1">Review Terkirim</p>
-            <p className="text-4xl font-bold text-gray-800">{userData?.stats?.total_reviews_given || 0}</p>
+            <p className="text-sm font-medium text-black/70 mb-1">Review Terkirim</p>
+            <p className="text-4xl font-bold text-black">{userData?.stats?.total_reviews_given || 0}</p>
           </div>
         </section>
 

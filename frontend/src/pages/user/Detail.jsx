@@ -21,14 +21,7 @@ const StarIcon = () => (
   </svg>
 );
 
-const timeSlots = [
-  { time: "10:00", available: true },
-  { time: "13:30", available: true },
-  { time: "15:00", available: true },
-  { time: "16:30", available: true },
-  { time: "18:00", available: true },
-  { time: "20:00", available: false },
-];
+
 
 export default function Detail() {
   const { id } = useParams();
@@ -45,6 +38,9 @@ export default function Detail() {
   const [isServiceOpen, setIsServiceOpen] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
   const [error, setError] = useState(null);
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchSalonDetail = async () => {
@@ -66,6 +62,31 @@ export default function Detail() {
     };
     fetchSalonDetail();
   }, [id]);
+
+  useEffect(() => {
+    const fetchAvailableSlots = async () => {
+      if (!selectedDate || !selectedService || !salon) return;
+      
+      setLoadingSlots(true);
+      try {
+        const response = await axiosClient.get(
+          `/bookings/available-slots?salon_id=${salon.id}&target_date=${selectedDate}&service_id=${selectedService.id}`
+        );
+        setAvailableSlots(response.data.slots);
+        
+        // Reset selected time if it's no longer available
+        const isStillAvailable = response.data.slots.find(s => s.time === selectedTime && s.available);
+        if (!isStillAvailable) {
+          setSelectedTime("");
+        }
+      } catch (error) {
+        console.error("Gagal mengambil jadwal:", error);
+      } finally {
+        setLoadingSlots(false);
+      }
+    };
+    fetchAvailableSlots();
+  }, [selectedDate, selectedService, salon]);
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -145,13 +166,36 @@ export default function Detail() {
         {/* Left Content Column */}
         <div className="lg:col-span-8 flex flex-col gap-10">
 
-          {/* Photo Gallery */}
-          <div className="w-full h-[220px] sm:h-[360px] lg:h-[480px] rounded-[24px] overflow-hidden shadow-sm">
-            <img
-              src={salon.image_url || "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80"}
-              alt={salon.name}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-            />
+          {/* Main Photo & Gallery */}
+          <div className="flex flex-col gap-4">
+            <div className="w-full h-[220px] sm:h-[360px] lg:h-[480px] rounded-[24px] overflow-hidden shadow-sm">
+              <img
+                src={salon.image_url || "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80"}
+                alt={salon.name}
+                onClick={() => setSelectedImage(salon.image_url || "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80")}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 cursor-pointer"
+              />
+            </div>
+            
+            {salon.galleries && salon.galleries.length > 0 && (
+              <div className="flex overflow-x-auto gap-3 pb-2 snap-x" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <style>{`
+                  .flex::-webkit-scrollbar {
+                    display: none;
+                  }
+                `}</style>
+                {salon.galleries.map(gallery => (
+                  <div key={gallery.id} className="flex-shrink-0 w-[100px] h-[70px] sm:w-[150px] sm:h-[100px] rounded-[16px] overflow-hidden snap-start border border-gray-100">
+                    <img
+                      src={gallery.image_url}
+                      alt="Gallery"
+                      onClick={() => setSelectedImage(gallery.image_url)}
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 cursor-pointer"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Salon Info */}
@@ -181,8 +225,8 @@ export default function Detail() {
               <div className="flex flex-col items-start sm:items-end gap-2 shrink-0">
                 <div className="flex items-center gap-2 px-6 py-2 rounded-xl bg-yellow-50 border border-yellow-100">
                   <StarIcon />
-                  <span className="text-yellow-700 text-lg font-bold">4.8</span>
-                  <span className="text-yellow-600/80 text-sm">(124 Review)</span>
+                  <span className="text-yellow-700 text-lg font-bold">{(salon.rating || 0).toFixed(1)}</span>
+                  <span className="text-yellow-600/80 text-sm">({salon.reviews_count || 0} Ulasan)</span>
                 </div>
               </div>
             </div>
@@ -289,24 +333,36 @@ export default function Detail() {
               {/* Time Slots */}
               <div className="flex flex-col gap-2">
                 <label className="text-gray-700 text-sm font-bold">WAKTU</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {timeSlots.map((slot) => (
-                    <button
-                      key={slot.time}
-                      disabled={!slot.available}
-                      onClick={() => slot.available && setSelectedTime(slot.time)}
-                      className={`py-2.5 rounded-xl text-sm font-medium text-center transition-all ${
-                        !slot.available
-                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : selectedTime === slot.time
-                          ? "bg-glowup-brand text-white shadow-md"
-                          : "border border-gray-200 bg-white text-gray-700 hover:border-glowup-brand hover:text-glowup-brand"
-                      }`}
-                    >
-                      {slot.time}
-                    </button>
-                  ))}
-                </div>
+                {loadingSlots ? (
+                  <div className="text-sm text-gray-500 py-4 text-center">Memuat jadwal...</div>
+                ) : !selectedDate || !selectedService ? (
+                  <div className="text-sm text-gray-400 py-4 text-center border border-dashed border-gray-200 rounded-xl">
+                    Pilih tanggal dan layanan untuk melihat jadwal.
+                  </div>
+                ) : availableSlots.length === 0 ? (
+                  <div className="text-sm text-red-500 py-4 text-center border border-red-100 bg-red-50 rounded-xl font-medium">
+                    Jadwal penuh atau tidak ada jadwal di hari ini.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2">
+                    {availableSlots.map((slot) => (
+                      <button
+                        key={slot.time}
+                        disabled={!slot.available}
+                        onClick={() => slot.available && setSelectedTime(slot.time)}
+                        className={`py-2.5 rounded-xl text-sm font-medium text-center transition-all ${
+                          !slot.available
+                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : selectedTime === slot.time
+                            ? "bg-glowup-brand text-white shadow-md"
+                            : "border border-gray-200 bg-white text-gray-700 hover:border-glowup-brand hover:text-glowup-brand"
+                        }`}
+                      >
+                        {slot.time}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -334,6 +390,32 @@ export default function Detail() {
           </div>
         </div>
       </div>
+
+      {/* Image Lightbox Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button 
+            className="absolute top-6 right-6 text-white bg-black/50 hover:bg-black/80 rounded-full p-2 transition-colors"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedImage(null);
+            }}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+          <img 
+            src={selectedImage} 
+            alt="Full size view" 
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </>
   );
 }

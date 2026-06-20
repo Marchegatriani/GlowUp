@@ -51,4 +51,10 @@ def get_current_user(
     if user is None:
         raise credentials_exception
 
+    if not user.is_active:
+        raise HTTPException(
+            status_code=403,
+            detail="Akun Anda telah dinonaktifkan."
+        )
+
     return user

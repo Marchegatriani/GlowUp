@@ -41,3 +41,10 @@ class BookingResponse(BookingBase):
 
     class Config:
         from_attributes = True
+
+class AvailableSlot(BaseModel):
+    time: str
+    available: bool
+
+class AvailableSlotsResponse(BaseModel):
+    slots: List[AvailableSlot]

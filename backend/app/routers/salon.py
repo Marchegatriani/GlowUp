@@ -8,6 +8,8 @@ from typing import List
 from app.database import get_db
 from app.models.salon import Salon, SalonGallery, Category
 from app.models.user import User
+from app.models.review import Review
+from sqlalchemy import func
 from app.schemas.salon import SalonCreate, SalonUpdate, SalonResponse, SalonGalleryResponse, CategoryResponse
 from app.utils.permissions import require_owner, require_admin
 
@@ -96,15 +98,35 @@ def create_salon(
 # 2. Get All Salons (Public)
 @router.get("/", response_model=List[SalonResponse])
 def get_all_salons(db: Session = Depends(get_db)):
-    salons = db.query(Salon).all()
+    salons = db.query(Salon).join(User, Salon.owner_id == User.id).filter(
+        Salon.is_active == True,
+        User.is_active == True
+    ).all()
+    
+    for salon in salons:
+        avg_rating = db.query(func.avg(Review.rating)).filter(Review.salon_id == salon.id).scalar() or 0
+        review_count = db.query(Review).filter(Review.salon_id == salon.id).count()
+        salon.rating = round(float(avg_rating), 1)
+        salon.reviews_count = review_count
+        
     return salons
 
 # 3. Get Salon By ID (Public)
 @router.get("/{salon_id}", response_model=SalonResponse)
 def get_salon_detail(salon_id: int, db: Session = Depends(get_db)):
-    salon = db.query(Salon).filter(Salon.id == salon_id).first()
+    salon = db.query(Salon).join(User, Salon.owner_id == User.id).filter(
+        Salon.id == salon_id,
+        Salon.is_active == True,
+        User.is_active == True
+    ).first()
     if not salon:
-        raise HTTPException(status_code=404, detail="Salon tidak ditemukan")
+        raise HTTPException(status_code=404, detail="Salon tidak ditemukan atau sedang tidak aktif")
+        
+    avg_rating = db.query(func.avg(Review.rating)).filter(Review.salon_id == salon.id).scalar() or 0
+    review_count = db.query(Review).filter(Review.salon_id == salon.id).count()
+    salon.rating = round(float(avg_rating), 1)
+    salon.reviews_count = review_count
+    
     return salon
 
 # 4. Update Salon

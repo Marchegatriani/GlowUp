@@ -139,7 +139,6 @@ export default function KelolaBooking() {
                       <th className="px-8 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Tanggal & Waktu</th>
                       <th className="px-8 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Total Harga</th>
                       <th className="px-8 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
-                      <th className="px-8 py-5 text-center text-xs font-bold text-gray-400 uppercase tracking-wider">Aksi Update</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -194,50 +193,6 @@ export default function KelolaBooking() {
                             >
                               {badge.label}
                             </span>
-                          </td>
-                          <td className="px-8 py-6">
-                            <div className="flex items-center justify-center gap-2">
-                              {booking.status === "pending" && (
-                                <>
-                                  <button
-                                    onClick={() => handleUpdateStatus(booking.id, "confirmed")}
-                                    disabled={updatingId !== null}
-                                    className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 text-xs font-bold transition-all disabled:opacity-50"
-                                  >
-                                    Konfirmasi
-                                  </button>
-                                  <button
-                                    onClick={() => handleUpdateStatus(booking.id, "cancelled")}
-                                    disabled={updatingId !== null}
-                                    className="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 text-xs font-bold transition-all disabled:opacity-50"
-                                  >
-                                    Batalkan
-                                  </button>
-                                </>
-                              )}
-                              {booking.status === "confirmed" && (
-                                <>
-                                  <button
-                                    onClick={() => handleUpdateStatus(booking.id, "completed")}
-                                    disabled={updatingId !== null || new Date(booking.booking_time) > new Date()}
-                                    title={new Date(booking.booking_time) > new Date() ? "Booking belum bisa diselesaikan karena waktu appointment belum tiba" : ""}
-                                    className="px-3 py-1.5 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 text-xs font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                  >
-                                    Selesai Treatment
-                                  </button>
-                                  <button
-                                    onClick={() => handleUpdateStatus(booking.id, "cancelled")}
-                                    disabled={updatingId !== null}
-                                    className="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 text-xs font-bold transition-all disabled:opacity-50"
-                                  >
-                                    Batalkan
-                                  </button>
-                                </>
-                              )}
-                              {booking.status !== "pending" && booking.status !== "confirmed" && (
-                                <span className="text-gray-400 text-xs">-</span>
-                              )}
-                            </div>
                           </td>
                         </tr>
                       );

@@ -129,17 +129,6 @@ export default function Pembayaran() {
               <p className="text-xs text-gray-500">BCA, Mandiri, BNI</p>
             </div>
           </button>
-
-          <button
-            onClick={() => setSelectedMethod("cash")}
-            className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${selectedMethod === "cash" ? "border-glowup-brand bg-pink-50/30" : "border-gray-200 hover:border-gray-300"}`}
-          >
-            <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 font-bold text-lg">C</div>
-            <div className="text-left">
-              <p className="font-bold text-gray-800">Bayar di Tempat</p>
-              <p className="text-xs text-gray-500">Cash / Kartu Debit</p>
-            </div>
-          </button>
         </div>
 
         <button

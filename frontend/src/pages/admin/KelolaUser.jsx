@@ -553,7 +553,8 @@ export default function KelolaUser() {
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-bold transition-all shadow-sm"
+                className="flex-1 py-3 rounded-xl text-[#2E1221] text-sm font-bold transition-all shadow-sm hover:brightness-[1.03]"
+                style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)" }}
               >
                 Hapus Permanen
               </button>

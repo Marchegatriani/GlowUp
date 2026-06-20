@@ -13,6 +13,7 @@ export default function DetailBooking() {
   const [submitting, setSubmitting] = useState(false);
   const [reviewError, setReviewError] = useState(null);
   const [reviewSuccess, setReviewSuccess] = useState(null);
+  const [isStatusUpdating, setIsStatusUpdating] = useState(false);
 
   useEffect(() => {
     const fetchBooking = async () => {
@@ -27,6 +28,19 @@ export default function DetailBooking() {
     };
     fetchBooking();
   }, [id]);
+
+  const handleUserUpdateStatus = async (status) => {
+    try {
+      setIsStatusUpdating(true);
+      const response = await axiosClient.put(`/bookings/${id}/user-status`, { status });
+      setBooking(response.data);
+    } catch (error) {
+      console.error("Gagal memperbarui status:", error);
+      alert(error.response?.data?.detail || "Gagal memperbarui status.");
+    } finally {
+      setIsStatusUpdating(false);
+    }
+  };
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
@@ -109,6 +123,27 @@ export default function DetailBooking() {
             </span>
           </div>
         </div>
+
+        {/* User Status Update Controls */}
+        {booking.status === "confirmed" && (
+          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => handleUserUpdateStatus("completed")}
+              disabled={isStatusUpdating || new Date(booking.booking_time) > new Date()}
+              title={new Date(booking.booking_time) > new Date() ? "Tombol aktif setelah waktu appointment lewat" : ""}
+              className="flex-1 py-3 px-4 rounded-xl bg-green-50 text-green-600 hover:bg-green-100 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-green-200 text-center"
+            >
+              Selesaikan Treatment
+            </button>
+            <button
+              onClick={() => handleUserUpdateStatus("cancelled")}
+              disabled={isStatusUpdating}
+              className="flex-1 py-3 px-4 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 font-bold transition-all disabled:opacity-50 border border-red-200 text-center"
+            >
+              Batalkan Pesanan
+            </button>
+          </div>
+        )}
 
         {/* Review Section */}
         {booking.status.toLowerCase() === "completed" && (

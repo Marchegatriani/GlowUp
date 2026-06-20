@@ -66,6 +66,12 @@ def login(
             detail="Email atau password salah"
         )
 
+    if not db_user.is_active:
+        raise HTTPException(
+            status_code=403,
+            detail="Akun Anda telah dinonaktifkan. Silakan hubungi admin."
+        )
+
     token = create_access_token({
         "sub": db_user.email,
         "role": db_user.role

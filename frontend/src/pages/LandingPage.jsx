@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { useAuth } from "../context/AuthContext";
@@ -119,26 +119,6 @@ function HeroSection() {
                 className="w-full h-full object-cover"
               />
             </div>
-
-            <div
-              className="absolute -bottom-7 left-1/2 -translate-x-1/2 w-[88%] flex items-center justify-between gap-4 px-6 py-5 rounded-[22px] bg-white"
-              style={{ boxShadow: "0 20px 45px -15px rgba(46,18,33,0.3)" }}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-full bg-glowup-pink-50 flex items-center justify-center shrink-0">
-                  <svg width="18" height="17" viewBox="0 0 17 16" fill="none">
-                    <path d="M3.1875 15.8333L4.54167 9.97917L0 6.04167L6 5.52083L8.33333 0L10.6667 5.52083L16.6667 6.04167L12.125 9.97917L13.4792 15.8333L8.33333 12.7292L3.1875 15.8333Z" fill="#795465" />
-                  </svg>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-glowup-brand font-bold text-base leading-tight">4.9 dari 5</span>
-                  <span className="text-[#8A8682] text-xs">2.300+ ulasan</span>
-                </div>
-              </div>
-              <Link to="/user/jelajah" className="text-glowup-brand text-sm font-bold whitespace-nowrap hover:underline">
-                Jelajahi →
-              </Link>
-            </div>
           </div>
         </div>
       </div>
@@ -174,14 +154,14 @@ function FeaturesSection() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[rgba(121,84,101,0.10)] rounded-[28px] overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {FEATURES.map((f) => (
-            <div key={f.mark} className="bg-white p-9 lg:p-10 flex flex-col gap-5">
-              <span className="text-glowup-brand/40 font-bold text-3xl leading-none tracking-tight">
+            <div key={f.mark} className="group bg-white rounded-[24px] border border-gray-100 p-9 lg:p-10 flex flex-col gap-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:bg-pink-50/60 hover:border-pink-200">
+              <span className="text-glowup-brand/40 font-bold text-3xl leading-none tracking-tight transition-colors duration-300">
                 {f.mark}
               </span>
-              <h3 className="text-[#1B1C1C] font-bold text-xl leading-7">{f.title}</h3>
-              <p className="text-[#5E5F5B] text-[15px] leading-[1.7]">{f.body}</p>
+              <h3 className="text-[#1B1C1C] font-bold text-xl leading-7 transition-colors duration-300">{f.title}</h3>
+              <p className="text-[#5E5F5B] text-[15px] leading-[1.7] transition-colors duration-300">{f.body}</p>
             </div>
           ))}
         </div>

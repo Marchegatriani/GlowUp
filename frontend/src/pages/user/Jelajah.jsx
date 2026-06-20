@@ -7,13 +7,7 @@ const ITEMS_PER_PAGE = 6; // Set to 6 to fit nicely in 3 columns
 
 // Data enrichment helpers to populate fields missing from db
 const getRating = (salon) => {
-  if (salon.name.toLowerCase().includes("ethereal")) return 4.9;
-  if (salon.name.toLowerCase().includes("velvet")) return 4.8;
-  if (salon.name.toLowerCase().includes("glow sanctuary")) return 4.7;
-  if (salon.name.toLowerCase().includes("crown")) return 5.0;
-  // Fallback based on ID to make it deterministic
-  const ratings = [4.5, 4.6, 4.7, 4.8, 4.9, 5.0];
-  return ratings[salon.id % ratings.length];
+  return salon.rating || 0.0;
 };
 
 const getCategory = (salon) => {
