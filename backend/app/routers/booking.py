@@ -236,6 +236,13 @@ def update_booking_status(
     if status_update.status not in valid_statuses:
         raise HTTPException(status_code=400, detail="Status tidak valid")
 
+    # Mencegah Owner membatalkan pesanan yang sudah dibayar (confirmed)
+    if status_update.status == "cancelled" and booking.status == "confirmed" and current_user.role != "admin":
+        raise HTTPException(
+            status_code=400, 
+            detail="Owner tidak dapat membatalkan booking yang sudah dibayar oleh Customer."
+        )
+
     if status_update.status == "completed" and booking.booking_time > datetime.now():
         raise HTTPException(
             status_code=400, 
