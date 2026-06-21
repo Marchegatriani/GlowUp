@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import axiosClient from "../../api/axiosClient";
+import AddUserModal from "../../components/admin/AddUserModal";
+import EditUserModal from "../../components/admin/EditUserModal";
+import DeleteUserModal from "../../components/admin/DeleteUserModal";
 
 export default function KelolaUser() {
   const [users, setUsers] = useState([]);
@@ -322,244 +325,39 @@ export default function KelolaUser() {
       </div>
 
       {/* Creation Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-[24px] max-w-md w-full shadow-2xl p-8 flex flex-col gap-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-xl font-bold text-gray-800">Registrasi Pengguna Baru</h3>
-                <p className="text-xs text-gray-500 mt-1">Daftarkan akun dengan peran khusus.</p>
-              </div>
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="text-gray-400 hover:text-gray-600 text-lg font-bold"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleAddSubmit} className="flex flex-col gap-5">
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Nama Lengkap</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Nama Lengkap"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Email</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="email@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Kata Sandi</label>
-                <input
-                  type="password"
-                  required
-                  placeholder="Minimal 6 karakter"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Hak Akses (Role)</label>
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
-                >
-                  <option value="user">Customer biasa</option>
-                  <option value="owner">Owner Salon (Pemilik)</option>
-                </select>
-              </div>
-
-              <div className="flex gap-3 mt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="flex-1 py-3.5 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-bold transition-all"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="flex-1 py-3.5 rounded-xl text-white text-sm font-bold transition-all shadow-sm"
-                  style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
-                >
-                  {saving ? "Menyimpan..." : "Simpan Akun"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <AddUserModal
+        show={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSubmit={handleAddSubmit}
+        saving={saving}
+        name={name} setName={setName}
+        email={email} setEmail={setEmail}
+        password={password} setPassword={setPassword}
+        role={role} setRole={setRole}
+      />
 
       {/* Editing Modal */}
-      {showEditModal && editingUser && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-[24px] max-w-md w-full shadow-2xl p-8 flex flex-col gap-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-xl font-bold text-gray-800">Ubah Data Pengguna</h3>
-                <p className="text-xs text-gray-500 mt-1">Ubah data profil atau status aktifasi user.</p>
-              </div>
-              <button
-                onClick={() => {
-                  setShowEditModal(false);
-                  setEditingUser(null);
-                }}
-                className="text-gray-400 hover:text-gray-600 text-lg font-bold"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleEditSubmit} className="flex flex-col gap-5">
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Nama Lengkap</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Nama Lengkap"
-                  value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Email</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="email@example.com"
-                  value={editEmail}
-                  onChange={(e) => setEditEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Kata Sandi Baru (Opsional)</label>
-                <input
-                  type="password"
-                  placeholder="Kosongkan jika tidak ingin diubah"
-                  value={editPassword}
-                  onChange={(e) => setEditPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Hak Akses (Role)</label>
-                <select
-                  value={editRole}
-                  onChange={(e) => setEditRole(e.target.value)}
-                  disabled={me?.id === editingUser.id}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors disabled:opacity-50"
-                >
-                  <option value="user">Customer biasa</option>
-                  <option value="owner">Owner Salon (Pemilik)</option>
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-gray-700 text-xs font-bold uppercase tracking-wider">Status Akun</label>
-                <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="isActive"
-                      checked={editIsActive === true}
-                      onChange={() => setEditIsActive(true)}
-                      className="text-glowup-brand focus:ring-glowup-brand"
-                      disabled={me?.id === editingUser.id}
-                    />
-                    Aktif
-                  </label>
-                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="isActive"
-                      checked={editIsActive === false}
-                      onChange={() => setEditIsActive(false)}
-                      className="text-glowup-brand focus:ring-glowup-brand"
-                      disabled={me?.id === editingUser.id}
-                    />
-                    Nonaktif
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex gap-3 mt-4">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowEditModal(false);
-                    setEditingUser(null);
-                  }}
-                  className="flex-1 py-3.5 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-bold transition-all"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="flex-1 py-3.5 rounded-xl text-white text-sm font-bold transition-all shadow-sm"
-                  style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)", color: "#2E1221" }}
-                >
-                  {saving ? "Menyimpan..." : "Simpan Perubahan"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <EditUserModal
+        show={showEditModal}
+        onClose={() => { setShowEditModal(false); setEditingUser(null); }}
+        onSubmit={handleEditSubmit}
+        saving={saving}
+        editingUser={editingUser}
+        me={me}
+        editName={editName} setEditName={setEditName}
+        editEmail={editEmail} setEditEmail={setEditEmail}
+        editPassword={editPassword} setEditPassword={setEditPassword}
+        editRole={editRole} setEditRole={setEditRole}
+        editIsActive={editIsActive} setEditIsActive={setEditIsActive}
+      />
 
       {/* Delete Confirmation Modal */}
-      {showDeleteModal && userToDelete && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-[24px] max-w-md w-full shadow-2xl p-8 flex flex-col gap-6">
-            <h3 className="text-xl font-bold text-gray-800">Hapus Pengguna</h3>
-            <p className="text-sm text-gray-500">
-              Apakah Anda yakin ingin menghapus akun <strong>{userToDelete.name}</strong> ({userToDelete.email})?
-            </p>
-            <p className="text-xs text-red-500 border border-red-100 bg-red-50/50 p-3 rounded-lg leading-5">
-              <strong>PENTING:</strong> Menghapus akun ini juga akan secara otomatis menghapus data Booking, review, pembayaran, dan salon (jika owner) yang terkait dengan pengguna ini.
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowDeleteModal(false)}
-                className="flex-1 py-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-bold transition-all"
-              >
-                Batal
-              </button>
-              <button
-                onClick={handleConfirmDelete}
-                className="flex-1 py-3 rounded-xl text-[#2E1221] text-sm font-bold transition-all shadow-sm hover:brightness-[1.03]"
-                style={{ background: "linear-gradient(99deg, #F8C8DC 0%, #EFE4A2 100%)" }}
-              >
-                Hapus Permanen
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DeleteUserModal
+        show={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleConfirmDelete}
+        userToDelete={userToDelete}
+      />
     </div>
   );
 }
