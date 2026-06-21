@@ -37,7 +37,7 @@ export default function KelolaUser() {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Fetch me info (to prevent editing/deleting own admin account)
       const meRes = await axiosClient.get("/me");
       setMe(meRes.data);
@@ -182,7 +182,7 @@ export default function KelolaUser() {
             Kelola Pengguna
           </h1>
           <p className="text-[#5E5F5B] text-base font-normal leading-6">
-            Daftar, edit, hapus, dan verifikasi akun Administrator, Salon Owner, maupun Customer.
+            Daftar, edit, hapus, dan verifikasi akun Owner dan Customer.
           </p>
         </div>
         <button
@@ -290,9 +290,8 @@ export default function KelolaUser() {
                       </span>
                     </td>
                     <td className="px-8 py-6 text-center whitespace-nowrap">
-                      <span className={`inline-flex px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
-                        user.is_active ? "bg-green-50 text-green-700 border border-green-100" : "bg-red-50 text-red-650 border border-red-100"
-                      }`}>
+                      <span className={`inline-flex px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${user.is_active ? "bg-green-50 text-green-700 border border-green-100" : "bg-red-50 text-red-650 border border-red-100"
+                        }`}>
                         {user.is_active ? "Aktif" : "Nonaktif"}
                       </span>
                     </td>
@@ -306,11 +305,10 @@ export default function KelolaUser() {
                       <button
                         onClick={() => handleDeleteClick(user)}
                         disabled={me?.id === user.id}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border shadow-sm ${
-                          me?.id === user.id
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border shadow-sm ${me?.id === user.id
                             ? "bg-gray-50 text-gray-400 border-gray-200 cursor-not-allowed"
                             : "bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
-                        }`}
+                          }`}
                       >
                         Hapus
                       </button>

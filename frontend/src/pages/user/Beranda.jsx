@@ -225,7 +225,7 @@ export default function Index() {
                   >
                     <div className="relative flex-shrink-0 w-32 h-32">
                       <img
-                        src={`https://api.builder.io/api/v1/image/assets/TEMP/${b.salon_id % 2 === 0 ? "4295490d2b008bb111491f419e44fca5db04c803" : "f522a522b78a02f7f219e665307f41b3cc812db9"}?width=256`}
+                        src={b.salon?.image_url || `https://api.builder.io/api/v1/image/assets/TEMP/${b.salon_id % 2 === 0 ? "4295490d2b008bb111491f419e44fca5db04c803" : "f522a522b78a02f7f219e665307f41b3cc812db9"}?width=256`}
                         alt={b.salon?.name || "Salon"}
                         className="w-full h-full object-cover rounded-xl"
                       />
