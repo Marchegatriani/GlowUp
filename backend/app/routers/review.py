@@ -1,75 +1,35 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from typing import List
 
 from app.database import get_db
-from app.models.review import Review
-from app.models.booking import Booking
-from app.models.salon import Salon
 from app.models.user import User
 
 from app.schemas.review import ReviewCreate, ReviewResponse, ReviewUpdate
 from app.utils.auth import get_current_user
+from app.services.review_service import AppReviewService
 
 router = APIRouter(tags=["Reviews"])
 
-# 1. POST /reviews - User membuat review
 @router.post("/reviews", response_model=ReviewResponse, status_code=status.HTTP_201_CREATED)
 def create_review(
     review_in: ReviewCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user) # WAJIB LOGIN
+    current_user: User = Depends(get_current_user)
 ):
-    # Cek ketersediaan booking
-    booking = db.query(Booking).filter(Booking.id == review_in.booking_id).first()
-    if not booking:
-        raise HTTPException(status_code=404, detail="Booking tidak ditemukan")
+    return AppReviewService.create_review(db, review_in, current_user)
 
-    # Aturan 1 & 2: Hanya user yang melakukan booking yang boleh review
-    if booking.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Akses ditolak. Anda hanya dapat mereview booking Anda sendiri")
-
-    # Cek apakah booking minimal sudah di-confirm/completed
-    if booking.status not in ["confirmed", "completed"]:
-        raise HTTPException(status_code=400, detail="Anda hanya dapat memberikan review untuk layanan yang sudah dikonfirmasi/selesai")
-
-    # Cek apakah sudah pernah direview sebelumnya
-    existing_review = db.query(Review).filter(Review.booking_id == review_in.booking_id).first()
-    if existing_review:
-        raise HTTPException(status_code=400, detail="Anda sudah memberikan review untuk booking ini")
-
-    # Simpan review
-    new_review = Review(
-        user_id=current_user.id,
-        salon_id=booking.salon_id,
-        booking_id=booking.id,
-        rating=review_in.rating,
-        comment=review_in.comment
-    )
-    db.add(new_review)
-    db.commit()
-    db.refresh(new_review)
-    return new_review
-
-# 2. GET /salons/{salon_id}/reviews - Lihat semua review sebuah salon (Public)
 @router.get("/salons/{salon_id}/reviews", response_model=List[ReviewResponse])
 def get_salon_reviews(salon_id: int, db: Session = Depends(get_db)):
-    salon = db.query(Salon).filter(Salon.id == salon_id).first()
-    if not salon:
-        raise HTTPException(status_code=404, detail="Salon tidak ditemukan")
-        
-    reviews = db.query(Review).filter(Review.salon_id == salon_id).all()
-    return reviews
+    return AppReviewService.get_salon_reviews(db, salon_id)
 
-# 3. GET /reviews/me - Lihat semua review milik user yang login
 @router.get("/reviews/me", response_model=List[ReviewResponse])
 def get_my_reviews(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    return db.query(Review).filter(Review.user_id == current_user.id).all()
+    return AppReviewService.get_my_reviews(db, current_user)
 
-# 4. PUT /reviews/{review_id} - User mengedit review
 @router.put("/reviews/{review_id}", response_model=ReviewResponse)
 def update_review(
     review_id: int,
@@ -77,33 +37,13 @@ def update_review(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    review = db.query(Review).filter(Review.id == review_id).first()
-    if not review:
-        raise HTTPException(status_code=404, detail="Review tidak ditemukan")
-        
-    if review.user_id != current_user.id and current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Akses ditolak. Anda tidak berhak mengubah review ini.")
-        
-    review.rating = review_update.rating
-    review.comment = review_update.comment
-    db.commit()
-    db.refresh(review)
-    return review
+    return AppReviewService.update_review(db, review_id, review_update.rating, review_update.comment, current_user)
 
-# 5. DELETE /reviews/{review_id} - User menghapus review
 @router.delete("/reviews/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_review(
     review_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    review = db.query(Review).filter(Review.id == review_id).first()
-    if not review:
-        raise HTTPException(status_code=404, detail="Review tidak ditemukan")
-        
-    if review.user_id != current_user.id and current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Akses ditolak. Anda tidak berhak menghapus review ini.")
-        
-    db.delete(review)
-    db.commit()
+    AppReviewService.delete_review(db, review_id, current_user)
     return
