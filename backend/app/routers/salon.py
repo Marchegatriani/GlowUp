@@ -25,7 +25,7 @@ def get_admin_salons_list(
     return AppSalonService.get_admin_salons_list(db)
 
 
-@router.post("/", response_model=SalonResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=SalonResponse, status_code=status.HTTP_201_CREATED)
 def create_salon(
     name: str = Form(...),
     address: str = Form(...),
@@ -42,7 +42,7 @@ def create_salon(
         db, current_user, name, address, phone_number, open_time, close_time, description, category_ids, image
     )
 
-@router.get("/", response_model=List[SalonResponse])
+@router.get("", response_model=List[SalonResponse])
 def get_all_salons(db: Session = Depends(get_db)):
     return AppSalonService.get_all_salons(db)
 
