@@ -30,7 +30,7 @@ export default function Login() {
       console.log("Login berhasil:", response.data);
       
       // Redirect sesuai role
-      const role = response.data.role;
+      const role = response.data.user?.role || response.data.role;
       if (role === "admin") {
         navigate("/admin/dashboard");
       } else if (role === "owner") {
