@@ -41,7 +41,7 @@ export default function KelolaSalon() {
       setAllCategories(catRes.data);
 
       // 3. Get all salons and find mine
-      const salonsRes = await axiosClient.get("/salons/");
+      const salonsRes = await axiosClient.get("/salons");
       const mySalon = salonsRes.data.find(s => s.owner_id === userRes.data.id);
 
       if (mySalon) {
@@ -103,7 +103,7 @@ export default function KelolaSalon() {
         setIsEditing(false);
       } else {
         // Create mode
-        const res = await axiosClient.post("/salons/", formData, {
+        const res = await axiosClient.post("/salons", formData, {
           headers: { "Content-Type": "multipart/form-data" }
         });
         setSalon(res.data);

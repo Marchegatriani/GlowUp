@@ -32,7 +32,7 @@ export default function KelolaLayanan() {
 
       // 1. Get owner profile & salon
       const userRes = await axiosClient.get("/me");
-      const salonsRes = await axiosClient.get("/salons/");
+      const salonsRes = await axiosClient.get("/salons");
       const mySalon = salonsRes.data.find(s => s.owner_id === userRes.data.id);
 
       if (mySalon) {
