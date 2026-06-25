@@ -4,7 +4,7 @@ from typing import List
 
 from app.database import get_db
 from app.models.user import User
-from app.schemas.salon import SalonCreate, SalonUpdate, SalonResponse, SalonGalleryResponse, CategoryResponse
+from app.schemas.salon import SalonCreate, SalonUpdate, SalonResponse, SalonGalleryResponse, CategoryResponse, AdminSalonListItem, AdminSalonDetailResponse
 from app.utils.permissions import require_owner, require_admin
 from app.services.salon_service import AppSalonService
 
@@ -17,7 +17,7 @@ router = APIRouter(
 def get_categories(db: Session = Depends(get_db)):
     return AppSalonService.get_categories(db)
 
-@router.get("/admin/list")
+@router.get("/admin/list", response_model=List[AdminSalonListItem])
 def get_admin_salons_list(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_admin)
@@ -85,7 +85,7 @@ def toggle_salon_status(
 ):
     return AppSalonService.toggle_salon_status(db, salon_id)
 
-@router.get("/{salon_id}/admin")
+@router.get("/{salon_id}/admin", response_model=AdminSalonDetailResponse)
 def get_admin_salon_detail(
     salon_id: int,
     db: Session = Depends(get_db),

@@ -59,4 +59,37 @@ class SalonResponse(SalonBase):
 
     class Config:
         # Memberitahu Pydantic untuk membaca data dari object SQLAlchemy (bukan cuma dari Dictionary)
-        from_attributes = True 
+        from_attributes = True 
+
+
+# ==========================================
+# SCHEMAS KHUSUS ADMIN SALONS
+# ==========================================
+
+class AdminSalonListItem(BaseModel):
+    id: int
+    name: str
+    owner_name: str
+    address: str
+    phone_number: str
+    is_active: bool
+
+
+class AdminSalonOwnerInfo(BaseModel):
+    id: int
+    name: str
+    email: str
+
+
+class AdminSalonDetailResponse(BaseModel):
+    id: int
+    name: str
+    address: str
+    phone_number: str
+    description: Optional[str] = None
+    open_time: Optional[str] = None
+    close_time: Optional[str] = None
+    image_url: Optional[str] = None
+    is_active: bool
+    owner: AdminSalonOwnerInfo
+    categories: List[CategoryResponse] = []

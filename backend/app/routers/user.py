@@ -5,6 +5,7 @@ from typing import List
 from app.database import get_db
 from app.models.user import User
 from app.schemas.user import UserCreate, UserLogin, UserCreateAdmin, UserUpdateAdmin, UserResponse
+from app.schemas.dashboard import AdminDashboardResponse, OwnerDashboardResponse, CustomerDashboardResponse
 from app.utils.auth import get_current_user
 from app.utils.permissions import require_admin, require_owner
 from app.services.dashboard_service import DashboardService
@@ -29,21 +30,21 @@ def get_me(current_user: User = Depends(get_current_user)):
         "role": current_user.role
     }
 
-@router.get("/admin/dashboard")
+@router.get("/admin/dashboard", response_model=AdminDashboardResponse)
 def admin_dashboard_data(
     current_user: User = Depends(require_admin),
     db: Session = Depends(get_db)
 ):
     return DashboardService.get_admin_dashboard_data(db, current_user)
 
-@router.get("/owner/dashboard")
+@router.get("/owner/dashboard", response_model=OwnerDashboardResponse)
 def owner_dashboard_data(
     current_user: User = Depends(require_owner),
     db: Session = Depends(get_db)
 ):
     return DashboardService.get_owner_dashboard_data(db, current_user)
 
-@router.get("/customer/dashboard")
+@router.get("/customer/dashboard", response_model=CustomerDashboardResponse)
 def customer_dashboard_data(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
