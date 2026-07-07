@@ -76,7 +76,6 @@ export default function EditUserModal({
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm outline-none focus:border-glowup-brand transition-colors disabled:opacity-50"
             >
               <option value="user">Customer biasa</option>
-              <option value="admin">Administrator</option>
               <option value="owner">Owner Salon (Pemilik)</option>
             </select>
           </div>

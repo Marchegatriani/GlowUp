@@ -5,7 +5,6 @@ import LandingPage from './pages/LandingPage';
 import Beranda from './pages/user/Beranda';
 import Jelajah from './pages/user/Jelajah';
 import Detail from './pages/user/Detail';
-import Booking from './pages/user/Booking';
 import RiwayatBooking from './pages/user/RiwayatBooking';
 import RiwayatReview from './pages/user/RiwayatReview';
 import Pembayaran from './pages/user/Pembayaran';
@@ -60,7 +59,6 @@ function App() {
           <Route element={<UserLayout />}>
             {/* Halaman Terproteksi (Wajib Login) */}
             <Route path="/user/beranda" element={<PrivateRoute><Beranda /></PrivateRoute>} />
-            <Route path="/user/booking/:id" element={<PrivateRoute><Booking /></PrivateRoute>} />
             <Route path="/user/riwayat-booking" element={<PrivateRoute><RiwayatBooking /></PrivateRoute>} />
             <Route path="/user/riwayat-review" element={<PrivateRoute><RiwayatReview /></PrivateRoute>} />
             <Route path="/user/pembayaran/:id" element={<PrivateRoute><Pembayaran /></PrivateRoute>} />

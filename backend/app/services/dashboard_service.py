@@ -82,7 +82,7 @@ class DashboardService:
                 "email": cust_email,
                 "service": svc_str,
                 "date": b.booking_time.strftime("%d %b %Y"),
-                "time": b.booking_time.strftime("%H:%M") + " WIB",
+                "time": b.booking_time.strftime("%H:%M") + " WITA",
                 "total": f"Rp {b.total_price:,}".replace(",", "."),
                 "status": status_text
             })

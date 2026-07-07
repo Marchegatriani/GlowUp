@@ -266,7 +266,7 @@ export default function Index() {
                             {new Date(b.booking_time).toLocaleString("id-ID", {
                               hour: "2-digit",
                               minute: "2-digit",
-                            })} WIB
+                            })} WITA
                           </span>
                         </div>
                       </div>

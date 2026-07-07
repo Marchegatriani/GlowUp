@@ -179,7 +179,7 @@ export default function KelolaBooking() {
                                 {new Date(booking.booking_time).toLocaleTimeString("id-ID", {
                                   hour: "2-digit",
                                   minute: "2-digit",
-                                })} WIB
+                                })} WITA
                               </span>
                             </div>
                           </td>
